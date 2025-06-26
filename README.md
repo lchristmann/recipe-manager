@@ -2,7 +2,16 @@
 
 This project is intended to be a massive improvement after my first [recipe-app](https://github.com/lchristmann/recipe-app).
 
-A self-hosted recipe manager, with public 
+A self-hosted recipe manager.
+
+## Todos <!-- omit in toc -->
+
+- add migrations, models, factories and seeders
+- figure the authentication & authorization out, write a concept -> build it
+- write one page after the other
+- implement that admin users can invite new users to the application (by email)
+    - do the mail sending with a queue
+- implement testing (test the mailing e.g. with Mailpit, test the authentication and authorization,...)
 
 ## Table of Contents <!-- omit in toc -->
 
@@ -12,7 +21,8 @@ A self-hosted recipe manager, with public
 - [Development](#development)
   - [Get it up](#get-it-up)
   - [Shut everything down](#shut-everything-down)
-  - [Helpful commands](#helpful-commands)
+  - [Access the database](#access-the-database)
+  - [Other helpful commands](#other-helpful-commands)
 - [Things I Want to Learn Here](#things-i-want-to-learn-here)
 - [Maintenance](#maintenance)
 
@@ -54,6 +64,8 @@ The below is mostly taken from the [docker/README.md > Setting Up the Developmen
 That's the official [Laravel Development Setup with Docker Compose](https://docs.docker.com/guides/frameworks/laravel/development-setup/) that I used and slightly adapted here.
 
 ### Get it up
+
+> Care that there's nothing else on port 80 already - otherwise adapt your `compose.dev.yaml`.
 
 1. ONLY ONCE: Copy the .env.example file to .env and adjust any necessary environment variables:
 
@@ -101,7 +113,20 @@ docker compose -f compose.dev.yaml exec workspace composer run dev
 docker compose -f compose.dev.yaml down # Shut it down
 ```
 
-### Helpful commands
+### Access the database
+
+```shell
+docker compose -f compose.dev.yaml exec postgres bash
+  psql -d app -U laravel # password: secret
+  \dt
+```
+
+```shell
+\d users
+SELECT * FROM users;
+```
+
+### Other helpful commands
 
 ```shell
 docker compose -f compose.dev.yaml exec workspace bash
@@ -110,14 +135,14 @@ docker compose -f compose.dev.yaml exec workspace bash
   php artisan migrate:fresh --seed
   php artisan tinker
   Location::factory()->count(2)->make()->toJson()
-  
-docker compose -f compose.dev.yaml exec postgres bash
-  psql -d app -U laravel # password: secret
-  \dt
-  \d tablename
-  
+```
+
+If you've modified the `docker/development/workspace/Dockerfile`, rebuild the image like this:
+
+```shell
 docker compose -f compose.dev.yaml build workspace # if you changed something about the Dockerfile
 ```
+
 
 ## Things I Want to Learn Here
 
