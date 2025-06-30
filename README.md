@@ -91,16 +91,22 @@ exit
 4. ONLY ONCE or WHEN CHANGED: or when migration/seeding changed Run Migrations:
 
 ```bash
-docker compose -f compose.dev.yaml exec workspace php artisan migrate:refresh --seed
+docker compose -f compose.dev.yaml exec workspace php artisan migrate:fresh --seed
 ```
 
-5. Start the application
+5. ONLY ONCE: Create the symlink from the `storage/app/public` folder to the `public` folder:
+
+```bash
+docker compose -f compose.dev.yaml exec workspace php artisan storage:link
+```
+
+6. Start the application
 
 ```bash
 docker compose -f compose.dev.yaml exec workspace composer run dev
 ```
 
-6. Access the Application:
+7. Access the Application:
 
 - the Laravel application is served by the Nginx at port 80: [http://localhost](http://localhost)
   - from the `web` service's container
