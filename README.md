@@ -6,12 +6,11 @@ A self-hosted recipe manager.
 
 ## Todos <!-- omit in toc -->
 
-- add migrations, models, factories and seeders
 - figure the authentication & authorization out, write a concept -> build it
 - write one page after the other
 - implement that admin users can invite new users to the application (by email)
     - do the mail sending with a queue
-- implement testing (test the mailing e.g. with Mailpit, test the authentication and authorization,...)
+- implement testing ([test the mailing](https://mailpit.axllent.org/docs/integration/), test the authentication and authorization,...)
 
 ## Table of Contents <!-- omit in toc -->
 
@@ -132,6 +131,11 @@ docker compose -f compose.dev.yaml exec postgres bash
 SELECT * FROM users;
 ```
 
+### Test E-Mail Sending
+
+I included [Mailpit](https://mailpit.axllent.org/docs/install/docker/) in the Docker Compose setup of `compose.dev.yaml`
+and configured it in the `.env.example` (see the `MAIL_` prefixed variables).
+
 ### Other helpful commands
 
 ```shell
@@ -149,6 +153,9 @@ If you've modified the `docker/development/workspace/Dockerfile`, rebuild the im
 docker compose -f compose.dev.yaml build workspace # if you changed something about the Dockerfile
 ```
 
+## Deployment
+
+Document setting up E-Mail with Amazon SES from AWS.
 
 ## Things I Want to Learn Here
 

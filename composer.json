@@ -2,7 +2,7 @@
     "$schema": "https://getcomposer.org/schema.json",
     "name": "lchristmann/recipe-manager",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "A selfhosted recipe manager.",
     "keywords": [
         "laravel",
         "framework"
