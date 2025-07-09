@@ -4,13 +4,19 @@ This project is intended to be a massive improvement after my first [recipe-app]
 
 A self-hosted recipe manager.
 
+Based on the [Laravel Vue Starter Kit](https://laravel.com/docs/12.x/starter-kits#vue).
+
+-  [⚡️ Laravel Vue Starter Kit - Deep Dive](https://www.youtube.com/watch?v=phaBzRIioAw) [20min YouTube video]
+- [Laravel 12 Starter Kits: What You Need To Know (by Laravel Daily)](https://youtu.be/mjSwVWhgpGc?t=633) [see @10:33 for adding CRUD as example of development on top of the Starter Kit]
+
 ## Todos <!-- omit in toc -->
 
-- figure the authentication & authorization out, write a concept -> build it
 - write one page after the other
 - implement that admin users can invite new users to the application (by email)
     - do the mail sending with a queue
 - implement testing ([test the mailing](https://mailpit.axllent.org/docs/integration/), test the authentication and authorization,...)
+
+Inspiration for design: [Recipe Manager Notion template](https://mrpugo.notion.site/Recipe-Manager-1be6c91f8850803bb51fee1ba4864e64) by Mr. Pugo
 
 ## Table of Contents <!-- omit in toc -->
 
@@ -41,12 +47,13 @@ This recipe manager shall have
 
 ## Architecture
 
-The backend is composed of four Docker containers:
+The backend is composed of five Docker containers:
 
 - [Nginx](https://nginx.org/): Web Server
 - [PHP-FPM](https://www.php.net/manual/de/install.fpm.php): Laravel API runtime
 - [PostgreSQL](https://www.postgresql.org/): Database (for main data)
 - [Redis](https://redis.io/): In-memory Database (for caching)
+- [Mailpit](https://mailpit.axllent.org/): E-Mail Testing Tool (only in `dev` setup included)
 
 ### Database Schema
 
