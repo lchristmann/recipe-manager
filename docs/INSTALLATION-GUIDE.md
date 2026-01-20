@@ -73,7 +73,7 @@ Now you can create your first admin user to log in:
 
 ````shell
 docker compose exec php-fpm bash
-php artisan make:filament-admin
+php artisan app:make-user --admin
 ````
 
 ## Setting up HTTPS
@@ -206,10 +206,10 @@ SSH into your server.
 
 Application data is stored in two places (with the second one not being used so far, but maybe sometime):
 
-| Data         | Location               | What it contains                                        |
-|--------------|------------------------|---------------------------------------------------------|
-| **Database** | PostgreSQL             | All data (users, collections, pieces, compilations,...) |
-| **Storage**  | Laravel storage volume | file uploads                                            |
+| Data         | Location               | What it contains                     |
+|--------------|------------------------|--------------------------------------|
+| **Database** | PostgreSQL             | All simple data (users, recipes,...) |
+| **Storage**  | Laravel storage volume | Uploaded files (images)              |
 
 
 For reliable disaster recovery, back up both.

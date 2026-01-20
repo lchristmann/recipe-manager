@@ -117,7 +117,15 @@ npm run dev
 
 6. Access the Application:
 
-Open your browser and navigate to [http://localhost](http://localhost). You can create a first admin user [as described here](docs/INSTALLATION-GUIDE.md#basic-setup) > step 7.
+Open your browser and navigate to [http://localhost](http://localhost).
+
+You can create a first admin user manually like so, but later we will use `php artisan migrate:fresh --seed` instead:
+
+```bash
+docker compose -f compose.dev.yaml exec workspace bash
+php artisan app:make-user Admin admin@admin.com admin --admin
+# Username: Admin, Email: admin@admin.com, Password: admin
+```
 
 ## Usage
 
