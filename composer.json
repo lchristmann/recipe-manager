@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/livewire-starter-kit",
+    "name": "lchristmann/recipe-manager",
     "type": "project",
-    "description": "The official Laravel starter kit for Livewire.",
+    "description": "A beautiful self-hosted recipe manager for your family / friend group.",
     "keywords": [
         "laravel",
         "framework"
