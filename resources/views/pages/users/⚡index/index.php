@@ -1,0 +1,153 @@
+<?php
+
+use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
+use Livewire\Attributes\Computed;
+use Livewire\Component;
+use Livewire\WithPagination;
+
+new class extends Component
+{
+    use WithPagination;
+
+    // Modal state
+    public bool $showFormModal = false;
+    public bool $showDeleteModal = false;
+
+    // Currently editing / deleting user
+    public ?User $editing = null;
+    public ?User $deleting = null;
+
+    // Form fields
+    public string $name = '';
+    public string $email = '';
+    public string $password = '';
+    public bool $is_admin = false;
+
+    // Search input
+    public string $search = '';
+
+    protected function rules(): array
+    {
+        return [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($this->editing),
+            ],
+            'password' => [$this->editing ? 'nullable' : 'required', 'min:8'],
+            'is_admin' => ['boolean'],
+        ];
+    }
+
+    /** Reset form fields */
+    protected function resetForm(): void
+    {
+        $this->reset([
+            'editing',
+            'name',
+            'email',
+            'password',
+            'is_admin',
+        ]);
+    }
+
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    // example in docs regarding pagination: https://livewire.laravel.com/docs/4.x/pagination#resetting-the-page
+    #[Computed]
+    public function users(): LengthAwarePaginator
+    {
+        return User::query()
+            ->orderByDesc('id')
+            ->when($this->search, fn (Builder $query) =>
+                $query->whereRaw('LOWER(name) LIKE ? OR LOWER(email) LIKE ?', [
+                    '%' . strtolower($this->search) . '%',
+                    '%' . strtolower($this->search) . '%',
+                ])
+            )
+            ->paginate(10);
+    }
+
+    // -------------------- create, update and delete --------------------
+
+    /** Save user (create or update) */
+    public function save(): void
+    {
+        $isCreating = is_null($this->editing);
+
+        $this->authorize($isCreating ? 'create' : 'update', $this->editing ?? User::class);
+
+        $validated = $this->validate();
+
+        $user = $this->editing ?? new User();
+
+        // Hash password only if provided
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        $user->fill($validated);
+        if ($isCreating) $user->email_verified_at = now();
+        $user->save();
+
+        if ($isCreating) $this->resetPage();
+
+        $this->resetForm();
+        $this->showFormModal = false;
+    }
+
+    /** Delete user */
+    public function delete(): void
+    {
+        $this->authorize('delete', $this->deleting);
+        $this->deleting->delete();
+
+        $this->deleting = null;
+        $this->showDeleteModal = false;
+    }
+
+    // -------------------- modal open and close --------------------
+
+    /** Open create modal */
+    public function openCreateModal(): void
+    {
+        $this->resetForm();
+        $this->showFormModal = true;
+    }
+
+    /** Open edit modal */
+    public function openEditModal(User $user): void
+    {
+        $this->editing = $user;
+        $this->name = $user->name;
+        $this->email = $user->email;
+        $this->is_admin = $user->is_admin;
+        $this->password = '';
+        $this->showFormModal = true;
+    }
+
+    /** Open delete modal */
+    public function openDeleteModal(User $user): void
+    {
+        $this->deleting = $user;
+        $this->showDeleteModal = true;
+    }
+
+    /** Close any modal */
+    public function closeModals(): void
+    {
+        $this->showFormModal = false;
+        $this->showDeleteModal = false;
+    }
+};
