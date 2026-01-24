@@ -30,8 +30,7 @@ class RecipeBookPolicy
      */
     public function update(User $user, RecipeBook $recipeBook): bool
     {
-        return $recipeBook->user_id === $user->id
-            || $recipeBook->community;
+        return $user->isAdmin() || $recipeBook->user_id === $user->id;
     }
 
     /**
@@ -39,6 +38,6 @@ class RecipeBookPolicy
      */
     public function delete(User $user, RecipeBook $recipeBook): bool
     {
-        return $recipeBook->user_id === $user->id;
+        return $user->isAdmin() || $recipeBook->user_id === $user->id;
     }
 }

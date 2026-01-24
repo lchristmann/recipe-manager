@@ -10,5 +10,3 @@
         </flux:button>
     </div>
 </div>
-
-<flux:separator variant="subtle" />

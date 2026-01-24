@@ -62,6 +62,8 @@ new class extends Component
         $this->resetPage();
     }
 
+    // -------------------- queries --------------------
+
     // example in docs regarding pagination: https://livewire.laravel.com/docs/4.x/pagination#resetting-the-page
     #[Computed]
     public function users(): LengthAwarePaginator
@@ -77,9 +79,8 @@ new class extends Component
             ->paginate(10);
     }
 
-    // -------------------- create, update and delete --------------------
+    // -------------------- create / update / delete --------------------
 
-    /** Save user (create or update) */
     public function save(): void
     {
         $isCreating = is_null($this->editing);
@@ -107,44 +108,45 @@ new class extends Component
         $this->showFormModal = false;
     }
 
-    /** Delete user */
     public function delete(): void
     {
         $this->authorize('delete', $this->deleting);
+
         $this->deleting->delete();
 
         $this->deleting = null;
         $this->showDeleteModal = false;
     }
 
-    // -------------------- modal open and close --------------------
+    // -------------------- modal helpers --------------------
 
-    /** Open create modal */
     public function openCreateModal(): void
     {
         $this->resetForm();
         $this->showFormModal = true;
     }
 
-    /** Open edit modal */
     public function openEditModal(User $user): void
     {
+        $this->authorize('update', $user);
+
         $this->editing = $user;
         $this->name = $user->name;
         $this->email = $user->email;
         $this->is_admin = $user->is_admin;
         $this->password = '';
+
         $this->showFormModal = true;
     }
 
-    /** Open delete modal */
     public function openDeleteModal(User $user): void
     {
+        $this->authorize('delete', $user);
+
         $this->deleting = $user;
         $this->showDeleteModal = true;
     }
 
-    /** Close any modal */
     public function closeModals(): void
     {
         $this->showFormModal = false;

@@ -18,16 +18,12 @@
         <flux:table.rows>
             @foreach ($this->users as $user)
                 <flux:table.row :key="$user->id">
-                    <!-- Name -->
+                    <!-- Name, Email and Role -->
                     <flux:table.cell class="flex items-center gap-3">
                         <flux:avatar size="xs" :name="$user->name" />
                         {{ $user->name }}
                     </flux:table.cell>
-
-                    <!-- Email -->
                     <flux:table.cell>{{ $user->email }}</flux:table.cell>
-
-                    <!-- Role -->
                     <flux:table.cell>
                         @if ($user->isAdmin())
                             <flux:badge variant="solid" color="zinc" size="sm" inset="top bottom">{{ __('Admin') }}</flux:badge>
@@ -35,24 +31,14 @@
                             <flux:badge color="zinc" size="sm" inset="top bottom">{{ __('User') }}</flux:badge>
                         @endif
                     </flux:table.cell>
-
-                    <!-- Actions -->
                     <flux:table.cell>
                         <!-- Desktop buttons -->
                         <div class="hidden sm:flex justify-end gap-2">
                             @unless($user->id === auth()->id())
-                                <flux:button
-                                    wire:click="openEditModal({{ $user->id }})"
-                                    icon="pencil"
-                                    size="sm"
-                                >
+                                <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $user->id }})">
                                     {{ __('Edit') }}
                                 </flux:button>
-                                <flux:button
-                                    wire:click="openDeleteModal({{ $user->id }})"
-                                    icon="trash"
-                                    size="sm"
-                                >
+                                <flux:button icon="trash" size="sm" wire:click="openDeleteModal({{ $user->id }})">
                                     {{ __('Delete') }}
                                 </flux:button>
                             @endunless
@@ -62,24 +48,13 @@
                         <div class="sm:hidden">
                             @unless($user->id === auth()->id())
                                 <flux:dropdown>
-                                    <flux:button
-                                        variant="ghost"
-                                        size="sm"
-                                        icon="ellipsis-horizontal"
-                                        inset="top bottom"
-                                    />
+                                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" />
                                     <flux:menu>
-                                        <flux:menu.item
-                                            wire:click="openEditModal({{ $user->id }})"
-                                            icon="pencil"
-                                        >
-                                            {{ __('Edit') }}
+                                        <flux:menu.item icon="pencil" wire:click="openEditModal({{ $user->id }})">
+                                                {{ __('Edit') }}
                                         </flux:menu.item>
-                                        <flux:menu.item
-                                            wire:click="openDeleteModal({{ $user->id }})"
-                                            icon="trash"
-                                        >
-                                            {{ __('Delete') }}
+                                        <flux:menu.item icon="trash" wire:click="openDeleteModal({{ $user->id }})">
+                                                {{ __('Delete') }}
                                         </flux:menu.item>
                                     </flux:menu>
                                 </flux:dropdown>
@@ -94,12 +69,10 @@
     <!-- Create / Edit Modal -->
     <flux:modal wire:model.self="showFormModal" title="{{ $editing ? __('Edit User') : __('Create User') }}" class="md:w-96">
         <form wire:submit="save" class="space-y-6">
-            <flux:input wire:model="name" label="{{ __('Name') }}" required />
-            <flux:input wire:model="email" label="{{ __('Email') }}" type="email" required />
+            <flux:input wire:model="name" label="{{ __('Name') }}" />
+            <flux:input wire:model="email" label="{{ __('Email') }}" type="email" />
             <flux:input wire:model="password" label="{{ __('Password') }}" type="password" :placeholder="$editing ? '••••••••' : ''" />
-            <flux:checkbox
-                wire:model="is_admin"
-                label="{{ __('Admin') }}"
+            <flux:checkbox wire:model="is_admin" label="{{ __('Admin') }}"
                 :disabled="$editing && $editing->id === auth()->id()"
             />
 
