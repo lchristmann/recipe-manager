@@ -65,6 +65,16 @@ class User extends Authenticatable
             ->orderBy('position');
     }
 
+    public function communityRecipeBooks(): HasMany
+    {
+        return $this->recipeBooks()->where('community', true);
+    }
+
+    public function personalRecipeBooks(): HasMany
+    {
+        return $this->recipeBooks()->where('community', false);
+    }
+
     public function plannedRecipes(): BelongsToMany
     {
         return $this->belongsToMany(Recipe::class, 'planned_recipes')

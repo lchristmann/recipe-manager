@@ -56,12 +56,15 @@
                     <flux:menu.separator />
 
                     <flux:menu.radio.group>
+                        <flux:menu.item :href="route('cookbooks.index')" icon="book-open" wire:navigate>
+                            {{ __('Cookbooks') }}
+                        </flux:menu.item>
                         @if (auth()->user()->isAdmin())
                             <flux:menu.item :href="route('users.index')" icon="users" wire:navigate>
                                 {{ __('Users') }}
                             </flux:menu.item>
-                            <flux:menu.separator />
                         @endif
+                        <flux:menu.separator />
                         <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>
                             {{ __('Settings') }}
                         </flux:menu.item>
