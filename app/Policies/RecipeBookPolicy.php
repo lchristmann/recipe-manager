@@ -12,9 +12,9 @@ class RecipeBookPolicy
      */
     public function view(User $user, RecipeBook $recipeBook): bool
     {
-        return $recipeBook->user_id === $user->id
-            || $recipeBook->community
-            || !$recipeBook->private;
+        return $recipeBook->community
+            || !$recipeBook->private
+            || $recipeBook->user_id === $user->id;
     }
 
     /**

@@ -11,6 +11,10 @@ Route::middleware(['auth'])->group(function () {
     Route::livewire('/cookbooks', 'pages::recipe-books.index')
         ->name('cookbooks.index');
 
+    Route::livewire('/cookbooks/{cookbook}', 'pages::recipe-books.show')
+        ->can('view', 'cookbook')
+        ->name('cookbooks.show');
+
     Route::livewire('/users', 'pages::users.index')
         ->can('viewAny', User::class)
         ->name('users.index');

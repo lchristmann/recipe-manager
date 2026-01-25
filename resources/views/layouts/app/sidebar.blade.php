@@ -1,3 +1,32 @@
+@php
+    use App\Models\RecipeBook;
+    use App\Models\User;
+
+    $communityBooks = RecipeBook::query()
+        ->where('community', true)
+        ->orderBy('position')
+        ->get();
+
+    $users = User::query()
+        ->orderBy('name')
+        ->get()
+        ->map(function (User $user) {
+            $booksQuery = RecipeBook::query()
+                ->where('community', false)
+                ->where('user_id', $user->id)
+                ->orderBy('position');
+
+            if ($user->id !== auth()->id()) {
+                $booksQuery->where('private', false);
+            }
+
+            $user->sidebarBooks = $booksQuery->get();
+
+            return $user;
+        })
+        ->filter(fn (User $user) => $user->sidebarBooks->isNotEmpty());
+@endphp
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
     <head>
@@ -11,11 +40,37 @@
             </flux:sidebar.header>
 
             <flux:sidebar.nav>
-                <flux:sidebar.group :heading="__('Platform')" class="grid">
-                    <flux:sidebar.item icon="home" :href="route('home')" :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard') }}
-                    </flux:sidebar.item>
-                </flux:sidebar.group>
+                {{-- -------------------- COMMUNITY -------------------- --}}
+                @if ($communityBooks->isNotEmpty())
+                    <flux:sidebar.group :heading="__('Community')" class="grid">
+                        @foreach ($communityBooks as $book)
+                            <flux:sidebar.item
+                                icon="book-open"
+                                :href="route('cookbooks.show', ['cookbook' => $book->id])"
+                                :current="request()->routeIs('cookbooks.show') && request()->route('cookbook')?->id === $book->id"
+                                wire:navigate
+                            >
+                                {{ $book->title }}
+                            </flux:sidebar.item>
+                        @endforeach
+                    </flux:sidebar.group>
+                @endif
+
+                {{-- -------------------- USERS -------------------- --}}
+                @foreach ($users as $user)
+                    <flux:sidebar.group :heading="$user->name" class="grid">
+                        @foreach ($user->sidebarBooks as $book)
+                            <flux:sidebar.item
+                                icon="book-open"
+                                :href="route('cookbooks.show', ['cookbook' => $book->id])"
+                                :current="request()->routeIs('cookbooks.show') && request()->route('cookbook')?->id === $book->id"
+                                wire:navigate
+                            >
+                                {{ $book->title }}
+                            </flux:sidebar.item>
+                        @endforeach
+                    </flux:sidebar.group>
+                @endforeach
             </flux:sidebar.nav>
 
             <flux:spacer />
