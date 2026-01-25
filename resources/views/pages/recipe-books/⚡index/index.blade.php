@@ -1,12 +1,66 @@
 <section class="w-full">
     @include('partials.recipe-books-heading')
 
-    {{-- COMMUNITY COOKBOOKS --}}
-    <flux:heading size="lg" class="mb-4">
-        {{ __('Community Cookbooks') }}
-    </flux:heading>
+    {{-- -------------------- COMMUNITY COOKBOOKS -------------------- --}}
+    <div class="flex items-center justify-between mb-4">
+        <flux:heading size="lg">{{ __('Community Cookbooks') }}</flux:heading>
+        <flux:button icon="arrows-right-left" wire:click="$toggle('sortingCommunity')">
+            {{ $sortingCommunity ? __('Done') : __('Reorder') }}
+        </flux:button>
+    </div>
 
-    <flux:table :paginate="$this->communityCookbooks">
+    {{-- SORTABLE TABLE --}}
+    <table class="w-full mb-4" x-show="$wire.sortingCommunity">
+        <flux:table.columns>
+            <flux:table.column class="w-6" />
+            <flux:table.column>{{ __('Title') }}</flux:table.column>
+            <flux:table.column>{{ __('Creator') }}</flux:table.column>
+            <flux:table.column>{{ __('Recipes') }}</flux:table.column>
+            <flux:table.column />
+        </flux:table.columns>
+
+        <tbody wire:sort="sortCommunity">
+        @foreach ($this->communityCookbooksAll as $cookbook)
+            <tr wire:sort:item="{{ $cookbook->id }}" :key="$cookbook->id">
+                <flux:table.cell class="w-6 cursor-grab " wire:sort:handle>
+                    <flux:icon name="bars-2" />
+                </flux:table.cell>
+                <flux:table.cell>{{ $cookbook->title }}</flux:table.cell>
+                <flux:table.cell>{{ $cookbook->user->name }}</flux:table.cell>
+                <flux:table.cell>{{ $cookbook->recipes_count }}</flux:table.cell>
+                <flux:table.cell>
+                    @can('update', $cookbook)
+                        <div class="hidden sm:flex justify-end gap-2">
+                            <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $cookbook->id }})">
+                                {{ __('Edit') }}
+                            </flux:button>
+                            <flux:button icon="trash" size="sm" wire:click="openDeleteModal({{ $cookbook->id }})">
+                                {{ __('Delete') }}
+                            </flux:button>
+                        </div>
+
+                        <div class="sm:hidden">
+                            <flux:dropdown>
+                                <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" />
+                                <flux:menu>
+                                    <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})">
+                                        {{ __('Edit') }}
+                                    </flux:menu.item>
+                                    <flux:menu.item icon="trash" wire:click="openDeleteModal({{ $cookbook->id }})">
+                                        {{ __('Delete') }}
+                                    </flux:menu.item>
+                                </flux:menu>
+                            </flux:dropdown>
+                        </div>
+                    @endcan
+                </flux:table.cell>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+
+    {{-- PAGINATED FLUX TABLE --}}
+    <flux:table :paginate="$this->communityCookbooks" x-show="!$wire.sortingCommunity">
         <flux:table.columns>
             <flux:table.column>{{ __('Title') }}</flux:table.column>
             <flux:table.column>{{ __('Creator') }}</flux:table.column>
@@ -52,33 +106,41 @@
         </flux:table.rows>
     </flux:table>
 
-    {{-- PERSONAL COOKBOOKS --}}
-    <flux:heading size="lg" class="mt-10 mb-4">
-        {{ __('My Cookbooks') }}
-    </flux:heading>
+    {{-- -------------------- PERSONAL COOKBOOKS -------------------- --}}
+    <div class="flex items-center justify-between mt-10 mb-4">
+        <flux:heading size="lg">{{ __('My Cookbooks') }}</flux:heading>
+        <flux:button icon="arrows-right-left" wire:click="$toggle('sortingPersonal')">
+            {{ $sortingPersonal ? __('Done') : __('Reorder') }}
+        </flux:button>
+    </div>
 
-    <flux:table :paginate="$this->personalCookbooks">
+    {{-- SORTABLE TABLE --}}
+    <table class="w-full mb-4" x-show="$wire.sortingPersonal">
         <flux:table.columns>
+            <flux:table.column class="w-6" />
             <flux:table.column>{{ __('Title') }}</flux:table.column>
             <flux:table.column>{{ __('Type') }}</flux:table.column>
             <flux:table.column>{{ __('Recipes') }}</flux:table.column>
             <flux:table.column />
         </flux:table.columns>
 
-        <flux:table.rows>
-            @foreach ($this->personalCookbooks as $cookbook)
-                <flux:table.row :key="$cookbook->id">
-                    <flux:table.cell>{{ $cookbook->title }}</flux:table.cell>
-                    <flux:table.cell>
-                        @if ($cookbook->private)
-                            <flux:badge color="zinc" size="sm" inset="top bottom">{{ __('Private') }}</flux:badge>
-                        @else
-                            <flux:badge color="sky" size="sm" inset="top bottom">{{ __('Public') }}</flux:badge>
-                        @endif
-                    </flux:table.cell>
-                    <flux:table.cell>{{ $cookbook->recipes_count }}</flux:table.cell>
-
-                    <flux:table.cell>
+        <tbody wire:sort="sortPersonal">
+        @foreach ($this->personalCookbooksAll as $cookbook)
+            <tr wire:sort:item="{{ $cookbook->id }}" :key="$cookbook->id">
+                <flux:table.cell class="w-6 cursor-grab " wire:sort:handle>
+                    <flux:icon name="bars-2" />
+                </flux:table.cell>
+                <flux:table.cell>{{ $cookbook->title }}</flux:table.cell>
+                <flux:table.cell>
+                    @if ($cookbook->private)
+                        <flux:badge color="zinc" size="sm" inset="top bottom">{{ __('Private') }}</flux:badge>
+                    @else
+                        <flux:badge color="sky" size="sm" inset="top bottom">{{ __('Public') }}</flux:badge>
+                    @endif
+                </flux:table.cell>
+                <flux:table.cell>{{ $cookbook->recipes_count }}</flux:table.cell>
+                <flux:table.cell>
+                    @can('update', $cookbook)
                         <div class="hidden sm:flex justify-end gap-2">
                             <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $cookbook->id }})">
                                 {{ __('Edit') }}
@@ -101,6 +163,60 @@
                                 </flux:menu>
                             </flux:dropdown>
                         </div>
+                    @endcan
+                </flux:table.cell>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+
+    {{-- PAGINATED FLUX TABLE --}}
+    <flux:table :paginate="$this->personalCookbooks" x-show="!$wire.sortingPersonal">
+        <flux:table.columns>
+            <flux:table.column>{{ __('Title') }}</flux:table.column>
+            <flux:table.column>{{ __('Type') }}</flux:table.column>
+            <flux:table.column>{{ __('Recipes') }}</flux:table.column>
+            <flux:table.column />
+        </flux:table.columns>
+
+        <flux:table.rows>
+            @foreach ($this->personalCookbooks as $cookbook)
+                <flux:table.row :key="$cookbook->id">
+                    <flux:table.cell>{{ $cookbook->title }}</flux:table.cell>
+                    <flux:table.cell>
+                        @if ($cookbook->private)
+                            <flux:badge color="zinc" size="sm" inset="top bottom">{{ __('Private') }}</flux:badge>
+                        @else
+                            <flux:badge color="sky" size="sm" inset="top bottom">{{ __('Public') }}</flux:badge>
+                        @endif
+                    </flux:table.cell>
+                    <flux:table.cell>{{ $cookbook->recipes_count }}</flux:table.cell>
+
+                    <flux:table.cell>
+                        @can('update', $cookbook)
+                            <div class="hidden sm:flex justify-end gap-2">
+                                <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $cookbook->id }})">
+                                    {{ __('Edit') }}
+                                </flux:button>
+                                <flux:button icon="trash" size="sm" wire:click="openDeleteModal({{ $cookbook->id }})">
+                                    {{ __('Delete') }}
+                                </flux:button>
+                            </div>
+
+                            <div class="sm:hidden">
+                                <flux:dropdown>
+                                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" />
+                                    <flux:menu>
+                                        <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})">
+                                            {{ __('Edit') }}
+                                        </flux:menu.item>
+                                        <flux:menu.item icon="trash" wire:click="openDeleteModal({{ $cookbook->id }})">
+                                            {{ __('Delete') }}
+                                        </flux:menu.item>
+                                    </flux:menu>
+                                </flux:dropdown>
+                            </div>
+                        @endcan
                     </flux:table.cell>
                 </flux:table.row>
             @endforeach

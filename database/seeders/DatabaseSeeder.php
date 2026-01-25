@@ -95,5 +95,30 @@ class DatabaseSeeder extends Seeder
                         }
                     });
             });
+
+        // ------------ Normalize (0-based, without gaps) positions of recipe books ------------
+
+        // Community recipe books
+        RecipeBook::query()
+            ->where('community', true)
+            ->orderBy('id')
+            ->get()
+            ->values()
+            ->each(fn ($book, $index) =>
+                $book->update(['position' => $index])
+            );
+
+        // Personal recipe books
+        User::all()->each(function (User $user) {
+            RecipeBook::query()
+                ->where('community', false)
+                ->where('user_id', $user->id)
+                ->orderBy('id')
+                ->get()
+                ->values()
+                ->each(fn ($book, $index) =>
+                    $book->update(['position' => $index])
+                );
+        });
     }
 }

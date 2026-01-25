@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\RecipeBook;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -112,7 +113,28 @@ new class extends Component
     {
         $this->authorize('delete', $this->deleting);
 
+        // Grab the user's community recipe books count
+        $communityBooksCount = RecipeBook::query()
+            ->where('community', true)
+            ->where('user_id', $this->deleting->id)
+            ->count();
+
+        // Delete the user (personal recipe books are deleted by cascade automatically)
         $this->deleting->delete();
+
+        // Close gaps in community recipe books positions if the user had any
+        if ($communityBooksCount > 0) {
+            RecipeBook::query()
+                ->where('community', true)
+                ->orderBy('position')
+                ->get()
+                ->values()
+                ->each(function (RecipeBook $book, int $index) {
+                    if ($book->position !== $index) {
+                        $book->update(['position' => $index]);
+                    }
+                });
+        }
 
         $this->deleting = null;
         $this->showDeleteModal = false;
