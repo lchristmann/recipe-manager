@@ -20,6 +20,7 @@ class RecipeFactory extends Factory
         return [
             'cookbook_id' => Cookbook::factory(),
             'title' => fake()->words(3, true),
+            'description' => fake()->sentences(2, true),
             'link' => fake()->boolean(30) ? fake()->url() : null,
             'ingredients' => fake()->paragraph(),
             'instructions' => fake()->paragraphs(3, true),

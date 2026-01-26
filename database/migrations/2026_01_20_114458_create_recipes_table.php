@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('cookbook_id')->constrained()->cascadeOnDelete();
 
             $table->string('title');
+            $table->text('description')->nullable();
             $table->string('link')->nullable();
             $table->text('ingredients')->nullable();
             $table->text('instructions')->nullable();
