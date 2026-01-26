@@ -82,7 +82,6 @@
                     <flux:table.cell>{{ $cookbook->title }}</flux:table.cell>
                     <flux:table.cell class="hidden sm:table-cell">{{ Str::limit($cookbook->subtitle, 25) }}</flux:table.cell>
                     <flux:table.cell>{{ $cookbook->recipes_count }}</flux:table.cell>
-
                     <flux:table.cell>
                         @can('update', $cookbook)
                             <div class="hidden sm:flex justify-end gap-2">
@@ -134,7 +133,6 @@
             <flux:table.column class="w-6"/>
             <flux:table.column>{{ __('Title') }}</flux:table.column>
             <flux:table.column class="hidden sm:table-cell">{{ __('Subtitle') }}</flux:table.column>
-            <flux:table.column>{{ __('Type') }}</flux:table.column>
             <flux:table.column>{{ __('#') }}</flux:table.column>
             <flux:table.column/>
         </flux:table.columns>
@@ -145,15 +143,18 @@
                 <flux:table.cell class="w-6 cursor-grab " wire:sort:handle>
                     <flux:icon name="bars-2"/>
                 </flux:table.cell>
-                <flux:table.cell>{{ $cookbook->title }}</flux:table.cell>
-                <flux:table.cell class="hidden sm:table-cell">{{ Str::limit($cookbook->subtitle, 25) }}</flux:table.cell>
                 <flux:table.cell>
-                    @if ($cookbook->private)
-                        <flux:badge color="zinc" size="sm" inset="top bottom">{{ __('Private') }}</flux:badge>
-                    @else
-                        <flux:badge color="sky" size="sm" inset="top bottom">{{ __('Public') }}</flux:badge>
-                    @endif
+                    <div class="flex items-center gap-2">
+                        @if ($cookbook->private)
+                            <flux:icon.lock-closed class="size-4"/>
+                        @else
+                            <flux:icon.eye class="size-4" />
+                        @endif
+
+                        <span>{{ $cookbook->title }}</span>
+                    </div>
                 </flux:table.cell>
+                <flux:table.cell class="hidden sm:table-cell">{{ Str::limit($cookbook->subtitle, 25) }}</flux:table.cell>
                 <flux:table.cell>{{ $cookbook->recipes_count }}</flux:table.cell>
                 <flux:table.cell>
                     @can('update', $cookbook)
@@ -197,7 +198,6 @@
         <flux:table.columns>
             <flux:table.column>{{ __('Title') }}</flux:table.column>
             <flux:table.column class="hidden sm:table-cell">{{ __('Subtitle') }}</flux:table.column>
-            <flux:table.column>{{ __('Type') }}</flux:table.column>
             <flux:table.column>{{ __('#') }}</flux:table.column>
             <flux:table.column/>
         </flux:table.columns>
@@ -205,17 +205,19 @@
         <flux:table.rows>
             @foreach ($this->personalCookbooks as $cookbook)
                 <flux:table.row :key="$cookbook->id">
-                    <flux:table.cell>{{ $cookbook->title }}</flux:table.cell>
-                    <flux:table.cell class="hidden sm:table-cell">{{ Str::limit($cookbook->subtitle, 25) }}</flux:table.cell>
                     <flux:table.cell>
-                        @if ($cookbook->private)
-                            <flux:badge color="zinc" size="sm" inset="top bottom">{{ __('Private') }}</flux:badge>
-                        @else
-                            <flux:badge color="sky" size="sm" inset="top bottom">{{ __('Public') }}</flux:badge>
-                        @endif
-                    </flux:table.cell>
-                    <flux:table.cell>{{ $cookbook->recipes_count }}</flux:table.cell>
+                        <div class="flex items-center gap-2">
+                            @if ($cookbook->private)
+                                <flux:icon.lock-closed class="size-4"/>
+                            @else
+                                <flux:icon.eye class="size-4" />
+                            @endif
 
+                            <span>{{ $cookbook->title }}</span>
+                        </div>
+                    </flux:table.cell>
+                    <flux:table.cell class="hidden sm:table-cell">{{ Str::limit($cookbook->subtitle, 25) }}</flux:table.cell>
+                    <flux:table.cell>{{ $cookbook->recipes_count }}</flux:table.cell>
                     <flux:table.cell>
                         @can('update', $cookbook)
                             <div class="hidden sm:flex justify-end gap-2">
