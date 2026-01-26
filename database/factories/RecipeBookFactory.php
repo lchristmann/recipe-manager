@@ -20,6 +20,7 @@ class RecipeBookFactory extends Factory
         return [
             'user_id' => User::factory(),
             'title' => fake()->words(3, true),
+            'subtitle' => fake()->sentence(),
             'community' => false,
             'private' => false,
             'position' => fake()->numberBetween(1, 10),

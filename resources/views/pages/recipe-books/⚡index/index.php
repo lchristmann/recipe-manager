@@ -23,6 +23,7 @@ new class extends Component
 
     // Form fields
     public string $title = '';
+    public string $subtitle = '';
     // community | public | private - default is public when creating
     public string $visibility = 'public';
 
@@ -34,6 +35,7 @@ new class extends Component
     {
         return [
             'title' => ['required', 'string', 'max:255'],
+            'subtitle' => ['required', 'string', 'max:255'],
             'visibility' => ['required', 'in:community,public,private'],
         ];
     }
@@ -43,6 +45,7 @@ new class extends Component
         $this->reset([
             'editing',
             'title',
+            'subtitle',
             'visibility',
         ]);
     }
@@ -108,6 +111,7 @@ new class extends Component
         $recipeBook = $this->editing ?? new RecipeBook();
 
         $recipeBook->title = $validated['title'];
+        $recipeBook->subtitle = $validated['subtitle'];
         $recipeBook->community = $this->visibility === 'community';
         $recipeBook->private = $this->visibility === 'private';
         $recipeBook->user_id ??= auth()->id(); //  set user id (when creating, when it's null)
@@ -182,6 +186,7 @@ new class extends Component
 
         $this->editing = $recipeBook;
         $this->title = $recipeBook->title;
+        $this->subtitle = $recipeBook->subtitle;
 
         // community & private booleans in database -> visibility variable mapping
         $this->visibility = match (true) {

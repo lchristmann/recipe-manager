@@ -1,3 +1,5 @@
+@php use Illuminate\Support\Str; @endphp
+
 <section class="w-full">
     @include('partials.recipe-books-heading')
 
@@ -12,20 +14,22 @@
     {{-- SORTABLE TABLE --}}
     <table class="w-full mb-4" x-show="$wire.sortingCommunity">
         <flux:table.columns>
-            <flux:table.column class="w-6" />
+            <flux:table.column class="w-6"/>
             <flux:table.column>{{ __('Title') }}</flux:table.column>
+            <flux:table.column class="hidden sm:table-cell">{{ __('Subtitle') }}</flux:table.column>
             <flux:table.column>{{ __('Creator') }}</flux:table.column>
-            <flux:table.column>{{ __('Recipes') }}</flux:table.column>
-            <flux:table.column />
+            <flux:table.column>{{ __('#') }}</flux:table.column>
+            <flux:table.column/>
         </flux:table.columns>
 
         <tbody wire:sort="sortCommunity">
         @foreach ($this->communityCookbooksAll as $cookbook)
             <tr wire:sort:item="{{ $cookbook->id }}" :key="$cookbook->id">
                 <flux:table.cell class="w-6 cursor-grab " wire:sort:handle>
-                    <flux:icon name="bars-2" />
+                    <flux:icon name="bars-2"/>
                 </flux:table.cell>
                 <flux:table.cell>{{ $cookbook->title }}</flux:table.cell>
+                <flux:table.cell class="hidden sm:table-cell">{{ Str::limit($cookbook->subtitle, 25) }}</flux:table.cell>
                 <flux:table.cell>{{ $cookbook->user->name }}</flux:table.cell>
                 <flux:table.cell>{{ $cookbook->recipes_count }}</flux:table.cell>
                 <flux:table.cell>
@@ -41,7 +45,7 @@
 
                         <div class="sm:hidden">
                             <flux:dropdown>
-                                <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" />
+                                <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"/>
                                 <flux:menu>
                                     <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})">
                                         {{ __('Edit') }}
@@ -63,15 +67,17 @@
     <flux:table :paginate="$this->communityCookbooks" x-show="!$wire.sortingCommunity">
         <flux:table.columns>
             <flux:table.column>{{ __('Title') }}</flux:table.column>
+            <flux:table.column class="hidden sm:table-cell">{{ __('Subtitle') }}</flux:table.column>
             <flux:table.column>{{ __('Creator') }}</flux:table.column>
-            <flux:table.column>{{ __('Recipes') }}</flux:table.column>
-            <flux:table.column />
+            <flux:table.column>{{ __('#') }}</flux:table.column>
+            <flux:table.column/>
         </flux:table.columns>
 
         <flux:table.rows>
             @foreach ($this->communityCookbooks as $cookbook)
                 <flux:table.row :key="$cookbook->id">
                     <flux:table.cell>{{ $cookbook->title }}</flux:table.cell>
+                    <flux:table.cell class="hidden sm:table-cell">{{ Str::limit($cookbook->subtitle, 25) }}</flux:table.cell>
                     <flux:table.cell>{{ $cookbook->user->name }}</flux:table.cell>
                     <flux:table.cell>{{ $cookbook->recipes_count }}</flux:table.cell>
 
@@ -88,7 +94,7 @@
 
                             <div class="sm:hidden">
                                 <flux:dropdown>
-                                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" />
+                                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"/>
                                     <flux:menu>
                                         <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})">
                                             {{ __('Edit') }}
@@ -117,20 +123,22 @@
     {{-- SORTABLE TABLE --}}
     <table class="w-full mb-4" x-show="$wire.sortingPersonal">
         <flux:table.columns>
-            <flux:table.column class="w-6" />
+            <flux:table.column class="w-6"/>
             <flux:table.column>{{ __('Title') }}</flux:table.column>
+            <flux:table.column class="hidden sm:table-cell">{{ __('Subtitle') }}</flux:table.column>
             <flux:table.column>{{ __('Type') }}</flux:table.column>
-            <flux:table.column>{{ __('Recipes') }}</flux:table.column>
-            <flux:table.column />
+            <flux:table.column>{{ __('#') }}</flux:table.column>
+            <flux:table.column/>
         </flux:table.columns>
 
         <tbody wire:sort="sortPersonal">
         @foreach ($this->personalCookbooksAll as $cookbook)
             <tr wire:sort:item="{{ $cookbook->id }}" :key="$cookbook->id">
                 <flux:table.cell class="w-6 cursor-grab " wire:sort:handle>
-                    <flux:icon name="bars-2" />
+                    <flux:icon name="bars-2"/>
                 </flux:table.cell>
                 <flux:table.cell>{{ $cookbook->title }}</flux:table.cell>
+                <flux:table.cell class="hidden sm:table-cell">{{ Str::limit($cookbook->subtitle, 25) }}</flux:table.cell>
                 <flux:table.cell>
                     @if ($cookbook->private)
                         <flux:badge color="zinc" size="sm" inset="top bottom">{{ __('Private') }}</flux:badge>
@@ -152,7 +160,7 @@
 
                         <div class="sm:hidden">
                             <flux:dropdown>
-                                <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" />
+                                <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"/>
                                 <flux:menu>
                                     <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})">
                                         {{ __('Edit') }}
@@ -174,15 +182,17 @@
     <flux:table :paginate="$this->personalCookbooks" x-show="!$wire.sortingPersonal">
         <flux:table.columns>
             <flux:table.column>{{ __('Title') }}</flux:table.column>
+            <flux:table.column class="hidden sm:table-cell">{{ __('Subtitle') }}</flux:table.column>
             <flux:table.column>{{ __('Type') }}</flux:table.column>
-            <flux:table.column>{{ __('Recipes') }}</flux:table.column>
-            <flux:table.column />
+            <flux:table.column>{{ __('#') }}</flux:table.column>
+            <flux:table.column/>
         </flux:table.columns>
 
         <flux:table.rows>
             @foreach ($this->personalCookbooks as $cookbook)
                 <flux:table.row :key="$cookbook->id">
                     <flux:table.cell>{{ $cookbook->title }}</flux:table.cell>
+                    <flux:table.cell class="hidden sm:table-cell">{{ Str::limit($cookbook->subtitle, 25) }}</flux:table.cell>
                     <flux:table.cell>
                         @if ($cookbook->private)
                             <flux:badge color="zinc" size="sm" inset="top bottom">{{ __('Private') }}</flux:badge>
@@ -205,7 +215,7 @@
 
                             <div class="sm:hidden">
                                 <flux:dropdown>
-                                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" />
+                                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"/>
                                     <flux:menu>
                                         <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})">
                                             {{ __('Edit') }}
@@ -226,15 +236,16 @@
     {{-- CREATE / EDIT MODAL --}}
     <flux:modal wire:model.self="showFormModal" title="{{ $editing ? __('Edit Cookbook') : __('Create Cookbook') }}">
         <form wire:submit="save" class="space-y-6">
-            <flux:input wire:model="title" label="{{ __('Title') }}" />
+            <flux:input wire:model="title" label="{{ __('Title') }}"/>
+            <flux:input wire:model="subtitle" label="{{ __('Subtitle') }}"/>
 
             <flux:radio.group wire:model="visibility" label="{{ __('Visibility') }}">
                 <flux:radio value="community" label="{{ __('Community') }}"
-                            description="{{ __('Editable by everyone in the community.') }}" />
+                            description="{{ __('Editable by everyone in the community.') }}"/>
                 <flux:radio value="public" label="{{ __('Public') }}"
-                            description="{{ __('Viewable by everyone, editable only by you.') }}" />
+                            description="{{ __('Viewable by everyone, editable only by you.') }}"/>
                 <flux:radio value="private" label="{{ __('Private') }}"
-                            description="{{ __('Only visible and editable by you.') }}" />
+                            description="{{ __('Only visible and editable by you.') }}"/>
             </flux:radio.group>
 
             <div class="flex justify-end gap-2">

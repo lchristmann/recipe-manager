@@ -19,6 +19,7 @@ class RecipeBook extends Model
 
     protected $fillable = [
         'title',
+        'subtitle',
         'community',
         'private',
         'position',

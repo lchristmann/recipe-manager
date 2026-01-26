@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
             $table->string('title');
+            $table->string('subtitle')->nullable();
             $table->boolean('community')->default(false);
             $table->boolean('private')->default(false);
             $table->integer('position')->default(0);
