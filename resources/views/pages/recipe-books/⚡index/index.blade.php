@@ -17,7 +17,9 @@
             <flux:table.column class="w-6"/>
             <flux:table.column>{{ __('Title') }}</flux:table.column>
             <flux:table.column class="hidden sm:table-cell">{{ __('Subtitle') }}</flux:table.column>
-            <flux:table.column>{{ __('#') }}</flux:table.column>
+            <flux:table.column>
+                <flux:icon.sigma class="size-4 -ml-0.5"/>
+            </flux:table.column>
             <flux:table.column/>
         </flux:table.columns>
 
@@ -72,7 +74,9 @@
         <flux:table.columns>
             <flux:table.column>{{ __('Title') }}</flux:table.column>
             <flux:table.column class="hidden sm:table-cell">{{ __('Subtitle') }}</flux:table.column>
-            <flux:table.column>{{ __('#') }}</flux:table.column>
+            <flux:table.column>
+                <flux:icon.sigma class="size-4 -ml-0.5"/>
+            </flux:table.column>
             <flux:table.column/>
         </flux:table.columns>
 
@@ -133,7 +137,9 @@
             <flux:table.column class="w-6"/>
             <flux:table.column>{{ __('Title') }}</flux:table.column>
             <flux:table.column class="hidden sm:table-cell">{{ __('Subtitle') }}</flux:table.column>
-            <flux:table.column>{{ __('#') }}</flux:table.column>
+            <flux:table.column>
+                <flux:icon.sigma class="size-4 -ml-0.5"/>
+            </flux:table.column>
             <flux:table.column/>
         </flux:table.columns>
 
@@ -198,7 +204,9 @@
         <flux:table.columns>
             <flux:table.column>{{ __('Title') }}</flux:table.column>
             <flux:table.column class="hidden sm:table-cell">{{ __('Subtitle') }}</flux:table.column>
-            <flux:table.column>{{ __('#') }}</flux:table.column>
+            <flux:table.column>
+                <flux:icon.sigma class="size-4 -ml-0.5"/>
+            </flux:table.column>
             <flux:table.column/>
         </flux:table.columns>
 
