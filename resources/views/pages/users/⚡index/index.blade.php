@@ -12,6 +12,9 @@
             <flux:table.column>{{ __('Name') }}</flux:table.column>
             <flux:table.column>{{ __('Email') }}</flux:table.column>
             <flux:table.column>{{ __('Role') }}</flux:table.column>
+            <flux:table.column>
+                <flux:icon.book-open class="size-4 -ml-0.5"/>
+            </flux:table.column>
             <flux:table.column></flux:table.column>
         </flux:table.columns>
 
@@ -31,6 +34,7 @@
                             <flux:badge color="zinc" size="sm" inset="top bottom">{{ __('User') }}</flux:badge>
                         @endif
                     </flux:table.cell>
+                    <flux:table.cell>{{ $user->cookbooks_count }}</flux:table.cell>
                     <flux:table.cell>
                         <!-- Desktop buttons -->
                         <div class="hidden sm:flex justify-end gap-2">

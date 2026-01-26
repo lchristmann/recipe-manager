@@ -96,9 +96,9 @@ class DatabaseSeeder extends Seeder
                     });
             });
 
-        // ------------ Normalize (0-based, without gaps) positions of recipe books ------------
+        // ------------ Normalize (0-based, without gaps) positions of cookbooks ------------
 
-        // Community recipe books
+        // Community cookbooks
         Cookbook::query()
             ->where('community', true)
             ->orderBy('id')
@@ -108,7 +108,7 @@ class DatabaseSeeder extends Seeder
                 $book->update(['position' => $index])
             );
 
-        // Personal recipe books
+        // Personal cookbooks
         User::all()->each(function (User $user) {
             Cookbook::query()
                 ->where('community', false)

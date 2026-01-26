@@ -70,6 +70,7 @@ new class extends Component
     public function users(): LengthAwarePaginator
     {
         return User::query()
+            ->withCount('cookbooks')
             ->orderByDesc('id')
             ->when($this->search, fn (Builder $query) =>
                 $query->whereRaw('LOWER(name) LIKE ? OR LOWER(email) LIKE ?', [
@@ -113,16 +114,16 @@ new class extends Component
     {
         $this->authorize('delete', $this->deleting);
 
-        // Grab the user's community recipe books count
+        // Grab the user's community cookbooks count
         $communityBooksCount = Cookbook::query()
             ->where('community', true)
             ->where('user_id', $this->deleting->id)
             ->count();
 
-        // Delete the user (personal recipe books are deleted by cascade automatically)
+        // Delete the user (personal cookbooks are deleted by cascade automatically)
         $this->deleting->delete();
 
-        // Close gaps in community recipe books positions if the user had any
+        // Close gaps in community cookbooks positions if the user had any
         if ($communityBooksCount > 0) {
             Cookbook::query()
                 ->where('community', true)
