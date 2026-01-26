@@ -17,7 +17,6 @@
             <flux:table.column class="w-6"/>
             <flux:table.column>{{ __('Title') }}</flux:table.column>
             <flux:table.column class="hidden sm:table-cell">{{ __('Subtitle') }}</flux:table.column>
-            <flux:table.column>{{ __('Creator') }}</flux:table.column>
             <flux:table.column>{{ __('#') }}</flux:table.column>
             <flux:table.column/>
         </flux:table.columns>
@@ -30,11 +29,13 @@
                 </flux:table.cell>
                 <flux:table.cell>{{ $cookbook->title }}</flux:table.cell>
                 <flux:table.cell class="hidden sm:table-cell">{{ Str::limit($cookbook->subtitle, 25) }}</flux:table.cell>
-                <flux:table.cell>{{ $cookbook->user->name }}</flux:table.cell>
                 <flux:table.cell>{{ $cookbook->recipes_count }}</flux:table.cell>
                 <flux:table.cell>
                     @can('update', $cookbook)
                         <div class="hidden sm:flex justify-end gap-2">
+                            <flux:button icon="information-circle" size="sm" wire:click="openInfoModal({{ $cookbook->id }})">
+                                {{ __('Info') }}
+                            </flux:button>
                             <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $cookbook->id }})">
                                 {{ __('Edit') }}
                             </flux:button>
@@ -47,6 +48,9 @@
                             <flux:dropdown>
                                 <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"/>
                                 <flux:menu>
+                                    <flux:menu.item icon="information-circle" wire:click="openInfoModal({{ $cookbook->id }})">
+                                        {{ __('Info') }}
+                                    </flux:menu.item>
                                     <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})">
                                         {{ __('Edit') }}
                                     </flux:menu.item>
@@ -68,7 +72,6 @@
         <flux:table.columns>
             <flux:table.column>{{ __('Title') }}</flux:table.column>
             <flux:table.column class="hidden sm:table-cell">{{ __('Subtitle') }}</flux:table.column>
-            <flux:table.column>{{ __('Creator') }}</flux:table.column>
             <flux:table.column>{{ __('#') }}</flux:table.column>
             <flux:table.column/>
         </flux:table.columns>
@@ -78,12 +81,14 @@
                 <flux:table.row :key="$cookbook->id">
                     <flux:table.cell>{{ $cookbook->title }}</flux:table.cell>
                     <flux:table.cell class="hidden sm:table-cell">{{ Str::limit($cookbook->subtitle, 25) }}</flux:table.cell>
-                    <flux:table.cell>{{ $cookbook->user->name }}</flux:table.cell>
                     <flux:table.cell>{{ $cookbook->recipes_count }}</flux:table.cell>
 
                     <flux:table.cell>
                         @can('update', $cookbook)
                             <div class="hidden sm:flex justify-end gap-2">
+                                <flux:button icon="information-circle" size="sm" wire:click="openInfoModal({{ $cookbook->id }})">
+                                    {{ __('Info') }}
+                                </flux:button>
                                 <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $cookbook->id }})">
                                     {{ __('Edit') }}
                                 </flux:button>
@@ -96,6 +101,9 @@
                                 <flux:dropdown>
                                     <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"/>
                                     <flux:menu>
+                                        <flux:menu.item icon="information-circle" wire:click="openInfoModal({{ $cookbook->id }})">
+                                            {{ __('Info') }}
+                                        </flux:menu.item>
                                         <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})">
                                             {{ __('Edit') }}
                                         </flux:menu.item>
@@ -150,6 +158,9 @@
                 <flux:table.cell>
                     @can('update', $cookbook)
                         <div class="hidden sm:flex justify-end gap-2">
+                            <flux:button icon="information-circle" size="sm" wire:click="openInfoModal({{ $cookbook->id }})">
+                                {{ __('Info') }}
+                            </flux:button>
                             <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $cookbook->id }})">
                                 {{ __('Edit') }}
                             </flux:button>
@@ -162,6 +173,9 @@
                             <flux:dropdown>
                                 <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"/>
                                 <flux:menu>
+                                    <flux:menu.item icon="information-circle" wire:click="openInfoModal({{ $cookbook->id }})">
+                                        {{ __('Info') }}
+                                    </flux:menu.item>
                                     <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})">
                                         {{ __('Edit') }}
                                     </flux:menu.item>
@@ -205,6 +219,9 @@
                     <flux:table.cell>
                         @can('update', $cookbook)
                             <div class="hidden sm:flex justify-end gap-2">
+                                <flux:button icon="information-circle" size="sm" wire:click="openInfoModal({{ $cookbook->id }})">
+                                    {{ __('Info') }}
+                                </flux:button>
                                 <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $cookbook->id }})">
                                     {{ __('Edit') }}
                                 </flux:button>
@@ -217,6 +234,9 @@
                                 <flux:dropdown>
                                     <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"/>
                                     <flux:menu>
+                                        <flux:menu.item icon="information-circle" wire:click="openInfoModal({{ $cookbook->id }})">
+                                            {{ __('Info') }}
+                                        </flux:menu.item>
                                         <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})">
                                             {{ __('Edit') }}
                                         </flux:menu.item>
@@ -232,6 +252,44 @@
             @endforeach
         </flux:table.rows>
     </flux:table>
+
+    {{-- INFO MODAL --}}
+    <flux:modal wire:model.self="showInfoModal" title="{{ __('Cookbook Info') }}">
+        @if ($infoCookbook)
+            <div class="space-y-4 text-sm">
+                <div>
+                    <strong>{{ __('Title') }}:</strong>
+                    {{ $infoCookbook->title }}
+                </div>
+
+                <div>
+                    <strong>{{ __('Subtitle') }}:</strong>
+                    {{ $infoCookbook->subtitle ?: '—' }}
+                </div>
+
+                <div>
+                    <strong>{{ __('Owner') }}:</strong>
+                    {{ $infoCookbook->user->name }}
+                </div>
+
+                <div>
+                    <strong>{{ __('Created') }}:</strong>
+                    {{ $infoCookbook->created_at->translatedFormat('F j, Y') }}
+                </div>
+
+                <div>
+                    <strong>{{ __('Last updated') }}:</strong>
+                    {{ $infoCookbook->updated_at->translatedFormat('F j, Y') }}
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <flux:modal.close>
+                    <flux:button>{{ __('Close') }}</flux:button>
+                </flux:modal.close>
+            </div>
+        @endif
+    </flux:modal>
 
     {{-- CREATE / EDIT MODAL --}}
     <flux:modal wire:model.self="showFormModal" title="{{ $editing ? __('Edit Cookbook') : __('Create Cookbook') }}">

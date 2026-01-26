@@ -14,10 +14,12 @@ new class extends Component
     use WithPagination;
 
     // Modal state
+    public bool $showInfoModal = false;
     public bool $showFormModal = false;
     public bool $showDeleteModal = false;
 
     // Currently editing / deleting
+    public ?RecipeBook $infoCookbook = null;
     public ?RecipeBook $editing = null;
     public ?RecipeBook $deleting = null;
 
@@ -173,6 +175,14 @@ new class extends Component
     }
 
     // -------------------- modal helpers --------------------
+
+    public function openInfoModal(RecipeBook $recipeBook): void
+    {
+        $this->authorize('view', $recipeBook);
+
+        $this->infoCookbook = $recipeBook->load('user');
+        $this->showInfoModal = true;
+    }
 
     public function openCreateModal(): void
     {
