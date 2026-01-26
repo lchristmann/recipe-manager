@@ -36,7 +36,7 @@ The app uses:
 - [Laravel](https://laravel.com/) 12
 - [Livewire](https://livewire.laravel.com/) 4
   - using the [Laravel Livewire Starter Kit](https://laravel.com/docs/12.x/starter-kits#livewire)
-- [Flux UI](https://fluxui.dev/) 2 and
+- [Flux UI](https://fluxui.dev/) 2 incl. [Flux Pro Components](https://fluxui.dev/pricing)
 - [Tailwind CSS](https://tailwindcss.com/) 4
 
 ## Data Model

@@ -31,6 +31,16 @@ docker compose version
 
 If these commands do not return the versions, install Docker and Docker Compose using the official documentation: [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/).
 
+You also need to activate Flux Pro for this project, entering your license's email and key string.
+
+```bash
+php artisan flux:activate
+```
+
+> If you don't have a license, but still wish to develop on this project, contact me, and I might write a little guide on
+> which Flux Pro Livewire components to comment out in the HTML, after removing the flux-pro repository from the composer.json,
+> so that the application runs (with few UI parts like pill boxes and file uploads missing) for you to work with it freely. 
+
 ## Commands for Everyday Development
 
 > **For the initial setup of the project visit the [Setting Up the Development Environment](#setting-up-the-development-environment) section first.**

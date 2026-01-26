@@ -1,7 +1,7 @@
 <section class="w-full">
     @include('partials.users-heading')
 
-    <flux:input
+    <flux:input icon="magnifying-glass"
         wire:model.live.debounce.250ms="search"
         placeholder="{{ __('Search users...') }}"
         class="w-full sm:w-64 mb-4"
