@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class RecipeBook extends Model
+class Cookbook extends Model
 {
-    /** @use HasFactory<\Database\Factories\RecipeBookFactory> */
+    /** @use HasFactory<\Database\Factories\CookbookFactory> */
     use HasFactory;
 
     protected $casts = [

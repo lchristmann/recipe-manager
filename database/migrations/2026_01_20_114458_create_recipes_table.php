@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('recipes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('recipe_book_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('cookbook_id')->constrained()->cascadeOnDelete();
 
             $table->string('title');
             $table->string('link')->nullable();

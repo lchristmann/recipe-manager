@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Recipe;
-use App\Models\RecipeBook;
+use App\Models\Cookbook;
 use App\Models\RecipeImage;
 use App\Models\Tag;
 use App\Models\User;
@@ -41,22 +41,22 @@ class DatabaseSeeder extends Seeder
         $tags = Tag::factory()->count(8)->create();
 
         $adminBooks = collect([
-            RecipeBook::factory()->private()->create([
+            Cookbook::factory()->private()->create([
                 'user_id' => $admin->id,
                 'title' => 'Private Recipes',
             ]),
-            RecipeBook::factory()->create([
+            Cookbook::factory()->create([
                 'user_id' => $admin->id,
                 'title' => 'Public Recipes',
             ]),
         ]);
 
         $userBooks = collect([
-            RecipeBook::factory()->community()->create([
+            Cookbook::factory()->community()->create([
                 'user_id' => $user->id,
                 'title' => 'Community Recipes',
             ]),
-            RecipeBook::factory()->create([
+            Cookbook::factory()->create([
                 'user_id' => $user->id,
                 'title' => 'Public Recipes',
             ]),
@@ -64,11 +64,11 @@ class DatabaseSeeder extends Seeder
 
         $adminBooks
             ->merge($userBooks)
-            ->each(function (RecipeBook $book) use ($tags) {
+            ->each(function (Cookbook $cookbook) use ($tags) {
                 Recipe::factory()
                     ->count(6)
                     ->create([
-                        'recipe_book_id' => $book->id,
+                        'cookbook_id' => $cookbook->id,
                     ])
                     ->each(function (Recipe $recipe) use ($tags) {
                         // Attach tags
@@ -99,7 +99,7 @@ class DatabaseSeeder extends Seeder
         // ------------ Normalize (0-based, without gaps) positions of recipe books ------------
 
         // Community recipe books
-        RecipeBook::query()
+        Cookbook::query()
             ->where('community', true)
             ->orderBy('id')
             ->get()
@@ -110,7 +110,7 @@ class DatabaseSeeder extends Seeder
 
         // Personal recipe books
         User::all()->each(function (User $user) {
-            RecipeBook::query()
+            Cookbook::query()
                 ->where('community', false)
                 ->where('user_id', $user->id)
                 ->orderBy('id')

@@ -1,7 +1,7 @@
 @php use Illuminate\Support\Str; @endphp
 
 <section class="w-full">
-    @include('partials.recipe-books-heading')
+    @include('partials.cookbooks-heading')
 
     {{-- -------------------- COMMUNITY COOKBOOKS -------------------- --}}
     <div class="flex items-center justify-between mb-4">

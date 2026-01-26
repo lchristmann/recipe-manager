@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\RecipeBook;
+use App\Models\Cookbook;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +18,7 @@ class RecipeFactory extends Factory
     public function definition(): array
     {
         return [
-            'recipe_book_id' => RecipeBook::factory(),
+            'cookbook_id' => Cookbook::factory(),
             'title' => fake()->words(3, true),
             'link' => fake()->boolean(30) ? fake()->url() : null,
             'ingredients' => fake()->paragraph(),

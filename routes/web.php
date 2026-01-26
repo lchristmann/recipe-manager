@@ -8,10 +8,10 @@ Route::middleware(['auth'])->group(function () {
        return view('dashboard');
    })->name('home');
 
-    Route::livewire('/cookbooks', 'pages::recipe-books.index')
+    Route::livewire('/cookbooks', 'pages::cookbooks.index')
         ->name('cookbooks.index');
 
-    Route::livewire('/cookbooks/{cookbook}', 'pages::recipe-books.show')
+    Route::livewire('/cookbooks/{cookbook}', 'pages::cookbooks.show')
         ->can('view', 'cookbook')
         ->name('cookbooks.show');
 

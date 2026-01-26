@@ -59,20 +59,20 @@ class User extends Authenticatable
         return $this->is_admin;
     }
 
-    public function recipeBooks(): HasMany
+    public function cookbooks(): HasMany
     {
-        return $this->hasMany(RecipeBook::class)
+        return $this->hasMany(Cookbook::class)
             ->orderBy('position');
     }
 
-    public function communityRecipeBooks(): HasMany
+    public function communityCookbooks(): HasMany
     {
-        return $this->recipeBooks()->where('community', true);
+        return $this->cookbooks()->where('community', true);
     }
 
-    public function personalRecipeBooks(): HasMany
+    public function personalCookbooks(): HasMany
     {
-        return $this->recipeBooks()->where('community', false);
+        return $this->cookbooks()->where('community', false);
     }
 
     public function plannedRecipes(): BelongsToMany

@@ -6,13 +6,13 @@ The setup is quick and easy: just follow the **[Installation Guide](docs/INSTALL
 
 ## Feature Description
 
-Each user can manage any number of recipe books for himself, which may contain many recipes.
+Each user can manage any number of cookbooks for himself, which may contain many recipes.
 
 Recipes can take shape as...
 
 - a link (leading to some recipe website's page)
 - ingredients + instructions
-- recipe images (photos taken from a physical recipe book)
+- recipe images (photos taken from a physical cookbook)
 
 ... and have food pictures uploaded for it.
 
@@ -25,7 +25,7 @@ There is a planner, where a user can switch between calendar weeks and manage re
 Sorting is implemented for almost all entities, to give the user the freedom of (re)arranging his data.
 
 By default, the app is "multi-tenant" (each user only sees their own data) and the only special privilege of admins is to manage users.<br>
-However, users can make their recipe books editable by others ("community") or just viewable ("public").
+However, users can make their cookbooks editable by others ("community") or just viewable ("public").
 
 ## Technical Architecture
 

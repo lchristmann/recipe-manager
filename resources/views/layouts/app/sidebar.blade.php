@@ -1,8 +1,8 @@
 @php
-    use App\Models\RecipeBook;
+    use App\Models\Cookbook;
     use App\Models\User;
 
-    $communityBooks = RecipeBook::query()
+    $communityBooks = Cookbook::query()
         ->where('community', true)
         ->orderBy('position')
         ->get();
@@ -11,7 +11,7 @@
         ->orderBy('name')
         ->get()
         ->map(function (User $user) {
-            $booksQuery = RecipeBook::query()
+            $booksQuery = Cookbook::query()
                 ->where('community', false)
                 ->where('user_id', $user->id)
                 ->orderBy('position');

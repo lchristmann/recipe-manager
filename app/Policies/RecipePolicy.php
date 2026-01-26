@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Recipe;
-use App\Models\RecipeBook;
+use App\Models\Cookbook;
 use App\Models\User;
 
 class RecipePolicy
@@ -13,16 +13,16 @@ class RecipePolicy
      */
     public function view(User $user, Recipe $recipe): bool
     {
-        return $user->can('view', $recipe->recipeBook);
+        return $user->can('view', $recipe->cookbook);
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user, RecipeBook $recipeBook): bool
+    public function create(User $user, Cookbook $cookbook): bool
     {
-        return $recipeBook->user_id === $user->id
-            || $recipeBook->community;
+        return $cookbook->user_id === $user->id
+            || $cookbook->community;
     }
 
     /**
@@ -30,10 +30,10 @@ class RecipePolicy
      */
     public function update(User $user, Recipe $recipe): bool
     {
-        $recipeBook = $recipe->recipeBook;
+        $cookbook = $recipe->cookbook;
 
-        return $recipeBook->user_id === $user->id
-            || $recipeBook->community;
+        return $cookbook->user_id === $user->id
+            || $cookbook->community;
     }
 
     /**
@@ -41,9 +41,9 @@ class RecipePolicy
      */
     public function delete(User $user, Recipe $recipe): bool
     {
-        $recipeBook = $recipe->recipeBook;
+        $cookbook = $recipe->cookbook;
 
-        return $recipeBook->user_id === $user->id
-            || $recipeBook->community;
+        return $cookbook->user_id === $user->id
+            || $cookbook->community;
     }
 }

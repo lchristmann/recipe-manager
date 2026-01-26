@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\RecipeBook;
+use App\Models\Cookbook;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -19,9 +19,9 @@ new class extends Component
     public bool $showDeleteModal = false;
 
     // Currently editing / deleting
-    public ?RecipeBook $infoCookbook = null;
-    public ?RecipeBook $editing = null;
-    public ?RecipeBook $deleting = null;
+    public ?Cookbook $infoCookbook = null;
+    public ?Cookbook $editing = null;
+    public ?Cookbook $deleting = null;
 
     // Form fields
     public string $title = '';
@@ -58,7 +58,7 @@ new class extends Component
     #[Computed]
     public function communityCookbooks(): LengthAwarePaginator
     {
-        return RecipeBook::query()
+        return Cookbook::query()
             ->with('user')
             ->withCount('recipes')
             ->where('community', true)
@@ -69,7 +69,7 @@ new class extends Component
     #[Computed]
     public function communityCookbooksAll(): Collection
     {
-        return RecipeBook::query()
+        return Cookbook::query()
             ->with('user')
             ->withCount('recipes')
             ->where('community', true)
@@ -80,7 +80,7 @@ new class extends Component
     #[Computed]
     public function personalCookbooks(): LengthAwarePaginator
     {
-        return RecipeBook::query()
+        return Cookbook::query()
             ->withCount('recipes')
             ->where('community', false)
             ->where('user_id', auth()->id())
@@ -91,7 +91,7 @@ new class extends Component
     #[Computed]
     public function personalCookbooksAll(): Collection
     {
-        return RecipeBook::query()
+        return Cookbook::query()
             ->withCount('recipes')
             ->where('community', false)
             ->where('user_id', auth()->id())
@@ -106,42 +106,42 @@ new class extends Component
         $isCreating = is_null($this->editing);
         $wasCommunity = $this->editing?->community;
 
-        $this->authorize($isCreating ? 'create' : 'update', $this->editing ?? RecipeBook::class);
+        $this->authorize($isCreating ? 'create' : 'update', $this->editing ?? Cookbook::class);
 
         $validated = $this->validate();
 
-        $recipeBook = $this->editing ?? new RecipeBook();
+        $cookbook = $this->editing ?? new Cookbook();
 
-        $recipeBook->title = $validated['title'];
-        $recipeBook->subtitle = $validated['subtitle'];
-        $recipeBook->community = $this->visibility === 'community';
-        $recipeBook->private = $this->visibility === 'private';
-        $recipeBook->user_id ??= auth()->id(); //  set user id (when creating, when it's null)
+        $cookbook->title = $validated['title'];
+        $cookbook->subtitle = $validated['subtitle'];
+        $cookbook->community = $this->visibility === 'community';
+        $cookbook->private = $this->visibility === 'private';
+        $cookbook->user_id ??= auth()->id(); //  set user id (when creating, when it's null)
 
-        $visibilityChanged = !$isCreating && $wasCommunity !== $recipeBook->community;
+        $visibilityChanged = !$isCreating && $wasCommunity !== $cookbook->community;
 
         // close gap in old scope (community / personal)
         if ($visibilityChanged) {
-            RecipeBook::query()
+            Cookbook::query()
                 ->where('community', $wasCommunity)
                 ->when(!$wasCommunity, fn (Builder $query) =>
                     $query->where('user_id', auth()->id())
                 )
-                ->where('position', '>', $recipeBook->position)
+                ->where('position', '>', $cookbook->position)
                 ->decrement('position');
         }
 
         // Assign position in new scope (community / personal)
         if ($isCreating  || $visibilityChanged) {
-            $recipeBook->position = RecipeBook::query()
-                    ->where('community', $recipeBook->community)
-                    ->when(!$recipeBook->community, fn (Builder $query) =>
+            $cookbook->position = Cookbook::query()
+                    ->where('community', $cookbook->community)
+                    ->when(!$cookbook->community, fn (Builder $query) =>
                         $query->where('user_id', auth()->id())
                     )
                     ->count();
         }
 
-        $recipeBook->save();
+        $cookbook->save();
 
         $this->resetForm();
         $this->showFormModal = false;
@@ -155,12 +155,12 @@ new class extends Component
             $position = $this->deleting->position;
 
             if ($this->deleting->community) {
-                RecipeBook::query()
+                Cookbook::query()
                     ->where('community', true)
                     ->where('position', '>', $position)
                     ->decrement('position');
             } else {
-                RecipeBook::query()
+                Cookbook::query()
                     ->where('community', false)
                     ->where('user_id', $this->deleting->user_id)
                     ->where('position', '>', $position)
@@ -176,11 +176,11 @@ new class extends Component
 
     // -------------------- modal helpers --------------------
 
-    public function openInfoModal(RecipeBook $recipeBook): void
+    public function openInfoModal(Cookbook $cookbook): void
     {
-        $this->authorize('view', $recipeBook);
+        $this->authorize('view', $cookbook);
 
-        $this->infoCookbook = $recipeBook->load('user');
+        $this->infoCookbook = $cookbook->load('user');
         $this->showInfoModal = true;
     }
 
@@ -190,29 +190,29 @@ new class extends Component
         $this->showFormModal = true;
     }
 
-    public function openEditModal(RecipeBook $recipeBook): void
+    public function openEditModal(Cookbook $cookbook): void
     {
-        $this->authorize('update', $recipeBook);
+        $this->authorize('update', $cookbook);
 
-        $this->editing = $recipeBook;
-        $this->title = $recipeBook->title;
-        $this->subtitle = $recipeBook->subtitle;
+        $this->editing = $cookbook;
+        $this->title = $cookbook->title;
+        $this->subtitle = $cookbook->subtitle;
 
         // community & private booleans in database -> visibility variable mapping
         $this->visibility = match (true) {
-            $recipeBook->community => 'community',
-            $recipeBook->private   => 'private',
+            $cookbook->community => 'community',
+            $cookbook->private   => 'private',
             default                => 'public',
         };
 
         $this->showFormModal = true;
     }
 
-    public function openDeleteModal(RecipeBook $recipeBook): void
+    public function openDeleteModal(Cookbook $cookbook): void
     {
-        $this->authorize('delete', $recipeBook);
+        $this->authorize('delete', $cookbook);
 
-        $this->deleting = $recipeBook;
+        $this->deleting = $cookbook;
         $this->showDeleteModal = true;
     }
 
@@ -226,7 +226,7 @@ new class extends Component
 
     public function sortCommunity(int $id, int $newPosition): void
     {
-        $books = RecipeBook::query()
+        $books = Cookbook::query()
             ->where('community', true)
             ->orderBy('position')
             ->lockForUpdate()
@@ -248,7 +248,7 @@ new class extends Component
 
     public function sortPersonal(int $id, int $newPosition): void
     {
-        $books = RecipeBook::query()
+        $books = Cookbook::query()
             ->where('community', false)
             ->where('user_id', auth()->id())
             ->orderBy('position')

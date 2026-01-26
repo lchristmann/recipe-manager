@@ -22,9 +22,9 @@ class Recipe extends Model
         'position',
     ];
 
-    public function recipeBook(): BelongsTo
+    public function cookbook(): BelongsTo
     {
-        return $this->belongsTo(RecipeBook::class);
+        return $this->belongsTo(Cookbook::class);
     }
 
     public function images(): HasMany

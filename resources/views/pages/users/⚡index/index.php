@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\RecipeBook;
+use App\Models\Cookbook;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -114,7 +114,7 @@ new class extends Component
         $this->authorize('delete', $this->deleting);
 
         // Grab the user's community recipe books count
-        $communityBooksCount = RecipeBook::query()
+        $communityBooksCount = Cookbook::query()
             ->where('community', true)
             ->where('user_id', $this->deleting->id)
             ->count();
@@ -124,14 +124,14 @@ new class extends Component
 
         // Close gaps in community recipe books positions if the user had any
         if ($communityBooksCount > 0) {
-            RecipeBook::query()
+            Cookbook::query()
                 ->where('community', true)
                 ->orderBy('position')
                 ->get()
                 ->values()
-                ->each(function (RecipeBook $book, int $index) {
-                    if ($book->position !== $index) {
-                        $book->update(['position' => $index]);
+                ->each(function (Cookbook $cookbook, int $index) {
+                    if ($cookbook->position !== $index) {
+                        $cookbook->update(['position' => $index]);
                     }
                 });
         }
