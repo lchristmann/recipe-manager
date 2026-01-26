@@ -29,7 +29,12 @@
                 <flux:table.cell class="w-6 cursor-grab " wire:sort:handle>
                     <flux:icon name="bars-2"/>
                 </flux:table.cell>
-                <flux:table.cell>{{ $cookbook->title }}</flux:table.cell>
+                <flux:table.cell>
+                    <div class="flex items-center gap-2">
+                        <flux:icon.globe-europe-africa class="size-4"/>
+                        <span>{{ $cookbook->title }}</span>
+                    </div>
+                </flux:table.cell>
                 <flux:table.cell class="hidden sm:table-cell">{{ Str::limit($cookbook->subtitle, 25) }}</flux:table.cell>
                 <flux:table.cell>{{ $cookbook->recipes_count }}</flux:table.cell>
                 <flux:table.cell>
@@ -83,7 +88,12 @@
         <flux:table.rows>
             @foreach ($this->communityCookbooks as $cookbook)
                 <flux:table.row :key="$cookbook->id">
-                    <flux:table.cell>{{ $cookbook->title }}</flux:table.cell>
+                    <flux:table.cell>
+                        <div class="flex items-center gap-2">
+                            <flux:icon.globe-europe-africa class="size-4"/>
+                            <span>{{ $cookbook->title }}</span>
+                        </div>
+                    </flux:table.cell>
                     <flux:table.cell class="hidden sm:table-cell">{{ Str::limit($cookbook->subtitle, 25) }}</flux:table.cell>
                     <flux:table.cell>{{ $cookbook->recipes_count }}</flux:table.cell>
                     <flux:table.cell>
@@ -275,6 +285,17 @@
                 <div>
                     <strong>{{ __('Subtitle') }}:</strong>
                     {{ $infoCookbook->subtitle ?: '—' }}
+                </div>
+
+                @php
+                    $type = $infoCookbook->community
+                        ? __('Community')
+                        : ($infoCookbook->private ? __('Private') : __('Public'));
+                @endphp
+
+                <div>
+                    <strong>{{ __('Type') }}:</strong>
+                    {{ $type }}
                 </div>
 
                 <div>
