@@ -77,6 +77,38 @@ docker compose -f compose.dev.yaml exec postgres bash
   SELECT * FROM users;
 ```
 
+## Helpful SQL Queries
+
+### For the validation of the cookbook.show page
+
+All tags that are available for a given cookbook:
+
+```postgresql
+SELECT DISTINCT(t.name)
+FROM recipes AS r
+    INNER JOIN recipe_tag AS rt ON r.id = rt.recipe_id
+    INNER JOIN tags AS t ON rt.tag_id = t.id
+WHERE cookbook_id = 1
+ORDER BY t.name;
+```
+
+All recipes that should be found for a tag filter combination:
+
+```postgresql
+SELECT r.id, r.cookbook_id, r.title, r.position
+FROM recipes AS r
+    INNER JOIN recipe_tag AS rt ON r.id = rt.recipe_id
+WHERE r.cookbook_id = 1
+  AND rt.tag_id IN (
+      SELECT id
+      FROM tags
+      WHERE name IN ('breakfast', 'french')
+    )
+GROUP BY r.id, r.cookbook_id, r.title, r.position
+HAVING COUNT(DISTINCT rt.tag_id) = 2 -- <- number of tags in list up there
+ORDER BY r.position;
+```
+
 ## Setting Up the Development Environment
 
 For development, we use the `compose.dev.yaml` Docker Compose configuration, which includes an additional workspace container with helpful tools.

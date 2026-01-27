@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
             ->merge($userBooks)
             ->each(function (Cookbook $cookbook) use ($tags) {
                 Recipe::factory()
-                    ->count(16)
+                    ->count(60)
                     ->create([
                         'cookbook_id' => $cookbook->id,
                     ])

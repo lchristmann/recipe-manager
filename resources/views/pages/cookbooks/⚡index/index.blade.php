@@ -25,7 +25,7 @@
 
         <tbody wire:sort="sortCommunity">
         @foreach ($this->communityCookbooksAll as $cookbook)
-            <tr wire:sort:item="{{ $cookbook->id }}" :key="$cookbook->id">
+            <tr wire:sort:item="{{ $cookbook->id }}" wire:key="{{ $cookbook->id }}">
                 <flux:table.cell class="w-6 cursor-grab " wire:sort:handle>
                     <flux:icon name="bars-2"/>
                 </flux:table.cell>
@@ -155,7 +155,7 @@
 
         <tbody wire:sort="sortPersonal">
         @foreach ($this->personalCookbooksAll as $cookbook)
-            <tr wire:sort:item="{{ $cookbook->id }}" :key="$cookbook->id">
+            <tr wire:sort:item="{{ $cookbook->id }}" wire:key="{{ $cookbook->id }}">
                 <flux:table.cell class="w-6 cursor-grab " wire:sort:handle>
                     <flux:icon name="bars-2"/>
                 </flux:table.cell>
