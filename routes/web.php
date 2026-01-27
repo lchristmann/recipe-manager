@@ -16,6 +16,9 @@ Route::middleware(['auth'])->group(function () {
         ->can('view', 'cookbook')
         ->name('cookbooks.show');
 
+    Route::livewire('/recipes/create', 'pages::recipes.create')
+        ->name('recipes.create');
+
     Route::livewire('/recipes/{recipe}', 'pages::recipes.show')
         ->can('view', 'recipe')
         ->name('recipes.show');

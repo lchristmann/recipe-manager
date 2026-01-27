@@ -30,7 +30,7 @@ class CookbookPolicy
      */
     public function update(User $user, Cookbook $cookbook): bool
     {
-        return $user->isAdmin() || $cookbook->user_id === $user->id;
+        return $cookbook->community || $cookbook->user_id === $user->id;
     }
 
     /**
@@ -38,6 +38,10 @@ class CookbookPolicy
      */
     public function delete(User $user, Cookbook $cookbook): bool
     {
-        return $user->isAdmin() || $cookbook->user_id === $user->id;
+        if ($cookbook->user_id === $user->id) return true;
+
+        if ($cookbook->community && $user->isAdmin()) return true;
+
+        return false;
     }
 }
