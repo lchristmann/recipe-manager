@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Enums\RecipeImageType;
 use App\Models\Recipe;
 use App\Models\Cookbook;
 use App\Models\RecipeImage;
@@ -96,7 +97,7 @@ class DatabaseSeeder extends Seeder
                     });
             });
 
-        // ------------ Normalize (0-based, without gaps) positions of cookbooks ------------
+        // ------------ Normalize (0-based, without gaps) positions ------------
 
         // Community cookbooks
         Cookbook::query()
@@ -120,5 +121,37 @@ class DatabaseSeeder extends Seeder
                     $book->update(['position' => $index])
                 );
         });
+
+        // Recipes within cookbooks
+        Cookbook::query()
+            ->with('recipes')
+            ->get()
+            ->each(function (Cookbook $cookbook) {
+                $cookbook->recipes
+                    ->sortBy('id')
+                    ->values()
+                    ->each(fn (Recipe $recipe, $index) =>
+                        $recipe->update(['position' => $index])
+                    );
+            });
+
+        // Recipe images per type within recipes
+        Recipe::query()
+            ->with('images')
+            ->get()
+            ->each(function (Recipe $recipe) {
+                collect([
+                    RecipeImageType::PHOTO,
+                    RecipeImageType::RECIPE,
+                ])->each(function (RecipeImageType $type) use ($recipe) {
+                    $recipe->images
+                        ->where('type', $type)
+                        ->sortBy('id')
+                        ->values()
+                        ->each(fn ($image, $index) =>
+                            $image->update(['position' => $index,])
+                        );
+                });
+            });
     }
 }

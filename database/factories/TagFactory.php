@@ -16,8 +16,56 @@ class TagFactory extends Factory
      */
     public function definition(): array
     {
+        $tags = [
+            // Diet & lifestyle
+            'vegetarian',
+            'vegan',
+            'gluten-free',
+            'dairy-free',
+            'low-carb',
+            'keto',
+            'paleo',
+            'high-protein',
+
+            // Meal types
+            'breakfast',
+            'lunch',
+            'dinner',
+            'snack',
+            'dessert',
+
+            // Cuisine
+            'italian',
+            'mexican',
+            'asian',
+            'indian',
+            'mediterranean',
+            'american',
+            'french',
+
+            // Difficulty & time
+            'quick',
+            'easy',
+            'meal-prep',
+            'one-pot',
+            'weeknight',
+
+            // Occasions
+            'party',
+            'holiday',
+            'family',
+            'comfort-food',
+
+            // Health & misc
+            'healthy',
+            'spicy',
+            'sweet',
+            'savory',
+            'kid-friendly',
+        ];
+
         return [
-            'name' => fake()->unique()->word(),
+            'name' => fake()->unique()->randomElement($tags),
         ];
     }
 }

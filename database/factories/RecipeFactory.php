@@ -17,9 +17,68 @@ class RecipeFactory extends Factory
      */
     public function definition(): array
     {
+        $adjectives = [
+            'Classic',
+            'Creamy',
+            'Spicy',
+            'Sweet',
+            'Savory',
+            'Crispy',
+            'Hearty',
+            'Fresh',
+            'Quick',
+            'Easy',
+            'Healthy',
+            'Comfort',
+        ];
+
+        $dishes = [
+            'Chicken Curry',
+            'Beef Stew',
+            'Vegetable Stir Fry',
+            'Mushroom Pasta',
+            'Tomato Soup',
+            'Grilled Salmon',
+            'Roasted Potatoes',
+            'Fried Rice',
+            'Caesar Salad',
+            'Veggie Bowl',
+            'Pancakes',
+            'Apple Pie',
+            'Chocolate Cake',
+            'Banana Bread',
+            'Fish Tacos',
+            'Lasagna',
+            'Risotto',
+            'Burrito',
+            'Omelette',
+            'Quiche',
+        ];
+
+        $extras = [
+            'with Herbs',
+            'with Garlic',
+            'with Lemon',
+            'with Cheese',
+            'with Vegetables',
+            'with Spices',
+            'with Rice',
+            'with Pasta',
+            'Style',
+            'Delight',
+        ];
+
+        $title = collect([
+            fake()->randomElement($adjectives),
+            fake()->randomElement($dishes),
+            fake()->boolean() ? fake()->randomElement($extras) : null,
+        ])
+            ->filter()
+            ->join(' ');
+
         return [
             'cookbook_id' => Cookbook::factory(),
-            'title' => fake()->words(3, true),
+            'title' => $title,
             'description' => fake()->sentences(2, true),
             'link' => fake()->boolean(30) ? fake()->url() : null,
             'ingredients' => fake()->paragraph(),
