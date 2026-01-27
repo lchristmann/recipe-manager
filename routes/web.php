@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\RecipeImage;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,12 @@ Route::middleware(['auth'])->group(function () {
     Route::livewire('/users', 'pages::users.index')
         ->can('viewAny', User::class)
         ->name('users.index');
+
+    Route::get('/recipe-images/{recipeImage}', function (RecipeImage $recipeImage) {
+        abort_unless(auth()->user()->can('view', $recipeImage->recipe), 403);
+
+        return Storage::response($recipeImage->path);
+    })->name('recipe-images.show');
 });
 
 require __DIR__.'/settings.php';
