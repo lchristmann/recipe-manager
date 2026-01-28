@@ -37,7 +37,7 @@ new class extends Component
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'subtitle' => ['required', 'string', 'max:255'],
+            'subtitle' => ['string', 'max:255'],
             'visibility' => ['required', 'in:community,public,private'],
         ];
     }
@@ -143,6 +143,8 @@ new class extends Component
 
         $cookbook->save();
 
+        $this->dispatch('cookbooks-changed');
+
         $this->resetForm();
         $this->showFormModal = false;
     }
@@ -169,6 +171,8 @@ new class extends Component
 
             $this->deleting->delete();
         });
+
+        $this->dispatch('cookbooks-changed');
 
         $this->deleting = null;
         $this->showDeleteModal = false;
@@ -244,6 +248,8 @@ new class extends Component
                 $book->update(['position' => $index]);
             }
         }
+
+        $this->dispatch('cookbooks-changed');
     }
 
     public function sortPersonal(int $id, int $newPosition): void
@@ -270,5 +276,7 @@ new class extends Component
                 $book->update(['position' => $index]);
             }
         }
+
+        $this->dispatch('cookbooks-changed');
     }
 };
