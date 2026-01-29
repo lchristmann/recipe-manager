@@ -6,6 +6,7 @@ use App\Enums\Enums\RecipeImageType;
 use App\Models\Recipe;
 use App\Models\Cookbook;
 use App\Models\RecipeImage;
+use App\Models\RecipeLink;
 use App\Models\Tag;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -76,6 +77,13 @@ class DatabaseSeeder extends Seeder
                         $recipe->tags()->attach(
                             $tags->random(rand(1, 4))->pluck('id')
                         );
+
+                        $linkCount = rand(0, 2);
+                        if ($linkCount > 0) {
+                            RecipeLink::factory()
+                                ->count($linkCount)
+                                ->create(['recipe_id' => $recipe->id,]);
+                        }
 
                         // Recipe images (0–2)
                         $recipeImageCount = rand(0, 2);
@@ -152,6 +160,19 @@ class DatabaseSeeder extends Seeder
                             $image->update(['position' => $index,])
                         );
                 });
+            });
+
+        // Recipe links per recipe
+        Recipe::query()
+            ->with('links')
+            ->get()
+            ->each(function (Recipe $recipe) {
+                $recipe->links
+                    ->sortBy('id')
+                    ->values()
+                    ->each(fn ($link, $index) =>
+                        $link->update(['position' => $index])
+                    );
             });
     }
 }

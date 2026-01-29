@@ -28,6 +28,12 @@ class Recipe extends Model
         return $this->belongsTo(Cookbook::class);
     }
 
+    public function links(): HasMany
+    {
+        return $this->hasMany(RecipeLink::class)
+            ->orderBy('position');
+    }
+
     public function images(): HasMany
     {
         return $this->hasMany(RecipeImage::class)

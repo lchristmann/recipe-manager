@@ -80,7 +80,6 @@ class RecipeFactory extends Factory
             'cookbook_id' => Cookbook::factory(),
             'title' => $title,
             'description' => fake()->sentences(2, true),
-            'link' => fake()->boolean(30) ? fake()->url() : null,
             'ingredients' => fake()->paragraph(),
             'instructions' => fake()->paragraphs(3, true),
             'position' => fake()->numberBetween(1, 20),
