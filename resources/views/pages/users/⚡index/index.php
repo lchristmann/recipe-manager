@@ -106,6 +106,8 @@ new class extends Component
 
         if ($isCreating) $this->resetPage();
 
+        $this->dispatch('users-changed');
+
         $this->resetForm();
         $this->showFormModal = false;
     }
@@ -136,6 +138,8 @@ new class extends Component
                     }
                 });
         }
+
+        $this->dispatch('users-changed');
 
         $this->deleting = null;
         $this->showDeleteModal = false;

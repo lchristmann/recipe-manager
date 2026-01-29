@@ -35,6 +35,8 @@ new class extends Component {
 
         $user->fill($validated);
 
+        $nameChanged = $user->isDirty('name');
+
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
@@ -42,6 +44,10 @@ new class extends Component {
         $user->save();
 
         $this->dispatch('profile-updated', name: $user->name);
+
+        if ($nameChanged) {
+            $this->dispatch('users-changed');
+        }
     }
 
     /**

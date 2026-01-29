@@ -8,6 +8,7 @@ use Livewire\Component;
 
 new class extends Component {
     #[On('cookbooks-changed')]
+    #[On('users-changed')]
     public function refreshSidebar(): void
     {
         // the event triggers a re-render of the component for a fresh sidebar
