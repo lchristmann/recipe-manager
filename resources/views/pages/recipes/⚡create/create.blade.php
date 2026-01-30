@@ -83,6 +83,34 @@
         <flux:textarea wire:model="instructions" rows="6" label="{{ __('Instructions') }}"
             placeholder="{{ __('Preparation steps (optional)') }}"/>
 
+        {{-- Photo Images --}}
+        <flux:file-upload wire:model="photoImages" multiple label="{{ __('Photos') }}" :error="$errors->first('photoImages.*')">
+            <flux:file-upload.dropzone heading="{{ __('Drop photos or click to browse') }}" text="{{ __('JPG, PNG, GIF up to 10MB') }}" inline with-progress/>
+        </flux:file-upload>
+        <div class="mt-3 flex flex-col gap-2">
+            @foreach ($photoImages as $index => $photo)
+                <flux:file-item :heading="$photo->getClientOriginalName()" :image="$photo->isPreviewable() ? $photo->temporaryUrl() : null" :size="$photo->getSize()">
+                    <x-slot name="actions">
+                        <flux:file-item.remove wire:click="removePhotoImage({{ $index }})"/>
+                    </x-slot>
+                </flux:file-item>
+            @endforeach
+        </div>
+
+        {{-- Recipe Images --}}
+        <flux:file-upload wire:model="recipeImages" multiple label="{{ __('Recipe pages') }}" :error="$errors->first('recipeImages.*')">
+            <flux:file-upload.dropzone heading="{{ __('Drop recipe images or click to browse') }}" text="{{ __('JPG, PNG, GIF up to 10MB') }}" inline with-progress/>
+        </flux:file-upload>
+        <div class="mt-3 flex flex-col gap-2">
+            @foreach ($recipeImages as $index => $photo)
+                <flux:file-item :heading="$photo->getClientOriginalName()" :image="$photo->isPreviewable() ? $photo->temporaryUrl() : null" :size="$photo->getSize()">
+                    <x-slot name="actions">
+                        <flux:file-item.remove wire:click="removeRecipeImage({{ $index }})"/>
+                    </x-slot>
+                </flux:file-item>
+            @endforeach
+        </div>
+
         {{-- Actions --}}
         <div class="pt-4 flex justify-end gap-3">
             <flux:button variant="ghost" :href="url()->previous()">

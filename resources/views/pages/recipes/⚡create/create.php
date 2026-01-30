@@ -1,5 +1,7 @@
 <?php
 
+use App\Constants\StorageConstants;
+use App\Enums\Enums\RecipeImageType;
 use App\Models\Cookbook;
 use App\Models\Recipe;
 use App\Models\Tag;
@@ -10,9 +12,12 @@ use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Url;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 new class extends Component
 {
+    use WithFileUploads;
+
     #[Url(as: 'cookbook')]
     public ?int $cookbookId = null;
 
@@ -30,6 +35,10 @@ new class extends Component
 
     public array $links = [''];
 
+    // Images
+    public array $photoImages = [];
+    public array $recipeImages = [];
+
     protected function rules(): array
     {
         return [
@@ -41,6 +50,10 @@ new class extends Component
             'selectedTags' => ['array', Rule::exists('tags', 'id')],
             'links' => ['array'],
             'links.*' => ['nullable', 'url:http,https', 'max:255'],
+            'photoImages' => ['array'],
+            'photoImages.*' => ['image', 'max:10240'],
+            'recipeImages' => ['array'],
+            'recipeImages.*' => ['image', 'max:8192'],
         ];
     }
 
@@ -49,6 +62,10 @@ new class extends Component
         return [
             'links.*.url' => __('Link #:position must be a valid URL.'),
             'links.*.max' => __('Link #:position may not exceed :max characters.'),
+            'photoImages.*.image' => __('Photo #:position must be an image file.'),
+            'photoImages.*.max' => __('Photo #:position may not be larger than 10 MB.'),
+            'recipeImages.*.image' => __('Recipe image #:position must be an image file.'),
+            'recipeImages.*.max' => __('Recipe image #:position may not be larger than 8 MB.'),
         ];
     }
 
@@ -116,6 +133,27 @@ new class extends Component
         $this->links = array_values($this->links); // reindex the array
     }
 
+    public function removePhotoImage(int $index): void
+    {
+        $file = $this->photoImages[$index] ?? null;
+
+        if ($file) $file->delete();
+
+        unset($this->photoImages[$index]);
+        $this->photoImages = array_values($this->photoImages);
+    }
+
+    public function removeRecipeImage(int $index): void
+    {
+        $file = $this->recipeImages[$index] ?? null;
+
+        if ($file) $file->delete();
+
+        unset($this->recipeImages[$index]);
+        $this->recipeImages = array_values($this->recipeImages);
+    }
+
+
     // -------------------- create / update / delete --------------------
 
     public function createTag(): void
@@ -170,6 +208,31 @@ new class extends Component
                     ]);
                 }
             }
+
+            // Store photo images
+            foreach ($this->photoImages as $position => $file) {
+                if ($file) {
+                    $path = $file->store(path: StorageConstants::PHOTO_IMAGES);
+                    $recipe->images()->create([
+                        'path' => $path,
+                        'type' => RecipeImageType::PHOTO,
+                        'position' => $position,
+                    ]);
+                }
+            }
+
+            // Store recipe images
+            foreach ($this->recipeImages as $position => $file) {
+                if ($file) {
+                    $path = $file->store(path: StorageConstants::RECIPE_IMAGES);
+                    $recipe->images()->create([
+                        'path' => $path,
+                        'type' => RecipeImageType::RECIPE,
+                        'position' => $position,
+                    ]);
+                }
+            }
+
 
             return $recipe;
         });

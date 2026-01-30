@@ -45,7 +45,9 @@ class RecipeImageFactory extends Factory
                 '.jpg'
             );
 
-            $destinationPath = StorageConstants::RECIPE_IMAGES . '/' . uniqid() . '.jpg';
+            $destinationFolder = $isPhoto ? StorageConstants::PHOTO_IMAGES : StorageConstants::RECIPE_IMAGES;
+
+            $destinationPath = $destinationFolder . '/' . uniqid() . '.jpg';
 
             Storage::put($destinationPath, file_get_contents($sourcePath));
 
