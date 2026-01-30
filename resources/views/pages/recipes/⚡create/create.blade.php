@@ -87,9 +87,10 @@
         <flux:file-upload wire:model="photoImages" multiple label="{{ __('Photos') }}" :error="$errors->first('photoImages.*')">
             <flux:file-upload.dropzone heading="{{ __('Drop photos or click to browse') }}" text="{{ __('JPG, PNG, GIF up to 10MB') }}" inline with-progress/>
         </flux:file-upload>
-        <div class="mt-3 flex flex-col gap-2">
+        <div class="mt-3 flex flex-col gap-2" wire:sort="sortPhotoImages">
             @foreach ($photoImages as $index => $photo)
-                <flux:file-item :heading="$photo->getClientOriginalName()" :image="$photo->isPreviewable() ? $photo->temporaryUrl() : null" :size="$photo->getSize()">
+                <flux:file-item wire:sort:item="{{ $index }}" :heading="$photo->getClientOriginalName()" wire:key="{{ $photo->getFilename() }}"
+                    :image="$photo->isPreviewable() ? $photo->temporaryUrl() : null" :size="$photo->getSize()">
                     <x-slot name="actions">
                         <flux:file-item.remove wire:click="removePhotoImage({{ $index }})"/>
                     </x-slot>
@@ -101,9 +102,10 @@
         <flux:file-upload wire:model="recipeImages" multiple label="{{ __('Recipe pages') }}" :error="$errors->first('recipeImages.*')">
             <flux:file-upload.dropzone heading="{{ __('Drop recipe images or click to browse') }}" text="{{ __('JPG, PNG, GIF up to 10MB') }}" inline with-progress/>
         </flux:file-upload>
-        <div class="mt-3 flex flex-col gap-2">
+        <div class="mt-3 flex flex-col gap-2" wire:sort="sortRecipeImages">
             @foreach ($recipeImages as $index => $photo)
-                <flux:file-item :heading="$photo->getClientOriginalName()" :image="$photo->isPreviewable() ? $photo->temporaryUrl() : null" :size="$photo->getSize()">
+                <flux:file-item wire:sort:item="{{ $index }}" :heading="$photo->getClientOriginalName()" wire:key="{{ $photo->getFilename() }}"
+                    :image="$photo->isPreviewable() ? $photo->temporaryUrl() : null" :size="$photo->getSize()">
                     <x-slot name="actions">
                         <flux:file-item.remove wire:click="removeRecipeImage({{ $index }})"/>
                     </x-slot>

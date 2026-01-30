@@ -239,4 +239,26 @@ new class extends Component
 
         $this->redirectRoute('recipes.show', $recipe);
     }
+
+    // -------------------- sorting handlers --------------------
+
+    public function sortPhotoImages(int $index, int $newPosition): void
+    {
+        $item = $this->photoImages[$index] ?? null;
+        if (!$item) return;
+
+        // Remove and reinsert at new position
+        array_splice($this->photoImages, $index, 1);
+        array_splice($this->photoImages, $newPosition, 0, [$item]);
+    }
+
+    public function sortRecipeImages(int $index, int $newPosition): void
+    {
+        $item = $this->recipeImages[$index] ?? null;
+        if (!$item) return;
+
+        // Remove and reinsert at new position
+        array_splice($this->recipeImages, $index, 1);
+        array_splice($this->recipeImages, $newPosition, 0, [$item]);
+    }
 };
