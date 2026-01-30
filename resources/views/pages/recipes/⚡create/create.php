@@ -28,6 +28,8 @@ new class extends Component
     public array $createdTagIds = [];
     public string $tagSearch = '';
 
+    public array $links = [''];
+
     protected function rules(): array
     {
         return [
@@ -37,6 +39,16 @@ new class extends Component
             'ingredients' => ['nullable', 'string'],
             'instructions' => ['nullable', 'string'],
             'selectedTags' => ['array', Rule::exists('tags', 'id')],
+            'links' => ['array'],
+            'links.*' => ['nullable', 'url:http,https', 'max:255'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'links.*.url' => __('Link #:position must be a valid URL.'),
+            'links.*.max' => __('Link #:position may not exceed :max characters.'),
         ];
     }
 
@@ -91,6 +103,19 @@ new class extends Component
             ->get();
     }
 
+    // -------------------- helper methods --------------------
+
+    public function addLink(): void
+    {
+        $this->links[] = ''; // append empty input
+    }
+
+    public function removeLink(int $index): void
+    {
+        unset($this->links[$index]);
+        $this->links = array_values($this->links); // reindex the array
+    }
+
     // -------------------- create / update / delete --------------------
 
     public function createTag(): void
@@ -135,6 +160,15 @@ new class extends Component
 
             if (!empty($validated['selectedTags'])) {
                 $recipe->tags()->sync($validated['selectedTags']);
+            }
+
+            foreach ($this->links as $position => $url) {
+                if (!empty($url)) {
+                    $recipe->links()->create([
+                        'url' => $url,
+                        'position' => $position,
+                    ]);
+                }
             }
 
             return $recipe;

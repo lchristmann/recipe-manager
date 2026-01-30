@@ -41,6 +41,19 @@
         {{-- Title --}}
         <flux:input wire:model="title" label="{{ __('Title') }}" placeholder="{{ __('Recipe title') }}"/>
 
+        {{-- Links --}}
+        <flux:field>
+            <flux:label>{{ __('Links') }}</flux:label>
+            @foreach ($links as $index => $link)
+                <flux:input.group wire:key="link-{{ $index }}">
+                    <flux:input wire:model="links.{{ $index }}" placeholder="https://example.com/..." />
+                    <flux:button type="button" wire:click="removeLink({{ $index }})">{{ __('Remove') }}</flux:button>
+                </flux:input.group>
+                <flux:error name="links.{{ $index }}" />
+            @endforeach
+        </flux:field>
+        <flux:button type="button" wire:click="addLink">{{ __('Add link') }}</flux:button>
+
         {{-- Description --}}
         <flux:textarea wire:model="description" rows="3" label="{{ __('Description') }}"
             placeholder="{{ __('Short description (optional)') }}"/>
