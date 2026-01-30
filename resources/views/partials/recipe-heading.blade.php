@@ -6,7 +6,19 @@
         @endif
     </div>
 
-    <div class="flex-shrink-0 ml-4">
-        <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $recipe->id }})" />
-    </div>
+    @can('update', $recipe)
+        <div class="flex-shrink-0 ml-4">
+            {{-- Mobile: icon only --}}
+            <div class="md:hidden">
+                <flux:button :href="route('recipes.edit', ['recipe' => $recipe->id])" icon="pencil" />
+            </div>
+
+            {{-- Desktop: icon + text --}}
+            <div class="hidden md:block">
+                <flux:button :href="route('recipes.edit', ['recipe' => $recipe->id])" icon="pencil">
+                    {{ __('Edit recipe') }}
+                </flux:button>
+            </div>
+        </div>
+    @endcan
 </div>

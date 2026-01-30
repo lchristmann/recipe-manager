@@ -19,6 +19,9 @@ Route::middleware(['auth'])->group(function () {
     Route::livewire('/recipes/create', 'pages::recipes.create')
         ->name('recipes.create');
 
+    Route::livewire('/recipes/{recipe}/edit', 'pages::recipes.edit')
+        ->name('recipes.edit');
+
     Route::livewire('/recipes/{recipe}', 'pages::recipes.show')
         ->can('view', 'recipe')
         ->name('recipes.show');
