@@ -25,7 +25,7 @@
 
         <tbody wire:sort="sortCommunity">
         @foreach ($this->communityCookbooksAll as $cookbook)
-            <tr wire:sort:item="{{ $cookbook->id }}" wire:key="{{ $cookbook->id }}">
+            <tr wire:sort:item="{{ $cookbook->id }}" wire:key="st-cb-c-{{ $cookbook->id }}">
                 <flux:table.cell class="w-6 cursor-grab " wire:sort:handle>
                     <flux:icon name="bars-2"/>
                 </flux:table.cell>
@@ -87,7 +87,7 @@
 
         <flux:table.rows>
             @foreach ($this->communityCookbooks as $cookbook)
-                <flux:table.row :key="$cookbook->id">
+                <flux:table.row wire:key="pg-cb-c-{{ $cookbook->id }}">
                     <flux:table.cell>
                         <div class="flex items-center gap-2">
                             <flux:icon.globe-europe-africa class="size-4"/>
@@ -155,7 +155,7 @@
 
         <tbody wire:sort="sortPersonal">
         @foreach ($this->personalCookbooksAll as $cookbook)
-            <tr wire:sort:item="{{ $cookbook->id }}" wire:key="{{ $cookbook->id }}">
+            <tr wire:sort:item="{{ $cookbook->id }}" wire:key="st-cb-p-{{ $cookbook->id }}">
                 <flux:table.cell class="w-6 cursor-grab " wire:sort:handle>
                     <flux:icon name="bars-2"/>
                 </flux:table.cell>
@@ -222,7 +222,7 @@
 
         <flux:table.rows>
             @foreach ($this->personalCookbooks as $cookbook)
-                <flux:table.row :key="$cookbook->id">
+                <flux:table.row wire:key="pg-cb-p-{{ $cookbook->id }}">
                     <flux:table.cell>
                         <div class="flex items-center gap-2">
                             @if ($cookbook->private)

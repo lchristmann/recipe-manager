@@ -20,7 +20,7 @@
 
         <flux:table.rows>
             @foreach ($this->users as $user)
-                <flux:table.row :key="$user->id">
+                <flux:table.row wire:key="user-{{ $user->id }}">
                     <!-- Name, Email and Role -->
                     <flux:table.cell class="flex items-center gap-3">
                         <flux:avatar size="xs" :name="$user->name" />

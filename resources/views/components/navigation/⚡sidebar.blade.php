@@ -65,6 +65,7 @@ new class extends Component {
                             icon="book-open"
                             :href="route('cookbooks.show', ['cookbook' => $book->id])"
                             :current="request()->routeIs('cookbooks.show') && request()->route('cookbook')?->id === $book->id"
+                            wire:key="cb-c-{{ $book->id }}"
                             wire:navigate
                         >
                             {{ $book->title }}
@@ -81,6 +82,7 @@ new class extends Component {
                             icon="book-open"
                             :href="route('cookbooks.show', ['cookbook' => $book->id])"
                             :current="request()->routeIs('cookbooks.show') && request()->route('cookbook')?->id === $book->id"
+                            wire:key="cb-p-{{ $book->id }}"
                             wire:navigate
                         >
                             {{ $book->title }}
