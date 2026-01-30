@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -38,7 +39,7 @@ new class extends Component
         return [
             'title' => ['required', 'string', 'max:255'],
             'subtitle' => ['string', 'max:255'],
-            'visibility' => ['required', 'in:community,public,private'],
+            'visibility' => ['required', Rule::in(['community', 'public', 'private'])],
         ];
     }
 

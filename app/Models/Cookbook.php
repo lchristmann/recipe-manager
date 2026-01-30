@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -33,6 +35,13 @@ class Cookbook extends Model
     public function recipes(): HasMany
     {
         return $this->hasMany(Recipe::class)
+            ->orderBy('position');
+    }
+
+    #[Scope]
+    protected function community(Builder $query): void
+    {
+        $query->where('community', true)
             ->orderBy('position');
     }
 }
