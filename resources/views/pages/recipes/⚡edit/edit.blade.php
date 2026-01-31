@@ -3,8 +3,49 @@
 
     <div class="space-y-6">
 
-        {{-- Cookbook (read-only) --}}
-        <flux:input :value="$recipe->cookbook->title" disabled label="{{ __('Cookbook') }}"/>
+        {{-- Cookbook --}}
+        @if(!$cookbookUnlocked)
+            <flux:input.group label="{{ __('Cookbook') }}">
+                <flux:input :value="$recipe->cookbook->title" disabled />
+                <flux:button type="button" wire:click="$set('cookbookUnlocked', true)">
+                    {{ __('Change') }}
+                </flux:button>
+            </flux:input.group>
+        @else
+            <flux:field>
+                <flux:label>{{ __('Cookbook') }}</flux:label>
+
+                <flux:dropdown>
+                    <flux:button icon:trailing="chevron-down" class="w-full justify-between">
+                        {{ $this->selectedCookbook?->title ?? __('Select cookbook') }}
+                    </flux:button>
+
+                    <flux:menu>
+                        @if($this->communityCookbooks->isNotEmpty())
+                            <flux:menu.group heading="{{ __('Community') }}">
+                                @foreach ($this->communityCookbooks as $cb)
+                                    <flux:menu.item wire:key="cb-c-{{ $cb->id }}"
+                                        wire:click="$set('selectedCookbookId', {{ $cb->id }})">
+                                        {{ $cb->title }}
+                                    </flux:menu.item>
+                                @endforeach
+                            </flux:menu.group>
+                        @endif
+
+                        @if($this->userCookbooks->isNotEmpty())
+                            <flux:menu.group :heading="auth()->user()->name">
+                                @foreach ($this->userCookbooks as $cb)
+                                    <flux:menu.item wire:key="cb-p-{{ $cb->id }}"
+                                        wire:click="$set('selectedCookbookId', {{ $cb->id }})">
+                                        {{ $cb->title }}
+                                    </flux:menu.item>
+                                @endforeach
+                            </flux:menu.group>
+                        @endif
+                    </flux:menu>
+                </flux:dropdown>
+            </flux:field>
+        @endif
 
         {{-- Title --}}
         <flux:input wire:model="title" label="{{ __('Title') }}" />

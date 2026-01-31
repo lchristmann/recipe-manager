@@ -2,6 +2,7 @@
 
 use App\Constants\StorageConstants;
 use App\Enums\Enums\RecipeImageType;
+use App\Models\Cookbook;
 use App\Models\Recipe;
 use App\Models\RecipeImage;
 use App\Models\Tag;
@@ -21,11 +22,14 @@ new class extends Component
 
     public Recipe $recipe;
 
+    public bool $cookbookUnlocked = false;
+    public int $selectedCookbookId;
+
     // Form fields
     public string $title;
-    public ?string $description;
-    public ?string $ingredients;
-    public ?string $instructions;
+    public ?string $description = null;
+    public ?string $ingredients = null;
+    public ?string $instructions = null;
 
     // Tags
     public array $selectedTags = [];
@@ -48,6 +52,7 @@ new class extends Component
     protected function rules(): array
     {
         return [
+            'selectedCookbookId' => ['required', Rule::exists('cookbooks', 'id')],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'ingredients' => ['nullable', 'string'],
@@ -80,6 +85,8 @@ new class extends Component
     {
         $this->authorize('update', $recipe);
         $this->recipe = $recipe;
+
+        $this->selectedCookbookId = $recipe->cookbook_id;
 
         $this->title = $recipe->title;
         $this->description = $recipe->description;
@@ -159,6 +166,24 @@ new class extends Component
     }
 
     // -------------------- queries --------------------
+
+    #[Computed]
+    public function communityCookbooks(): Collection
+    {
+        return Cookbook::query()->community()->get();
+    }
+
+    #[Computed]
+    public function userCookbooks(): Collection
+    {
+        return auth()->user()?->personalCookbooks()->get() ?? collect();
+    }
+
+    #[Computed]
+    public function selectedCookbook(): Cookbook
+    {
+        return Cookbook::findOrFail($this->selectedCookbookId);
+    }
 
     #[Computed]
     public function allTags(): Collection
@@ -249,6 +274,27 @@ new class extends Component
         $this->validate();
 
         DB::transaction(function () {
+
+            // If the cookbook was unlocked and changed, update it
+            if ($this->cookbookUnlocked && $this->selectedCookbookId !== $this->recipe->cookbook_id) {
+                $oldCookbookId = $this->recipe->cookbook_id;
+                $newCookbook = Cookbook::findOrFail($this->selectedCookbookId);
+                $this->authorize('update', $newCookbook);
+
+                // Close positions gap in old cookbook
+                Recipe::query()
+                    ->where('cookbook_id', $oldCookbookId)
+                    ->where('position', '>', $this->recipe->position)
+                    ->decrement('position');
+
+                $newPosition = Recipe::query()->where('cookbook_id', $newCookbook->id)->count();
+
+                $this->recipe->update([
+                    'cookbook_id' => $newCookbook->id,
+                    'position' => $newPosition,
+                ]);
+            }
+
             $this->recipe->update([
                 'title' => $this->title,
                 'description' => $this->description ?: null,
