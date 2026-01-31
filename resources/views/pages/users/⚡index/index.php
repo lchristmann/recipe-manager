@@ -173,10 +173,4 @@ new class extends Component
         $this->deleting = $user;
         $this->showDeleteModal = true;
     }
-
-    public function closeModals(): void
-    {
-        $this->showFormModal = false;
-        $this->showDeleteModal = false;
-    }
 };

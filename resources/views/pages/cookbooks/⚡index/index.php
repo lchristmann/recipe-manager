@@ -221,12 +221,6 @@ new class extends Component
         $this->showDeleteModal = true;
     }
 
-    public function closeModals(): void
-    {
-        $this->showFormModal = false;
-        $this->showDeleteModal = false;
-    }
-
     // -------------------- sorting handlers --------------------
 
     public function sortCommunity(int $id, int $newPosition): void

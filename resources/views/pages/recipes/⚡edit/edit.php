@@ -20,6 +20,9 @@ new class extends Component
 {
     use WithFileUploads;
 
+    // Modal state
+    public bool $showDeleteModal = false;
+
     public Recipe $recipe;
 
     public bool $cookbookUnlocked = false;
@@ -354,6 +357,45 @@ new class extends Component
         });
 
         $this->redirectRoute('recipes.show', $this->recipe);
+    }
+
+    public function delete(): void
+    {
+        $this->authorize('delete', $this->recipe);
+
+        $cookbookId = $this->recipe->cookbook_id;
+
+        DB::transaction(function () use ($cookbookId) {
+            $position = $this->recipe->position;
+
+            // Collect image paths before deletion of the recipe model
+            $imagePaths = $this->recipe->images()->pluck('path')->all();
+
+            // Close gap in the cookbook's recipe list
+            Recipe::query()
+                ->where('cookbook_id', $cookbookId)
+                ->where('position', '>', $position)
+                ->decrement('position');
+
+            $this->recipe->delete();
+
+            // Delete the recipe's image files from storage
+            foreach ($imagePaths as $path) {
+                Storage::delete($path);
+            }
+        });
+
+        $this->showDeleteModal = false;
+
+        $this->redirectRoute('cookbooks.show', $cookbookId);
+    }
+
+    // -------------------- modal helpers --------------------
+
+    public function openDeleteModal(): void
+    {
+        $this->authorize('delete', $this->recipe);
+        $this->showDeleteModal = true;
     }
 
     // -------------------- sorting handlers --------------------

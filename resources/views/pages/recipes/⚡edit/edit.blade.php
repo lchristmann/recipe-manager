@@ -150,4 +150,22 @@
         </div>
 
     </div>
+
+    {{-- DELETE MODAL --}}
+    <flux:modal wire:model.self="showDeleteModal" title="{{ __('Confirm Deletion') }}">
+        <div class="space-y-6">
+            <p>
+                {{ __('Are you sure you want to delete :title?', ['title' => $recipe->title]) }}
+            </p>
+
+            <div class="flex justify-end gap-2">
+                <flux:modal.close>
+                    <flux:button variant="ghost">{{ __('Cancel') }}</flux:button>
+                </flux:modal.close>
+                <flux:button variant="danger" wire:click="delete">
+                    {{ __('Delete') }}
+                </flux:button>
+            </div>
+        </div>
+    </flux:modal>
 </section>
