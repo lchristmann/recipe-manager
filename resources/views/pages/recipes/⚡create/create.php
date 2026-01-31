@@ -164,9 +164,7 @@ new class extends Component
             return;
         }
 
-        $tag = Tag::firstOrCreate([
-            'name' => $name,
-        ]);
+        $tag = Tag::firstOrCreate(['name' => $name]);
 
         $this->createdTagIds[] = $tag->id;
         $this->selectedTags[] = $tag->id;
