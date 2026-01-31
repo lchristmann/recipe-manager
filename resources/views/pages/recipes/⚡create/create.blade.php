@@ -100,7 +100,7 @@
 
         {{-- Recipe Images --}}
         <flux:file-upload wire:model="recipeImages" multiple label="{{ __('Recipe pages') }}" :error="$errors->first('recipeImages.*')">
-            <flux:file-upload.dropzone heading="{{ __('Drop recipe images or click to browse') }}" text="{{ __('JPG, PNG, GIF up to 10MB') }}" inline with-progress/>
+            <flux:file-upload.dropzone heading="{{ __('Drop recipe images or click to browse') }}" text="{{ __('JPG, PNG, GIF up to 8MB') }}" inline with-progress/>
         </flux:file-upload>
         <div class="mt-3 flex flex-col gap-2" wire:sort="sortRecipeImages">
             @foreach ($recipeImages as $index => $photo)

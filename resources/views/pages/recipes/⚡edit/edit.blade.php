@@ -51,6 +51,52 @@
         <flux:textarea wire:model="instructions" rows="6" label="{{ __('Instructions') }}"
            placeholder="{{ __('Preparation steps (optional)') }}"/>
 
+        {{-- Photo Images --}}
+        <flux:file-upload wire:model="newPhotoFiles" multiple label="{{ __('Photos') }}">
+            <flux:file-upload.dropzone heading="{{ __('Drop photos or click to browse') }}" text="{{ __('JPG, PNG, GIF up to 10MB') }}" inline with-progress />
+        </flux:file-upload>
+        <div class="mt-3 flex flex-col gap-2" wire:sort="sortPhotoImages">
+            @foreach ($photoImages as $index => $image)
+                <flux:file-item wire:sort:item="{{ $index }}" :heading="$image['heading']" wire:key="{{ $image['key'] }}"
+                    :image="$image['preview']" :size="$image['size']">
+                    <x-slot name="actions">
+                        <flux:file-item.remove wire:click="removePhotoImage({{ $index }})"/>
+                    </x-slot>
+                </flux:file-item>
+            @endforeach
+        </div>
+        @if($errors->hasAny('photoImages.*.file'))
+            <div class="text-red-600 text-sm mt-1">
+                {{ collect($errors->get('photoImages.*.file'))
+                    ->filter(fn($m) => is_array($m) && count($m))
+                    ->flatten()
+                    ->first() }}
+            </div>
+        @endif
+
+        {{-- Recipe Images --}}
+        <flux:file-upload wire:model="newRecipeFiles" multiple label="{{ __('Recipe pages') }}">
+            <flux:file-upload.dropzone heading="{{ __('Drop recipe images or click to browse') }}" text="{{ __('JPG, PNG, GIF up to 8MB') }}" inline with-progress />
+        </flux:file-upload>
+        <div class="mt-3 flex flex-col gap-2" wire:sort="sortRecipeImages">
+            @foreach ($recipeImages as $index => $image)
+                <flux:file-item wire:sort:item="{{ $index }}" :heading="$image['heading']" wire:key="{{ $image['key'] }}"
+                    :image="$image['preview']" :size="$image['size']">
+                    <x-slot name="actions">
+                        <flux:file-item.remove wire:click="removeRecipeImage({{ $index }})"/>
+                    </x-slot>
+                </flux:file-item>
+            @endforeach
+        </div>
+        @if($errors->hasAny('recipeImages.*.file'))
+            <div class="text-red-600 text-sm mt-1">
+                {{ collect($errors->get('recipeImages.*.file'))
+                    ->filter(fn($m) => is_array($m) && count($m))
+                    ->flatten()
+                    ->first() }}
+            </div>
+        @endif
+
         {{-- Actions --}}
         <div class="pt-4 flex justify-end gap-3">
             <flux:button variant="ghost" :href="route('recipes.show', $recipe)">
