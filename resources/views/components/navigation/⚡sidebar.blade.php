@@ -45,6 +45,23 @@ new class extends Component {
             })
             ->filter(fn(User $user) => $user->sidebarBooks->isNotEmpty());
     }
+
+    #[Computed]
+    public function currentCookbookId(): ?int
+    {
+        $route = request()->route();
+        if (!$route) return null;
+
+        return match ($route->getName()) {
+            'cookbooks.show' => $route->parameter('cookbook')?->id,
+
+            'recipes.show', 'recipes.edit' => $route->parameter('recipe')?->cookbook_id,
+
+            'recipes.create' => request()->integer('cookbook'),
+
+            default => null,
+        };
+    }
 };
 ?>
 
@@ -64,7 +81,7 @@ new class extends Component {
                         <flux:sidebar.item
                             icon="book-open"
                             :href="route('cookbooks.show', ['cookbook' => $book->id])"
-                            :current="request()->routeIs('cookbooks.show') && request()->route('cookbook')?->id === $book->id"
+                            :current="$this->currentCookbookId === $book->id"
                             wire:key="cb-c-{{ $book->id }}"
                             wire:navigate
                         >
@@ -81,7 +98,7 @@ new class extends Component {
                         <flux:sidebar.item
                             icon="book-open"
                             :href="route('cookbooks.show', ['cookbook' => $book->id])"
-                            :current="request()->routeIs('cookbooks.show') && request()->route('cookbook')?->id === $book->id"
+                            :current="$this->currentCookbookId === $book->id"
                             wire:key="cb-p-{{ $book->id }}"
                             wire:navigate
                         >
