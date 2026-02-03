@@ -11,7 +11,9 @@ new class extends Component
     {
         $this->recipe = $recipe->load([
             'cookbook',
-            'images',
+            'links',
+            'photoImages',
+            'recipeImages',
             'tags',
         ]);
     }
