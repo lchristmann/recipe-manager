@@ -1,0 +1,85 @@
+<section class="w-full max-w-3xl">
+    @include('partials.tags-heading')
+
+    <div class="space-y-6">
+        <flux:tab.group>
+            <flux:tabs wire:model="tab">
+                <flux:tab name="community">{{ __('Community') }}</flux:tab>
+                <flux:tab name="personal">{{ __('Personal') }}</flux:tab>
+            </flux:tabs>
+
+            {{-- -------------------- COMMUNITY -------------------- --}}
+            <flux:tab.panel name="community" class="space-y-3">
+                @forelse ($this->communityTags as $tag)
+                    <div class="flex items-start gap-2" wire:key="c-tag-{{ $tag->id }}">
+                        <flux:input.group class="flex-1">
+                            @if ($editingTagId === $tag->id)
+                                <flux:input wire:model="editingName" wire:key="c-tag-input-{{ $tag->id }}"/>
+                                <flux:button type="button" wire:click="save({{ $tag->id }})" wire:key="c-tag-button-{{ $tag->id }}">
+                                    {{ __('Save') }}
+                                </flux:button>
+                            @else
+                                <flux:input :value="$tag->name" disabled />
+                                <flux:button type="button" wire:click="editTag({{ $tag->id }})">
+                                    {{ __('Edit') }}
+                                </flux:button>
+                            @endif
+                        </flux:input.group>
+
+                        <flux:button icon="trash" wire:click="openDeleteModal({{ $tag->id }})"/>
+                    </div>
+                @empty
+                    <flux:text>{{ __('No tags on community recipes yet.') }}</flux:text>
+                @endforelse
+            </flux:tab.panel>
+
+            {{-- -------------------- PERSONAL -------------------- --}}
+            <flux:tab.panel name="personal" class="space-y-3">
+                @forelse ($this->personalTags as $tag)
+                    <div class="flex items-start gap-2" wire:key="p-tag-{{ $tag->id }}">
+                        <flux:input.group class="flex-1">
+                            @if ($editingTagId === $tag->id)
+                                <flux:input wire:model="editingName" wire:key="p-tag-input-{{ $tag->id }}"/>
+                                <flux:button type="button" wire:click="save({{ $tag->id }})" wire:key="p-tag-button-{{ $tag->id }}">
+                                    {{ __('Save') }}
+                                </flux:button>
+                            @else
+                                <flux:input :value="$tag->name" disabled />
+                                <flux:button type="button" wire:click="editTag({{ $tag->id }})">
+                                    {{ __('Edit') }}
+                                </flux:button>
+                            @endif
+                        </flux:input.group>
+
+                        <flux:button icon="trash" wire:click="openDeleteModal({{ $tag->id }})"/>
+                    </div>
+                @empty
+                    <flux:text>{{ __('No tags on personal recipes yet.') }}</flux:text>
+                @endforelse
+            </flux:tab.panel>
+        </flux:tab.group>
+    </div>
+
+    {{-- DELETE MODAL --}}
+    <flux:modal wire:model.self="showDeleteModal" title="{{ __('Confirm Deletion') }}">
+        <div class="space-y-6">
+            @if ($this->tagPendingDeletion)
+                <p>
+                    {{ __('Are you sure you want to remove the tag ":tag" from all :scope recipes?', [
+                        'tag'   => $this->tagPendingDeletion->name,
+                        'scope' => $tab === 'community' ? __('community') : __('personal'),
+                    ]) }}
+                </p>
+            @endif
+
+            <div class="flex justify-end gap-2">
+                <flux:modal.close>
+                    <flux:button variant="ghost">{{ __('Cancel') }}</flux:button>
+                </flux:modal.close>
+                <flux:button variant="danger" wire:click="delete">
+                    {{ __('Delete') }}
+                </flux:button>
+            </div>
+        </div>
+    </flux:modal>
+</section>

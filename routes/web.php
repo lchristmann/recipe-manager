@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\RecipeImage;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,10 @@ Route::middleware(['auth'])->group(function () {
     Route::livewire('/recipes/{recipe}', 'pages::recipes.show')
         ->can('view', 'recipe')
         ->name('recipes.show');
+
+    Route::livewire('/tags', 'pages::tags.index')
+        ->can('viewAny', Tag::class)
+        ->name('tags.index');
 
     Route::livewire('/users', 'pages::users.index')
         ->can('viewAny', User::class)

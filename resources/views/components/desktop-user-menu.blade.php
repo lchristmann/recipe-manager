@@ -22,6 +22,9 @@
             <flux:menu.item :href="route('cookbooks.index')" icon="book-open" wire:navigate>
                 {{ __('Cookbooks') }}
             </flux:menu.item>
+            <flux:menu.item :href="route('tags.index')" icon="tag" wire:navigate>
+                {{ __('Tags') }}
+            </flux:menu.item>
             @if (auth()->user()->isAdmin())
                 <flux:menu.item :href="route('users.index')" icon="users" wire:navigate>
                     {{ __('Users') }}

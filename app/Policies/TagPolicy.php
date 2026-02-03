@@ -8,6 +8,14 @@ use App\Models\User;
 class TagPolicy
 {
     /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
+    {
+        return true;
+    }
+
+    /**
      * Determine whether the user can view the model.
      */
     public function view(User $user, Tag $tag): bool
@@ -28,7 +36,7 @@ class TagPolicy
      */
     public function update(User $user, Tag $tag): bool
     {
-        return $user->isAdmin();
+        return true;
     }
 
     /**
@@ -36,6 +44,6 @@ class TagPolicy
      */
     public function delete(User $user, Tag $tag): bool
     {
-        return !$tag->recipes()->exists();
+        return true;
     }
 }
