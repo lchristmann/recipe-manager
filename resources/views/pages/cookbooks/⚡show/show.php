@@ -24,6 +24,8 @@ new class extends Component
     // Tags available for this cookbook
     public Collection $availableTags;
 
+    public bool $sorting = false;
+
     public function mount(Cookbook $cookbook): void
     {
         $this->cookbook = $cookbook;
@@ -38,7 +40,7 @@ new class extends Component
         $this->loadRecipes();
     }
 
-    // -------------------- search + pillbox filter --------------------
+    // -------------------- search + pillbox filter + sort toggle --------------------
 
     public function updatedSearch(): void
     {
@@ -57,6 +59,21 @@ new class extends Component
         $this->recipes = collect();
 
         $this->loadRecipes();
+    }
+
+    public function toggleSorting(): void
+    {
+        if (!$this->sorting) {
+            // entering sorting mode
+            $this->search = '';
+            $this->selectedTags = [];
+            $this->loadAllRecipesForSorting();
+        } else {
+            // leaving sorting mode -> restore normal browsing
+            $this->resetRecipes();
+        }
+
+        $this->sorting = !$this->sorting;
     }
 
     // -------------------- infinite scroll --------------------
@@ -100,5 +117,41 @@ new class extends Component
 
         $this->recipes = $this->recipes->merge($newRecipes);
         $this->page++;
+    }
+
+    protected function loadAllRecipesForSorting(): void
+    {
+        $this->recipes = Recipe::query()
+            ->where('cookbook_id', $this->cookbook->id)
+            ->with(['photoImages'])
+            ->orderBy('position')
+            ->get();
+
+        // Disable infinite scroll state
+        $this->hasMoreRecipes = false;
+        $this->page = 1;
+    }
+
+    // -------------------- sorting handlers --------------------
+
+    public function sortRecipe(int $id, int $newPosition): void
+    {
+        $recipes = $this->recipes->sortBy('position')->values();
+
+        $moved = $recipes->firstWhere('id', $id);
+        if (!$moved) return;
+
+        $recipes = $recipes->reject(fn($r) => $r->id === $id)->values();
+
+        $recipes->splice($newPosition, 0, [$moved]);
+
+        foreach ($recipes as $index => $recipe) {
+            if ($recipe->position !== $index) {
+                Recipe::query()->where('id', $recipe->id)->update(['position' => $index]);
+            }
+        }
+
+        // Refresh the recipes collection after reordering
+        $this->recipes = $recipes;
     }
 };

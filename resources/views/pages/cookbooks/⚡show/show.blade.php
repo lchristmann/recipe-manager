@@ -18,21 +18,47 @@
         </flux:pillbox>
     </div>
 
-    <!-- Recipe grid -->
     @if ($this->recipes->isEmpty())
         <div class="py-16">
             <flux:text class="text-center">{{ __('No recipes found.') }}</flux:text>
         </div>
     @else
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
+        {{-- SORTABLE GRID --}}
+        <div
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4"
+            x-show="$wire.sorting"
+            wire:sort="sortRecipe"
+        >
             @foreach ($this->recipes as $recipe)
-                <x-recipe-card :recipe="$recipe" wire:key="recipe-{{ $recipe->id }}" />
+                <div wire:sort:item="{{ $recipe->id }}" wire:key="sort-recipe-{{ $recipe->id }}">
+                    <x-recipe-card :recipe="$recipe" />
+                </div>
             @endforeach
         </div>
 
-        <!-- Infinite scroll trigger -->
-        @if ($hasMoreRecipes)
-            <div wire:intersect.margin.100%="loadRecipes" class="h-px"></div>
-        @endif
+        {{-- NORMAL GRID WITH INFINITE SCROLL --}}
+        <div
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4"
+            x-show="!$wire.sorting"
+        >
+            @foreach ($this->recipes as $recipe)
+                <x-recipe-card :recipe="$recipe" wire:key="recipe-{{ $recipe->id }}" />
+            @endforeach
+
+            {{-- Infinite scroll trigger --}}
+            @if ($hasMoreRecipes)
+                <div wire:intersect.margin.100%="loadRecipes" class="h-px"></div>
+            @endif
+        </div>
     @endif
+
+
+    {{-- Mobile full-width reorder button --}}
+    @can('update', $cookbook)
+        <div class="mt-4 md:hidden">
+            <flux:button class="w-full" icon="arrows-right-left" wire:click="toggleSorting">
+                {{ $sorting ? __('Done') : __('Reorder') }}
+            </flux:button>
+        </div>
+    @endcan
 </section>

@@ -14,9 +14,13 @@
             </div>
 
             {{-- Desktop: icon + text --}}
-            <div class="hidden md:block">
+            <div class="hidden md:flex items-center gap-2">
                 <flux:button :href="route('recipes.create', ['cookbook' => $cookbook->id])" icon="plus">
                     {{ __('Create recipe') }}
+                </flux:button>
+
+                <flux:button icon="arrows-right-left" wire:click="toggleSorting">
+                    {{ $sorting ? __('Done') : __('Reorder') }}
                 </flux:button>
             </div>
         </div>
