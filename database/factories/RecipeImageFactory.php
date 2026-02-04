@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Constants\StorageConstants;
-use App\Enums\Enums\RecipeImageType;
+use App\Enums\RecipeImageType;
 use App\Models\Recipe;
 use App\Models\RecipeImage;
 use Illuminate\Database\Eloquent\Factories\Factory;

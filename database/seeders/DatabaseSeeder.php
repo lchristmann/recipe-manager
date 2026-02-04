@@ -2,16 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Enums\Enums\RecipeImageType;
-use App\Models\Recipe;
+use App\Enums\RecipeImageType;
 use App\Models\Cookbook;
+use App\Models\Recipe;
 use App\Models\RecipeImage;
 use App\Models\RecipeLink;
 use App\Models\Tag;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {

@@ -1,7 +1,7 @@
 <?php
 
 use App\Constants\StorageConstants;
-use App\Enums\Enums\RecipeImageType;
+use App\Enums\RecipeImageType;
 use App\Models\Cookbook;
 use App\Models\Recipe;
 use App\Models\RecipeImage;
