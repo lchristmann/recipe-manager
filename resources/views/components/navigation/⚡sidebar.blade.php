@@ -111,6 +111,12 @@ new class extends Component {
 
         <flux:spacer/>
 
+        <flux:sidebar.nav>
+            <flux:sidebar.item icon="calendar" :href="route('planner.index')" :current="request()->routeIs('planner.index')" wire:navigate>
+                {{ __('Planner') }}
+            </flux:sidebar.item>
+        </flux:sidebar.nav>
+
         <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name"/>
     </flux:sidebar>
 </div>

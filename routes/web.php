@@ -40,6 +40,9 @@ Route::middleware(['auth'])->group(function () {
 
         return Storage::response($recipeImage->path);
     })->name('recipe-images.show');
+
+    Route::livewire('/planner', 'pages::planner.index')
+        ->name('planner.index');
 });
 
 require __DIR__.'/settings.php';
