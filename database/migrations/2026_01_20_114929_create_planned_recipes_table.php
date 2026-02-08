@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\PlannerMealType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,7 +18,6 @@ return new class extends Migration
             $table->foreignId('recipe_id')->constrained()->cascadeOnDelete();
 
             $table->date('date');
-            $table->string('type')->default(PlannerMealType::LUNCH->value);
             $table->integer('position')->default(0);
 
             $table->timestamps();

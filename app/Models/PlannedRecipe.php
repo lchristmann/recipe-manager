@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\PlannerMealType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -12,13 +11,11 @@ class PlannedRecipe extends Model
         'user_id',
         'recipe_id',
         'date',
-        'type',
         'position',
     ];
 
     protected $casts = [
         'date' => 'date',
-        'type' => PlannerMealType::class,
     ];
 
     public function recipe(): BelongsTo
