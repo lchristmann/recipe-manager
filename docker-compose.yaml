@@ -1,6 +1,6 @@
 services:
   web:
-    image: leanderchristmann/recipe-manager-nginx:0.9.0
+    image: leanderchristmann/recipe-manager-nginx:1.0.0-beta
     restart: unless-stopped # Automatically restart unless the service is explicitly stopped
     volumes:
       # Mount the 'laravel-storage-production' volume to '/var/www/storage' inside the container.
@@ -26,7 +26,7 @@ services:
 
   php-fpm:
     # For the php-fpm service, we will create a custom image to install the necessary PHP extensions and setup proper permissions.
-    image: leanderchristmann/recipe-manager:0.9.0
+    image: leanderchristmann/recipe-manager:1.0.0-beta
     restart: unless-stopped
     volumes:
       # Mount persistent storage

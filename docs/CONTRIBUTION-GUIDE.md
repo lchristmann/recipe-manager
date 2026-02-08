@@ -26,7 +26,7 @@ e.g. with the below settings:
 Adding a serious application logo would be even better though - if you got one, you could run it through the RealFaviconGenerator,
 replace the current logo files and submit the pull request.
 
-## Adding another Language
+## Adding another Language (WIP: multi-language hasn't been implemented yet!)
 
 At the time of writing, the there's two languages available: English and German.<br>
 The technical admin can set the default language via the `APP_LOCALE` environment variable, and users can switch between all available ones using the language switch in the header bar.
@@ -49,7 +49,7 @@ This installs framework-level translations such as validation messages, dates, a
 
 ### 2. Register the locale in the language switch (WIP: we'll have a Flux UI switch instead)
 
-The language must be explicitly enabled in the Filament language switch.
+The language must be added to the language switch component.
 
 Add the new locale code to the `locales()` list in the [AppServiceProvider.php](../app/Providers/AppServiceProvider.php):
 

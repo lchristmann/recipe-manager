@@ -25,8 +25,6 @@ php artisan migrate --force
 # -----------------------------------------------------------
 # Improves performance by caching Laravel's config, routes, events and views.
 php artisan optimize
-# Improves performance by caching Filament's components and Blade icons.
-php artisan filament:optimize
 
 # Run the default command
 exec "$@"
