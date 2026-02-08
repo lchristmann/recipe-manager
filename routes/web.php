@@ -1,14 +1,14 @@
 <?php
 
+use App\Http\Controllers\HomeRedirectController;
 use App\Models\RecipeImage;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
-   Route::get('/', function () {
-       return view('dashboard');
-   })->name('home');
+   Route::get('/', HomeRedirectController::class)
+       ->name('home');
 
     Route::livewire('/cookbooks', 'pages::cookbooks.index')
         ->name('cookbooks.index');
