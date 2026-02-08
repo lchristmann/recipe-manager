@@ -7,6 +7,7 @@ whose documentation can be found in the [BASE-PROJECT-README.md](docs/BASE-PROJE
 
 - [Prerequisites](#prerequisites)
 - [Commands for Everyday Development](#commands-for-everyday-development)
+- [Helpful SQL Queries](#helpful-sql-queries)
 - [Setting Up the Development Environment](#setting-up-the-development-environment)
 - [Usage](#usage)
   - [Accessing the Workspace Container](#accessing-the-workspace-container)
@@ -14,6 +15,7 @@ whose documentation can be found in the [BASE-PROJECT-README.md](docs/BASE-PROJE
   - [Rebuild Containers:](#rebuild-containers)
   - [Stop Containers:](#stop-containers)
   - [View Logs:](#view-logs)
+- [Testing](#testing)
 - [How to Release](#how-to-release)
   - [Prepare](#prepare)
   - [Build and Tag the Docker Images](#build-and-tag-the-docker-images)
@@ -79,7 +81,7 @@ docker compose -f compose.dev.yaml exec postgres bash
 
 ## Helpful SQL Queries
 
-### For the validation of the cookbook.show page
+### For the validation of the cookbook.show page <!-- omit in toc -->
 
 All tags that are available for a given cookbook:
 
@@ -209,6 +211,15 @@ For specific services, you can use:
 
 ```bash
 docker compose -f compose.dev.yaml logs -f web
+```
+
+## Testing
+
+Execute the unit tests written for the planner page's [SearchFormatter](/app/Support/Planner/SearchFormatter.php) class method the with [Pest](https://pestphp.com/):
+
+```bash
+docker compose -f compose.dev.yaml exec workspace bash
+php artisan test --testsuite=Unit
 ```
 
 ## How to Release

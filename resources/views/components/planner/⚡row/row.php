@@ -2,6 +2,7 @@
 
 use App\Models\PlannedRecipe;
 use App\Models\Recipe;
+use App\Support\Planner\SearchFormatter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
@@ -30,7 +31,7 @@ new class extends Component
     #[Computed]
     public function recipes(): Collection
     {
-        $cleanSearch = $this->getCleanSearch();
+        $cleanSearch = SearchFormatter::clean($this->search);
 
         return Recipe::query()
             ->with('cookbook.user')
@@ -56,14 +57,6 @@ new class extends Component
                     ->get()
                     ->merge($results);
             });
-    }
-
-    protected function getCleanSearch(): ?string
-    {
-        if (!$this->search) return null;
-
-        // Strip the " (community)" or " (User Xyz)" in parentheses at the end
-        return trim(preg_replace('/\s*\([^)]+\)$/', '', $this->search));
     }
 
     public function startEdit(): void
