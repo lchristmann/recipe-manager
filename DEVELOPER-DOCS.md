@@ -79,6 +79,16 @@ docker compose -f compose.dev.yaml exec postgres bash
   SELECT * FROM users;
 ```
 
+Over time, Docker can accumulate unused images, containers, and build cache, which may consume significant disk space.
+I recommend to run the following command occasionally to free up space:
+
+> Mind that it'll delete this project's Docker network, if you don't have it running. If so, just recreate it: `docker network create recipe-manager-network`.
+
+```shell
+docker system prune -a
+# docker image prune -a # or just delete the unused images like this
+```
+
 ## Helpful SQL Queries
 
 ### For the validation of the cookbook.show page <!-- omit in toc -->

@@ -42,6 +42,16 @@ README.md
 DEVELOPER-DOCS.md
 docs
 
+storage/app/*
+storage/debugbar
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/testing/*
+storage/framework/views/*
+storage/logs/*
+
+database/seeders/files
+
 # Ignore development-related files and directories
 # For development environment, we will use mount bind to mount the source code to the container
 # So we don't need to copy the source code to the container for development

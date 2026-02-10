@@ -8,7 +8,7 @@ new class extends Component {
 
     public function mount(): void
     {
-        $this->locale = auth()->user()?->locale ?? app()->getLocale();
+        $this->locale = auth()->user()?->locale ?? config('app.locale');
     }
 
     public function updatedLocale($value): void
