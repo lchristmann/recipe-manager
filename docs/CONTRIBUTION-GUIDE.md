@@ -26,10 +26,10 @@ e.g. with the below settings:
 Adding a serious application logo would be even better though - if you got one, you could run it through the RealFaviconGenerator,
 replace the current logo files and submit the pull request.
 
-## Adding another Language (WIP: multi-language hasn't been implemented yet!)
+## Adding another Language
 
 At the time of writing, the there's two languages available: English and German.<br>
-The technical admin can set the default language via the `APP_LOCALE` environment variable, and users can switch between all available ones using the language switch in the header bar.
+The technical admin can set the default language via the `APP_LOCALE` environment variable, and users can switch between all available ones in the settings.
 
 If you want to add another language (which I’d be happy to see), follow these steps.
 
@@ -47,19 +47,19 @@ php artisan lang:add <locale>
 
 This installs framework-level translations such as validation messages, dates, and pagination.
 
-### 2. Register the locale in the language switch (WIP: we'll have a Flux UI switch instead)
+### 2. Register the locale in the language switch
 
-The language must be added to the language switch component.
+The language must be added to the language switch in the settings (so users can choose it).
 
-Add the new locale code to the `locales()` list in the [AppServiceProvider.php](../app/Providers/AppServiceProvider.php):
+Add the new locale code as select option in the [⚡language.blade.php](../resources/views/pages/settings/⚡language.blade.php):
 
-````php
-LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
-    $switch->locales(['en', 'de', '<locale>']);
-});
-````
-
-Only locales listed here will be selectable by users.
+```html
+<flux:select variant="listbox" wire:model.live="locale" placeholder="{{ __('Select language') }}">
+    <flux:select.option value="en">English</flux:select.option>
+    <flux:select.option value="de">Deutsch</flux:select.option>
+    <!-- add your new language locale here -->
+</flux:select>
+```
 
 ### 3. Add application-specific translations
 
@@ -71,4 +71,4 @@ The English text is always used as the key (don't touch that - just replace the 
 
 ### 4. Verify
 
-Run the application (see [Developer Docs](../DEVELOPER-DOCS.md)), switch to the new language via the language selector, and confirm that everything looks correct.
+Run the application (see [Developer Docs](../DEVELOPER-DOCS.md)), switch to the new language in your settings, and confirm that everything looks correct.

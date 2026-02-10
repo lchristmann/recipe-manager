@@ -9,8 +9,8 @@
         <flux:button icon="chevron-left" wire:click="previousWeek"/>
 
         <flux:heading size="lg">
-            {{ $weekStart->format('M j') }} -
-            {{ $weekStart->addDays(6)->format('M j') }}
+            {{ $weekStart->translatedFormat('M j') }} -
+            {{ $weekStart->addDays(6)->translatedFormat('M j') }}
         </flux:heading>
 
         <div class="flex gap-2">
@@ -22,7 +22,7 @@
     {{-- Days --}}
     @foreach($this->days as $date)
         <div class="space-y-3" wire:key="planner-day-{{ $date }}">
-            <flux:heading size="md">{{ Carbon::parse($date)->format('M j') }}</flux:heading>
+            <flux:heading size="md">{{ Carbon::parse($date)->translatedFormat('M j') }}</flux:heading>
 
             {{-- Existing planner rows --}}
             @foreach($plans[$date] ?? [] as $plan)

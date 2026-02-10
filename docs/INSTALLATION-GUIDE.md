@@ -49,7 +49,7 @@ SSH into your server.
     ```
    You may optionally change the below:
     - `APP_TIMEZONE=UTC`: change the application's timezone to another one from the list of [timezones for PHP](https://www.php.net/manual/en/timezones.php), e.g. `Europe/Berlin`
-    - `APP_LOCALE=en`: change the application's language by choosing from the list of supported languages (as shown in the array list `->locales([...here...])` in [AppServiceProvider.php](../app/Providers/AppServiceProvider.php))
+    - `APP_LOCALE=en`: change the application's language by choosing from the list of supported locales (see the `flux:select.option` values at the bottom of the [⚡language.blade.php](../resources/views/pages/settings/⚡language.blade.php) file, e.g. `en` or `de`)
 5. Create the Docker network and start the services
     ```shell
     docker network create recipe-manager-network

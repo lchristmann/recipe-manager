@@ -65,9 +65,9 @@
         <div class="space-y-6">
             @if ($this->tagPendingDeletion)
                 <p>
-                    {{ __('Are you sure you want to remove the tag ":tag" from all :scope recipes?', [
+                    {{ __('Are you sure you want to remove the tag ":tag" from all :scope?', [
                         'tag'   => $this->tagPendingDeletion->name,
-                        'scope' => $tab === 'community' ? __('community') : __('personal'),
+                        'scope' => $tab === 'community' ? __('community recipes') : __('personal recipes'),
                     ]) }}
                 </p>
             @endif
