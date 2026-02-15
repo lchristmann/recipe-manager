@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeRedirectController;
-use App\Models\RecipeImage;
+use App\Http\Controllers\RecipeImageController;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -35,11 +35,8 @@ Route::middleware(['auth'])->group(function () {
         ->can('viewAny', User::class)
         ->name('users.index');
 
-    Route::get('/recipe-images/{recipeImage}', function (RecipeImage $recipeImage) {
-        abort_unless(auth()->user()->can('view', $recipeImage->recipe), 403);
-
-        return Storage::response($recipeImage->path);
-    })->name('recipe-images.show');
+    Route::get('/recipe-images/{recipeImage}', RecipeImageController::class)
+        ->name('recipe-images.show');
 
     Route::livewire('/planner', 'pages::planner.index')
         ->name('planner.index');

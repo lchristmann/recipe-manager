@@ -17,7 +17,7 @@ new class extends Component
 
     // Infinite scroll state
     public int $page = 1;
-    public int $perPage = 48;
+    public int $perPage = 24;
     public bool $hasMoreRecipes = true;
 
     public Collection $recipes;

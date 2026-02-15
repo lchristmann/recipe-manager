@@ -2,12 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Constants\StorageConstants;
 use App\Enums\RecipeImageType;
 use App\Models\Recipe;
 use App\Models\RecipeImage;
+use App\Support\Image\RecipeImageProcessor;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\RecipeImage>
@@ -37,22 +36,18 @@ class RecipeImageFactory extends Factory
         return $this->afterCreating(function (RecipeImage $image) {
             $isPhoto = $image->type === RecipeImageType::PHOTO;
 
-            $sourcePath = database_path(
-                'seeders/files/sample-' .
-                ($isPhoto ? 'photo' : 'recipe') .
-                '-image-' .
-                (fake()->boolean ? '1' : '2') .
-                '.jpg'
-            );
+            $sampleFiles = $isPhoto
+                ? ['sample-photo-image-1.jpg', 'sample-photo-image-2.jpg']
+                : ['sample-recipe-image-1.png', 'sample-recipe-image-2.jpg'];
 
-            $destinationFolder = $isPhoto ? StorageConstants::PHOTO_IMAGES : StorageConstants::RECIPE_IMAGES;
+            $selectedFile = $sampleFiles[array_rand($sampleFiles)];
+            $sourcePath = database_path('seeders/files/' . $selectedFile);
 
-            $destinationPath = $destinationFolder . '/' . uniqid() . '.jpg';
-
-            Storage::put($destinationPath, file_get_contents($sourcePath));
+            // Process the image and generate the webp sizes
+            $folder = RecipeImageProcessor::processSeedImage($sourcePath, $image->type);
 
             $image->updateQuietly([
-                'path' => $destinationPath,
+                'path' => $folder,
             ]);
         });
     }

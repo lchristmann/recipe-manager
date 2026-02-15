@@ -294,6 +294,8 @@ Set that new version in the `docker-compose.yaml`:
 > docker run -it leanderchristmann/recipe-manager:${VERSION} bash
 > docker run -it leanderchristmann/recipe-manager-nginx:${VERSION} sh
 > ```
+> 
+> And enter the running containers as usual: `docker compose exec ...`
 
 ### Publish the Docker Images
 

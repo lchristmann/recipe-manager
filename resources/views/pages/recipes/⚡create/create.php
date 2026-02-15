@@ -1,10 +1,10 @@
 <?php
 
-use App\Constants\StorageConstants;
 use App\Enums\RecipeImageType;
 use App\Models\Cookbook;
 use App\Models\Recipe;
 use App\Models\Tag;
+use App\Support\Image\RecipeImageProcessor;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -210,9 +210,9 @@ new class extends Component
             // Store photo images
             foreach ($this->photoImages as $position => $file) {
                 if ($file) {
-                    $path = $file->store(path: StorageConstants::PHOTO_IMAGES);
+                    $folder = RecipeImageProcessor::process($file, RecipeImageType::PHOTO);
                     $recipe->images()->create([
-                        'path' => $path,
+                        'path' => $folder,
                         'type' => RecipeImageType::PHOTO,
                         'position' => $position,
                     ]);
@@ -222,15 +222,14 @@ new class extends Component
             // Store recipe images
             foreach ($this->recipeImages as $position => $file) {
                 if ($file) {
-                    $path = $file->store(path: StorageConstants::RECIPE_IMAGES);
+                    $folder = RecipeImageProcessor::process($file, RecipeImageType::RECIPE);
                     $recipe->images()->create([
-                        'path' => $path,
+                        'path' => $folder,
                         'type' => RecipeImageType::RECIPE,
                         'position' => $position,
                     ]);
                 }
             }
-
 
             return $recipe;
         });

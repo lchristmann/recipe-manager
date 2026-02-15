@@ -6,6 +6,7 @@ use App\Models\Cookbook;
 use App\Models\Recipe;
 use App\Models\RecipeImage;
 use App\Models\Tag;
+use App\Support\Image\RecipeImageProcessor;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -102,31 +103,25 @@ new class extends Component
 
         $this->photoImages = $recipe->photoImages()->get()
             ->map(function (RecipeImage $img, int $index) {
-                $extension = pathinfo($img->path, PATHINFO_EXTENSION);
-                $heading = "image-" . ($index + 1) . "." . $extension;
-
                 return [
                     'id' => $img->id,
                     'file' => null,
-                    'preview' => route('recipe-images.show', $img),
+                    'preview' => route('recipe-images.show', [$img, 'size' => 300]),
                     'key' => 'photo-' . $img->id,
-                    'heading' => $heading,
-                    'size' => Storage::size($img->path),
+                    'heading' => 'image-' . ($index + 1) . '.webp',
+                    'size' => Storage::size(StorageConstants::PHOTO_IMAGES . '/' . $img->path . '/300.webp'),
                 ];
             })->toArray();
 
         $this->recipeImages = $recipe->recipeImages()->get()
             ->map(function (RecipeImage $img, int $index) {
-                $extension = pathinfo($img->path, PATHINFO_EXTENSION);
-                $heading = "image-" . ($index + 1) . "." . $extension;
-
                 return [
                     'id' => $img->id,
                     'file' => null,
-                    'preview' => route('recipe-images.show', $img),
+                    'preview' => route('recipe-images.show', [$img, 'size' => 300]),
                     'key' => 'recipe-' . $img->id,
-                    'heading' => $heading,
-                    'size' => Storage::size($img->path),
+                    'heading' => 'image-' . ($index + 1) . '.webp',
+                    'size' => Storage::size(StorageConstants::RECIPE_IMAGES . '/' . $img->path . '/300.webp'),
                 ];
             })->toArray();
     }
@@ -319,13 +314,15 @@ new class extends Component
 
             RecipeImage::whereIn('id', $this->deletedPhotoImageIds)
                 ->each(function (RecipeImage $image) {
-                    Storage::delete($image->path);
+                    $base = $image->type === RecipeImageType::PHOTO ? StorageConstants::PHOTO_IMAGES : StorageConstants::RECIPE_IMAGES;
+                    Storage::deleteDirectory("{$base}/{$image->path}");
                     $image->delete();
                 });
 
             RecipeImage::whereIn('id', $this->deletedRecipeImageIds)
                 ->each(function (RecipeImage $image) {
-                    Storage::delete($image->path);
+                    $base = $image->type === RecipeImageType::PHOTO ? StorageConstants::PHOTO_IMAGES : StorageConstants::RECIPE_IMAGES;
+                    Storage::deleteDirectory("{$base}/{$image->path}");
                     $image->delete();
                 });
 
@@ -333,9 +330,9 @@ new class extends Component
                 if ($image['id']) {
                     $this->recipe->images()->whereKey($image['id'])->update(['position' => $position]);
                 } elseif ($image['file']) {
-                    $path = $image['file']->store(path: StorageConstants::PHOTO_IMAGES);
+                    $folder = RecipeImageProcessor::process($image['file'], RecipeImageType::PHOTO);
                     $this->recipe->images()->create([
-                        'path' => $path,
+                        'path' => $folder,
                         'type' => RecipeImageType::PHOTO,
                         'position' => $position,
                     ]);
@@ -346,9 +343,9 @@ new class extends Component
                 if ($image['id']) {
                     $this->recipe->images()->whereKey($image['id'])->update(['position' => $position]);
                 } elseif ($image['file']) {
-                    $path = $image['file']->store(path: StorageConstants::RECIPE_IMAGES);
+                    $folder = RecipeImageProcessor::process($image['file'], RecipeImageType::RECIPE);
                     $this->recipe->images()->create([
-                        'path' => $path,
+                        'path' => $folder,
                         'type' => RecipeImageType::RECIPE,
                         'position' => $position,
                     ]);
@@ -368,8 +365,8 @@ new class extends Component
         DB::transaction(function () use ($cookbookId) {
             $position = $this->recipe->position;
 
-            // Collect image paths before deletion of the recipe model
-            $imagePaths = $this->recipe->images()->pluck('path')->all();
+            // Collect image paths and types before deletion of the recipe model
+            $images = $this->recipe->images()->get(['path', 'type']);
 
             // Close gap in the cookbook's recipe list
             Recipe::query()
@@ -380,8 +377,9 @@ new class extends Component
             $this->recipe->delete();
 
             // Delete the recipe's image files from storage
-            foreach ($imagePaths as $path) {
-                Storage::delete($path);
+            foreach ($images as $image) {
+                $base = $image->type === RecipeImageType::PHOTO ? StorageConstants::PHOTO_IMAGES : StorageConstants::RECIPE_IMAGES;
+                Storage::deleteDirectory("{$base}/{$image->path}");
             }
         });
 

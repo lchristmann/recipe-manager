@@ -42,7 +42,10 @@ README.md
 DEVELOPER-DOCS.md
 docs
 
-storage/app/*
+storage/app/private/livewire-tmp
+storage/app/private/photo-images/*
+storage/app/private/recipe-images/*
+storage/app/public
 storage/debugbar
 storage/framework/cache/*
 storage/framework/sessions/*

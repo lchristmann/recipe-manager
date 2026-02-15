@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Constants\StorageConstants;
 use App\Enums\RecipeImageType;
 use App\Models\Cookbook;
 use App\Models\Recipe;
@@ -11,6 +12,7 @@ use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -21,6 +23,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Delete and recreate the image upload folders, so previously seeded/uploaded files are wiped
+        Storage::deleteDirectory(StorageConstants::PHOTO_IMAGES);
+        Storage::deleteDirectory(StorageConstants::RECIPE_IMAGES);
+        Storage::makeDirectory(StorageConstants::PHOTO_IMAGES);
+        Storage::makeDirectory(StorageConstants::RECIPE_IMAGES);
+        $base = storage_path('app/private/');
+        chmod($base . StorageConstants::PHOTO_IMAGES, 0775);
+        chmod($base . StorageConstants::RECIPE_IMAGES, 0775);
+
         $admin = User::factory()
             ->admin()
             ->create([
