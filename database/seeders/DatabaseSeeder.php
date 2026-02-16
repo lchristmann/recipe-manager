@@ -23,14 +23,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Delete and recreate the image upload folders, so previously seeded/uploaded files are wiped
-        Storage::deleteDirectory(StorageConstants::PHOTO_IMAGES);
-        Storage::deleteDirectory(StorageConstants::RECIPE_IMAGES);
-        Storage::makeDirectory(StorageConstants::PHOTO_IMAGES);
-        Storage::makeDirectory(StorageConstants::RECIPE_IMAGES);
-        $base = storage_path('app/private/');
-        chmod($base . StorageConstants::PHOTO_IMAGES, 0775);
-        chmod($base . StorageConstants::RECIPE_IMAGES, 0775);
+        // Delete and recreate the image upload folders, so previously seeded/uploaded files are wiped (but keep .gitignore files)
+        foreach ([StorageConstants::PHOTO_IMAGES, StorageConstants::RECIPE_IMAGES] as $folder) {
+            $gitignorePath = "{$folder}/.gitignore";
+            $gitignoreContents = Storage::exists($gitignorePath) ? Storage::get($gitignorePath) : "*\n!.gitignore\n";
+
+            Storage::deleteDirectory($folder);
+            Storage::makeDirectory($folder);
+
+            Storage::put($gitignorePath, $gitignoreContents);
+
+            chmod(storage_path("app/private/{$folder}"), 0775);
+        }
 
         $admin = User::factory()
             ->admin()
