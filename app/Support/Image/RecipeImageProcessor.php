@@ -37,6 +37,13 @@ class RecipeImageProcessor
 
         if (!$image) throw new RuntimeException('Unsupported image format');
 
+        // Limit max width to 2000px immediately (also for server memory reasons)
+        if (imagesx($image) > 2000) {
+            $scaled = imagescale($image, 2000);
+            imagedestroy($image);
+            $image = $scaled;
+        }
+
         // Always create original.webp
         self::saveWebp($image, "{$absoluteDir}/original.webp");
 
@@ -55,13 +62,39 @@ class RecipeImageProcessor
 
     private static function loadImage(string $path)
     {
-        return match (exif_imagetype($path)) {
+        $type = exif_imagetype($path);
+
+        $image = match ($type) {
             IMAGETYPE_JPEG => imagecreatefromjpeg($path),
             IMAGETYPE_PNG  => self::prepareAlpha(imagecreatefrompng($path)),
             IMAGETYPE_GIF  => self::prepareAlpha(imagecreatefromgif($path)),
             IMAGETYPE_WEBP => imagecreatefromwebp($path),
             default => null,
         };
+
+        if (!$image) return null;
+
+        // Auto-rotate JPEG based on EXIF orientation
+        if ($type === IMAGETYPE_JPEG && function_exists('exif_read_data')) {
+            $exif = @exif_read_data($path);
+
+            if (!empty($exif['Orientation'])) {
+                $angle = match ($exif['Orientation']) {
+                    3 => 180,
+                    6 => -90,
+                    8 => 90,
+                    default => 0,
+                };
+
+                if ($angle !== 0) {
+                    $rotated = imagerotate($image, $angle, 0);
+                    imagedestroy($image); // free original immediately
+                    $image = $rotated;
+                }
+            }
+        }
+
+        return $image;
     }
 
     private static function prepareAlpha($image)

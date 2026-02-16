@@ -11,7 +11,9 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command(PruneOrphanedTagsCommand::class)
-    ->weeklyOn(1, '4:00'); // Monday 04:00
+    ->weeklyOn(1, '4:00') // Monday 04:00
+    ->timezone(config('app.timezone'));
 
 Schedule::command(PruneOrphanedRecipeImageFilesCommand::class)
-    ->weeklyOn(1, '4:05'); // Monday 04:05
+    ->weeklyOn(1, '4:05') // Monday 04:05
+    ->timezone(config('app.timezone'));
