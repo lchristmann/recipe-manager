@@ -3,7 +3,7 @@
 
     <div class="space-y-6">
         <flux:tab.group>
-            <flux:tabs wire:model="tab">
+            <flux:tabs wire:model.live="tab">
                 <flux:tab name="community">{{ __('Community') }}</flux:tab>
                 <flux:tab name="personal">{{ __('Personal') }}</flux:tab>
             </flux:tabs>
@@ -12,9 +12,24 @@
             <flux:tab.panel name="community" class="space-y-3">
                 @forelse ($this->communityTags as $tag)
                     <div class="flex items-start gap-2" wire:key="c-tag-{{ $tag->id }}">
-                        <flux:input.group class="flex-1">
+                        <flux:input.group class="flex-1" wire:key="c-tag-group-{{ $tag->id }}">
                             @if ($editingTagId === $tag->id)
+                                {{-- Tag name --}}
                                 <flux:input wire:model="editingName" wire:key="c-tag-input-{{ $tag->id }}"/>
+
+                                {{-- Tag color picker --}}
+                                <flux:select wire:model="editingColor" wire:key="c-tag-select-{{ $tag->id }}"
+                                     variant="listbox" placeholder="Pick color...">
+                                    @foreach(\App\Models\TagColor::COLORS as $color)
+                                        <flux:select.option value="{{ $color }}">
+                                            <div class="flex items-center gap-2">
+                                                <flux:badge color="{{ $color }}">{{ __(ucfirst($color)) }}</flux:badge>
+                                            </div>
+                                        </flux:select.option>
+                                    @endforeach
+                                </flux:select>
+
+                                {{-- Save button --}}
                                 <flux:button type="button" wire:click="save({{ $tag->id }})" wire:key="c-tag-button-{{ $tag->id }}">
                                     {{ __('Save') }}
                                 </flux:button>
@@ -37,9 +52,24 @@
             <flux:tab.panel name="personal" class="space-y-3">
                 @forelse ($this->personalTags as $tag)
                     <div class="flex items-start gap-2" wire:key="p-tag-{{ $tag->id }}">
-                        <flux:input.group class="flex-1">
+                        <flux:input.group class="flex-1" wire:key="p-tag-group-{{ $tag->id }}">
                             @if ($editingTagId === $tag->id)
+                                {{-- Tag name --}}
                                 <flux:input wire:model="editingName" wire:key="p-tag-input-{{ $tag->id }}"/>
+
+                                {{-- Tag color picker --}}
+                                <flux:select wire:model="editingColor" wire:key="c-tag-select-{{ $tag->id }}"
+                                     variant="listbox" placeholder="Pick color...">
+                                    @foreach(\App\Models\TagColor::COLORS as $color)
+                                        <flux:select.option value="{{ $color }}">
+                                            <div class="flex items-center gap-2">
+                                                <flux:badge color="{{ $color }}">{{ __(ucfirst($color)) }}</flux:badge>
+                                            </div>
+                                        </flux:select.option>
+                                    @endforeach
+                                </flux:select>
+
+                                {{-- Save button --}}
                                 <flux:button type="button" wire:click="save({{ $tag->id }})" wire:key="p-tag-button-{{ $tag->id }}">
                                     {{ __('Save') }}
                                 </flux:button>

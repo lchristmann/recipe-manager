@@ -6,8 +6,12 @@
     {{-- Tags --}}
     @if($recipe->tags->isNotEmpty())
         <div class="flex flex-wrap gap-2">
+            @php
+                $userId = $recipe->cookbook->community ? null : $recipe->cookbook->user_id;
+            @endphp
+
             @foreach($recipe->tags as $tag)
-                <flux:badge wire:key="tag-{{ $tag->id }}">{{ $tag->name }}</flux:badge>
+                <flux:badge wire:key="tag-{{ $tag->id }}" color="{{ $tag->colorFor($userId) }}">{{ $tag->name }}</flux:badge>
             @endforeach
         </div>
     @endif

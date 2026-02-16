@@ -14,7 +14,7 @@ new class extends Component
             'links',
             'photoImages',
             'recipeImages',
-            'tags',
+            'tags.colors',
         ]);
     }
 };

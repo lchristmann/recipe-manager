@@ -9,6 +9,7 @@ use App\Models\Recipe;
 use App\Models\RecipeImage;
 use App\Models\RecipeLink;
 use App\Models\Tag;
+use App\Models\TagColor;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -57,6 +58,13 @@ class DatabaseSeeder extends Seeder
             ]);
 
         $tags = Tag::factory()->count(8)->create();
+        $tags->each(function (Tag $tag) {
+            TagColor::create([
+                'tag_id' => $tag->id,
+                'user_id' => null, // community scope
+                'color' => fake()->randomElement(TagColor::COLORS),
+            ]);
+        });
 
         $adminBooks = collect([
             Cookbook::factory()->private()->create([

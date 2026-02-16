@@ -229,5 +229,24 @@
     "Visibility": "Sichtbarkeit",
     "When you enable two-factor authentication, you will be prompted for a secure pin during login. This pin can be retrieved from a TOTP-supported application on your phone.": "Wenn du die Zwei-Faktor-Authentifizierung aktivierst, wirst du beim Login nach einem sicheren PIN gefragt. Dieser PIN kann über eine TOTP-fähige App auf deinem Telefon abgerufen werden.",
     "With two-factor authentication enabled, you will be prompted for a secure, random pin during login, which you can retrieve from the TOTP-supported application on your phone.": "Mit aktivierter Zwei-Faktor-Authentifizierung wirst du beim Login nach einem sicheren, zufälligen PIN gefragt, den du über eine TOTP-fähige App auf deinem Telefon abrufen kannst.",
-    "Your email address is unverified.": "Deine E-Mail-Adresse ist nicht verifiziert."
+    "Your email address is unverified.": "Deine E-Mail-Adresse ist nicht verifiziert.",
+
+    "Zinc": "Zink",
+    "Red": "Rot",
+    "Orange": "Orange",
+    "Amber": "Bernstein",
+    "Yellow": "Gelb",
+    "Lime": "Limette",
+    "Green": "Grün",
+    "Emerald": "Smaragd",
+    "Teal": "Blaugrün",
+    "Cyan": "Cyan",
+    "Sky": "Himmelblau",
+    "Blue": "Blau",
+    "Indigo": "Indigo",
+    "Violet": "Violett",
+    "Purple": "Lila",
+    "Fuchsia": "Fuchsia",
+    "Pink": "Pink",
+    "Rose": "Rosa"
 }
