@@ -109,7 +109,7 @@ new class extends Component
                     'preview' => route('recipe-images.show', [$img, 'size' => 300]),
                     'key' => 'photo-' . $img->id,
                     'heading' => 'image-' . ($index + 1) . '.webp',
-                    'size' => Storage::size(StorageConstants::PHOTO_IMAGES . '/' . $img->path . '/300.webp'),
+                    'size' => Storage::size(StorageConstants::PHOTO_IMAGES . '/' . $img->path . '/original.webp'),
                 ];
             })->toArray();
 
@@ -121,7 +121,7 @@ new class extends Component
                     'preview' => route('recipe-images.show', [$img, 'size' => 300]),
                     'key' => 'recipe-' . $img->id,
                     'heading' => 'image-' . ($index + 1) . '.webp',
-                    'size' => Storage::size(StorageConstants::RECIPE_IMAGES . '/' . $img->path . '/300.webp'),
+                    'size' => Storage::size(StorageConstants::RECIPE_IMAGES . '/' . $img->path . '/original.webp'),
                 ];
             })->toArray();
     }

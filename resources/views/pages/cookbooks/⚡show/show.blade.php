@@ -31,7 +31,7 @@
         >
             @foreach ($this->recipes as $recipe)
                 <div wire:sort:item="{{ $recipe->id }}" wire:key="sort-recipe-{{ $recipe->id }}">
-                    <x-recipe-card :recipe="$recipe" />
+                    <x-recipe.recipe-card :recipe="$recipe" />
                 </div>
             @endforeach
         </div>
@@ -42,7 +42,7 @@
             x-show="!$wire.sorting"
         >
             @foreach ($this->recipes as $recipe)
-                <x-recipe-card :recipe="$recipe" wire:key="recipe-{{ $recipe->id }}" />
+                <x-recipe.recipe-card :recipe="$recipe" wire:key="recipe-{{ $recipe->id }}" />
             @endforeach
 
             {{-- Infinite scroll trigger --}}

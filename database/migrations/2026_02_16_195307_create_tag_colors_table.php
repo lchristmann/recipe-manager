@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tag_colors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tag_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->nullable(); // null = community
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete(); // null = community
             $table->string('color')->default('zinc');
 
             $table->unique(['tag_id', 'user_id']);
