@@ -6,7 +6,7 @@
     {{-- -------------------- COMMUNITY COOKBOOKS -------------------- --}}
     <div class="flex items-center justify-between mb-4">
         <flux:heading size="lg">{{ __('Community Cookbooks') }}</flux:heading>
-        <flux:button icon="arrows-right-left" wire:click="$toggle('sortingCommunity')">
+        <flux:button icon="arrows-right-left" wire:click="$toggle('sortingCommunity')" class="cursor-pointer">
             {{ $sortingCommunity ? __('Done') : __('Reorder') }}
         </flux:button>
     </div>
@@ -40,28 +40,28 @@
                 <flux:table.cell>
                     @can('update', $cookbook)
                         <div class="hidden sm:flex justify-end gap-2">
-                            <flux:button icon="information-circle" size="sm" wire:click="openInfoModal({{ $cookbook->id }})">
+                            <flux:button icon="information-circle" size="sm" wire:click="openInfoModal({{ $cookbook->id }})" class="cursor-pointer">
                                 {{ __('Info') }}
                             </flux:button>
-                            <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $cookbook->id }})">
+                            <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $cookbook->id }})" class="cursor-pointer">
                                 {{ __('Edit') }}
                             </flux:button>
-                            <flux:button icon="trash" size="sm" wire:click="openDeleteModal({{ $cookbook->id }})">
+                            <flux:button icon="trash" size="sm" wire:click="openDeleteModal({{ $cookbook->id }})" class="cursor-pointer">
                                 {{ __('Delete') }}
                             </flux:button>
                         </div>
 
                         <div class="sm:hidden">
                             <flux:dropdown>
-                                <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"/>
+                                <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" class="cursor-pointer"/>
                                 <flux:menu>
-                                    <flux:menu.item icon="information-circle" wire:click="openInfoModal({{ $cookbook->id }})">
+                                    <flux:menu.item icon="information-circle" wire:click="openInfoModal({{ $cookbook->id }})" class="cursor-pointer">
                                         {{ __('Info') }}
                                     </flux:menu.item>
-                                    <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})">
+                                    <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})" class="cursor-pointer">
                                         {{ __('Edit') }}
                                     </flux:menu.item>
-                                    <flux:menu.item icon="trash" wire:click="openDeleteModal({{ $cookbook->id }})">
+                                    <flux:menu.item icon="trash" wire:click="openDeleteModal({{ $cookbook->id }})" class="cursor-pointer">
                                         {{ __('Delete') }}
                                     </flux:menu.item>
                                 </flux:menu>
@@ -99,28 +99,28 @@
                     <flux:table.cell>
                         @can('update', $cookbook)
                             <div class="hidden sm:flex justify-end gap-2">
-                                <flux:button icon="information-circle" size="sm" wire:click="openInfoModal({{ $cookbook->id }})">
+                                <flux:button icon="information-circle" size="sm" wire:click="openInfoModal({{ $cookbook->id }})" class="cursor-pointer">
                                     {{ __('Info') }}
                                 </flux:button>
-                                <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $cookbook->id }})">
+                                <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $cookbook->id }})" class="cursor-pointer">
                                     {{ __('Edit') }}
                                 </flux:button>
-                                <flux:button icon="trash" size="sm" wire:click="openDeleteModal({{ $cookbook->id }})">
+                                <flux:button icon="trash" size="sm" wire:click="openDeleteModal({{ $cookbook->id }})" class="cursor-pointer">
                                     {{ __('Delete') }}
                                 </flux:button>
                             </div>
 
                             <div class="sm:hidden">
                                 <flux:dropdown>
-                                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"/>
+                                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" class="cursor-pointer"/>
                                     <flux:menu>
-                                        <flux:menu.item icon="information-circle" wire:click="openInfoModal({{ $cookbook->id }})">
+                                        <flux:menu.item icon="information-circle" wire:click="openInfoModal({{ $cookbook->id }})" class="cursor-pointer">
                                             {{ __('Info') }}
                                         </flux:menu.item>
-                                        <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})">
+                                        <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})" class="cursor-pointer">
                                             {{ __('Edit') }}
                                         </flux:menu.item>
-                                        <flux:menu.item icon="trash" wire:click="openDeleteModal({{ $cookbook->id }})">
+                                        <flux:menu.item icon="trash" wire:click="openDeleteModal({{ $cookbook->id }})" class="cursor-pointer">
                                             {{ __('Delete') }}
                                         </flux:menu.item>
                                     </flux:menu>
@@ -136,7 +136,7 @@
     {{-- -------------------- PERSONAL COOKBOOKS -------------------- --}}
     <div class="flex items-center justify-between mt-10 mb-4">
         <flux:heading size="lg">{{ __('My Cookbooks') }}</flux:heading>
-        <flux:button icon="arrows-right-left" wire:click="$toggle('sortingPersonal')">
+        <flux:button icon="arrows-right-left" wire:click="$toggle('sortingPersonal')" class="cursor-pointer">
             {{ $sortingPersonal ? __('Done') : __('Reorder') }}
         </flux:button>
     </div>
@@ -175,28 +175,28 @@
                 <flux:table.cell>
                     @can('update', $cookbook)
                         <div class="hidden sm:flex justify-end gap-2">
-                            <flux:button icon="information-circle" size="sm" wire:click="openInfoModal({{ $cookbook->id }})">
+                            <flux:button icon="information-circle" size="sm" wire:click="openInfoModal({{ $cookbook->id }})" class="cursor-pointer">
                                 {{ __('Info') }}
                             </flux:button>
-                            <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $cookbook->id }})">
+                            <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $cookbook->id }})" class="cursor-pointer">
                                 {{ __('Edit') }}
                             </flux:button>
-                            <flux:button icon="trash" size="sm" wire:click="openDeleteModal({{ $cookbook->id }})">
+                            <flux:button icon="trash" size="sm" wire:click="openDeleteModal({{ $cookbook->id }})" class="cursor-pointer">
                                 {{ __('Delete') }}
                             </flux:button>
                         </div>
 
                         <div class="sm:hidden">
                             <flux:dropdown>
-                                <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"/>
+                                <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" class="cursor-pointer"/>
                                 <flux:menu>
-                                    <flux:menu.item icon="information-circle" wire:click="openInfoModal({{ $cookbook->id }})">
+                                    <flux:menu.item icon="information-circle" wire:click="openInfoModal({{ $cookbook->id }})" class="cursor-pointer">
                                         {{ __('Info') }}
                                     </flux:menu.item>
-                                    <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})">
+                                    <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})" class="cursor-pointer">
                                         {{ __('Edit') }}
                                     </flux:menu.item>
-                                    <flux:menu.item icon="trash" wire:click="openDeleteModal({{ $cookbook->id }})">
+                                    <flux:menu.item icon="trash" wire:click="openDeleteModal({{ $cookbook->id }})" class="cursor-pointer">
                                         {{ __('Delete') }}
                                     </flux:menu.item>
                                 </flux:menu>
@@ -239,28 +239,28 @@
                     <flux:table.cell>
                         @can('update', $cookbook)
                             <div class="hidden sm:flex justify-end gap-2">
-                                <flux:button icon="information-circle" size="sm" wire:click="openInfoModal({{ $cookbook->id }})">
+                                <flux:button icon="information-circle" size="sm" wire:click="openInfoModal({{ $cookbook->id }})" class="cursor-pointer">
                                     {{ __('Info') }}
                                 </flux:button>
-                                <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $cookbook->id }})">
+                                <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $cookbook->id }})" class="cursor-pointer">
                                     {{ __('Edit') }}
                                 </flux:button>
-                                <flux:button icon="trash" size="sm" wire:click="openDeleteModal({{ $cookbook->id }})">
+                                <flux:button icon="trash" size="sm" wire:click="openDeleteModal({{ $cookbook->id }})" class="cursor-pointer">
                                     {{ __('Delete') }}
                                 </flux:button>
                             </div>
 
                             <div class="sm:hidden">
                                 <flux:dropdown>
-                                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"/>
+                                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" class="cursor-pointer"/>
                                     <flux:menu>
-                                        <flux:menu.item icon="information-circle" wire:click="openInfoModal({{ $cookbook->id }})">
+                                        <flux:menu.item icon="information-circle" wire:click="openInfoModal({{ $cookbook->id }})" class="cursor-pointer">
                                             {{ __('Info') }}
                                         </flux:menu.item>
-                                        <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})">
+                                        <flux:menu.item icon="pencil" wire:click="openEditModal({{ $cookbook->id }})" class="cursor-pointer">
                                             {{ __('Edit') }}
                                         </flux:menu.item>
-                                        <flux:menu.item icon="trash" wire:click="openDeleteModal({{ $cookbook->id }})">
+                                        <flux:menu.item icon="trash" wire:click="openDeleteModal({{ $cookbook->id }})" class="cursor-pointer">
                                             {{ __('Delete') }}
                                         </flux:menu.item>
                                     </flux:menu>
@@ -316,7 +316,7 @@
 
             <div class="mt-6 flex justify-end">
                 <flux:modal.close>
-                    <flux:button>{{ __('Close') }}</flux:button>
+                    <flux:button class="cursor-pointer">{{ __('Close') }}</flux:button>
                 </flux:modal.close>
             </div>
         @endif
@@ -339,9 +339,9 @@
 
             <div class="flex justify-end gap-2">
                 <flux:modal.close>
-                    <flux:button variant="ghost">{{ __('Cancel') }}</flux:button>
+                    <flux:button variant="ghost" class="cursor-pointer">{{ __('Cancel') }}</flux:button>
                 </flux:modal.close>
-                <flux:button type="submit">{{ __('Save') }}</flux:button>
+                <flux:button type="submit" class="cursor-pointer">{{ __('Save') }}</flux:button>
             </div>
         </form>
     </flux:modal>
@@ -355,9 +355,9 @@
 
             <div class="flex justify-end gap-2">
                 <flux:modal.close>
-                    <flux:button variant="ghost">{{ __('Cancel') }}</flux:button>
+                    <flux:button variant="ghost" class="cursor-pointer">{{ __('Cancel') }}</flux:button>
                 </flux:modal.close>
-                <flux:button variant="danger" wire:click="delete">
+                <flux:button variant="danger" wire:click="delete" class="cursor-pointer">
                     {{ __('Delete') }}
                 </flux:button>
             </div>

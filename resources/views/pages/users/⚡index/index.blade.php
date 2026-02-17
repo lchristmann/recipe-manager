@@ -39,10 +39,10 @@
                         <!-- Desktop buttons -->
                         <div class="hidden sm:flex justify-end gap-2">
                             @unless($user->id === auth()->id())
-                                <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $user->id }})">
+                                <flux:button icon="pencil" size="sm" wire:click="openEditModal({{ $user->id }})" class="cursor-pointer">
                                     {{ __('Edit') }}
                                 </flux:button>
-                                <flux:button icon="trash" size="sm" wire:click="openDeleteModal({{ $user->id }})">
+                                <flux:button icon="trash" size="sm" wire:click="openDeleteModal({{ $user->id }})" class="cursor-pointer">
                                     {{ __('Delete') }}
                                 </flux:button>
                             @endunless
@@ -52,7 +52,7 @@
                         <div class="sm:hidden">
                             @unless($user->id === auth()->id())
                                 <flux:dropdown>
-                                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" />
+                                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" class="cursor-pointer"/>
                                     <flux:menu>
                                         <flux:menu.item icon="pencil" wire:click="openEditModal({{ $user->id }})">
                                                 {{ __('Edit') }}
@@ -82,9 +82,9 @@
 
             <div class="flex items-center justify-end gap-2">
                 <flux:modal.close>
-                    <flux:button type="button" variant="ghost">{{ __('Cancel') }}</flux:button>
+                    <flux:button type="button" variant="ghost" class="cursor-pointer">{{ __('Cancel') }}</flux:button>
                 </flux:modal.close>
-                <flux:button type="submit" variant="primary">{{ __('Save') }}</flux:button>
+                <flux:button type="submit" variant="primary" class="cursor-pointer">{{ __('Save') }}</flux:button>
             </div>
         </form>
     </flux:modal>
@@ -96,9 +96,9 @@
 
             <div class="flex items-center justify-end gap-2">
                 <flux:modal.close>
-                    <flux:button type="button" variant="ghost">{{ __('Cancel') }}</flux:button>
+                    <flux:button type="button" variant="ghost" class="cursor-pointer">{{ __('Cancel') }}</flux:button>
                 </flux:modal.close>
-                <flux:button type="button" variant="danger" wire:click="delete">{{ __('Delete') }}</flux:button>
+                <flux:button type="button" variant="danger" wire:click="delete" class="cursor-pointer">{{ __('Delete') }}</flux:button>
             </div>
         </div>
     </flux:modal>

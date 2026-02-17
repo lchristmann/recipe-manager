@@ -17,7 +17,7 @@
             {{-- Copy link --}}
             <div x-data="{ copied: false }">
                 <flux:tooltip toggleable position="left">
-                    <flux:button icon="link"
+                    <flux:button icon="link" class="cursor-pointer"
                         @click="
                             navigator.clipboard.writeText(window.location.href);
                             copied = true;
@@ -42,7 +42,7 @@
             {{-- Copy link --}}
             <div x-data="{ copied: false }">
                 <flux:tooltip toggleable position="bottom">
-                    <flux:button icon="link"
+                    <flux:button icon="link" class="cursor-pointer"
                         @click="
                             navigator.clipboard.writeText(window.location.href);
                             copied = true;

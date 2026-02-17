@@ -30,18 +30,18 @@
                                 </flux:select>
 
                                 {{-- Save button --}}
-                                <flux:button type="button" wire:click="save({{ $tag->id }})" wire:key="c-tag-button-{{ $tag->id }}">
+                                <flux:button type="button" wire:click="save({{ $tag->id }})" wire:key="c-tag-button-{{ $tag->id }}" class="cursor-pointer">
                                     {{ __('Save') }}
                                 </flux:button>
                             @else
                                 <flux:input :value="$tag->name" disabled />
-                                <flux:button type="button" wire:click="editTag({{ $tag->id }})">
+                                <flux:button type="button" wire:click="editTag({{ $tag->id }})" class="cursor-pointer">
                                     {{ __('Edit') }}
                                 </flux:button>
                             @endif
                         </flux:input.group>
 
-                        <flux:button icon="trash" wire:click="openDeleteModal({{ $tag->id }})"/>
+                        <flux:button icon="trash" wire:click="openDeleteModal({{ $tag->id }})" class="cursor-pointer"/>
                     </div>
                 @empty
                     <flux:text>{{ __('No tags on community recipes yet.') }}</flux:text>
@@ -70,18 +70,18 @@
                                 </flux:select>
 
                                 {{-- Save button --}}
-                                <flux:button type="button" wire:click="save({{ $tag->id }})" wire:key="p-tag-button-{{ $tag->id }}">
+                                <flux:button type="button" wire:click="save({{ $tag->id }})" wire:key="p-tag-button-{{ $tag->id }}" class="cursor-pointer">
                                     {{ __('Save') }}
                                 </flux:button>
                             @else
                                 <flux:input :value="$tag->name" disabled />
-                                <flux:button type="button" wire:click="editTag({{ $tag->id }})">
+                                <flux:button type="button" wire:click="editTag({{ $tag->id }})" class="cursor-pointer">
                                     {{ __('Edit') }}
                                 </flux:button>
                             @endif
                         </flux:input.group>
 
-                        <flux:button icon="trash" wire:click="openDeleteModal({{ $tag->id }})"/>
+                        <flux:button icon="trash" wire:click="openDeleteModal({{ $tag->id }})" class="cursor-pointer"/>
                     </div>
                 @empty
                     <flux:text>{{ __('No tags on personal recipes yet.') }}</flux:text>
@@ -104,9 +104,9 @@
 
             <div class="flex justify-end gap-2">
                 <flux:modal.close>
-                    <flux:button variant="ghost">{{ __('Cancel') }}</flux:button>
+                    <flux:button variant="ghost" class="cursor-pointer">{{ __('Cancel') }}</flux:button>
                 </flux:modal.close>
-                <flux:button variant="danger" wire:click="delete">
+                <flux:button variant="danger" wire:click="delete" class="cursor-pointer">
                     {{ __('Delete') }}
                 </flux:button>
             </div>

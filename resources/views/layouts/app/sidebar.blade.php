@@ -17,6 +17,7 @@
                 <flux:profile
                     :initials="auth()->user()->initials()"
                     icon-trailing="chevron-down"
+                    class="cursor-pointer"
                 />
 
                 <flux:menu>

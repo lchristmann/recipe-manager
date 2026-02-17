@@ -56,7 +56,7 @@
     {{-- Mobile full-width reorder button --}}
     @can('update', $cookbook)
         <div class="mt-4 md:hidden">
-            <flux:button class="w-full" icon="arrows-right-left" wire:click="toggleSorting">
+            <flux:button class="w-full" icon="arrows-right-left" wire:click="toggleSorting" class="cursor-pointer">
                 {{ $sorting ? __('Done') : __('Reorder') }}
             </flux:button>
         </div>

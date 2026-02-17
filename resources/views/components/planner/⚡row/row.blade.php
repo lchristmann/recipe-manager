@@ -11,8 +11,8 @@
         </div>
 
         <div class="w-[80px] flex justify-end gap-1">
-            <flux:button icon="pencil" variant="ghost" wire:click="startEdit"/>
-            <flux:button icon="trash" variant="ghost" wire:click="delete"/>
+            <flux:button icon="pencil" variant="ghost" wire:click="startEdit" class="cursor-pointer"/>
+            <flux:button icon="trash" variant="ghost" wire:click="delete" class="cursor-pointer"/>
         </div>
 
     @else
@@ -32,8 +32,8 @@
         </div>
 
         <div class="w-[80px] flex justify-end gap-1">
-            <flux:button icon="check" variant="outline" wire:click="save"/>
-            <flux:button icon="trash" variant="ghost" wire:click="delete"/>
+            <flux:button icon="check" variant="outline" wire:click="save" class="cursor-pointer"/>
+            <flux:button icon="trash" variant="ghost" wire:click="delete" class="cursor-pointer"/>
         </div>
 
     @endif

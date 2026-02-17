@@ -6,7 +6,7 @@
 
     {{-- Week navigation --}}
     <div class="flex items-center justify-between">
-        <flux:button icon="chevron-left" wire:click="previousWeek"/>
+        <flux:button icon="chevron-left" wire:click="previousWeek" class="cursor-pointer"/>
 
         <flux:heading size="lg">
             {{ $weekStart->translatedFormat('M j') }} -
@@ -14,8 +14,8 @@
         </flux:heading>
 
         <div class="flex gap-2">
-            <flux:button icon="chevron-double-down" wire:click="goToCurrentWeek"/>
-            <flux:button icon="chevron-right" wire:click="nextWeek"/>
+            <flux:button icon="chevron-double-down" wire:click="goToCurrentWeek" class="cursor-pointer"/>
+            <flux:button icon="chevron-right" wire:click="nextWeek" class="cursor-pointer"/>
         </div>
     </div>
 

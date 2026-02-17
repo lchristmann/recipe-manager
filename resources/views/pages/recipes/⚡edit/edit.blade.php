@@ -7,7 +7,7 @@
         @if(!$cookbookUnlocked)
             <flux:input.group label="{{ __('Cookbook') }}">
                 <flux:input :value="$recipe->cookbook->title" disabled />
-                <flux:button type="button" wire:click="$set('cookbookUnlocked', true)">
+                <flux:button type="button" wire:click="$set('cookbookUnlocked', true)" class="cursor-pointer">
                     {{ __('Change') }}
                 </flux:button>
             </flux:input.group>
@@ -56,12 +56,12 @@
             @foreach ($links as $index => $link)
                 <flux:input.group wire:key="link-{{ $index }}">
                     <flux:input wire:model="links.{{ $index }}" placeholder="https://example.com/..." />
-                    <flux:button type="button" wire:click="removeLink({{ $index }})">{{ __('Remove') }}</flux:button>
+                    <flux:button type="button" wire:click="removeLink({{ $index }})" class="cursor-pointer">{{ __('Remove') }}</flux:button>
                 </flux:input.group>
                 <flux:error name="links.{{ $index }}" />
             @endforeach
         </flux:field>
-        <flux:button type="button" wire:click="addLink">{{ __('Add link') }}</flux:button>
+        <flux:button type="button" wire:click="addLink" class="cursor-pointer">{{ __('Add link') }}</flux:button>
 
         {{-- Description --}}
         <flux:textarea wire:model="description" rows="3" label="{{ __('Description') }}"
@@ -144,7 +144,7 @@
                 {{ __('Cancel') }}
             </flux:button>
 
-            <flux:button wire:click="save" variant="primary">
+            <flux:button wire:click="save" variant="primary" class="cursor-pointer">
                 {{ __('Save changes') }}
             </flux:button>
         </div>
@@ -160,9 +160,9 @@
 
             <div class="flex justify-end gap-2">
                 <flux:modal.close>
-                    <flux:button variant="ghost">{{ __('Cancel') }}</flux:button>
+                    <flux:button variant="ghost" class="cursor-pointer">{{ __('Cancel') }}</flux:button>
                 </flux:modal.close>
-                <flux:button variant="danger" wire:click="delete">
+                <flux:button variant="danger" wire:click="delete" class="cursor-pointer">
                     {{ __('Delete') }}
                 </flux:button>
             </div>

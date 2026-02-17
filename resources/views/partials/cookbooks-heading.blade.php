@@ -5,7 +5,7 @@
     </div>
 
     <div class="flex-shrink-0">
-        <flux:button wire:click="openCreateModal" icon="plus">
+        <flux:button wire:click="openCreateModal" icon="plus" class="cursor-pointer">
             {{ __('Create cookbook') }}
         </flux:button>
     </div>

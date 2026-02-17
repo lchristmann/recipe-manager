@@ -47,12 +47,12 @@
             @foreach ($links as $index => $link)
                 <flux:input.group wire:key="link-{{ $index }}">
                     <flux:input wire:model="links.{{ $index }}" placeholder="https://example.com/..." />
-                    <flux:button type="button" wire:click="removeLink({{ $index }})">{{ __('Remove') }}</flux:button>
+                    <flux:button type="button" wire:click="removeLink({{ $index }})" class="cursor-pointer">{{ __('Remove') }}</flux:button>
                 </flux:input.group>
                 <flux:error name="links.{{ $index }}" />
             @endforeach
         </flux:field>
-        <flux:button type="button" wire:click="addLink">{{ __('Add link') }}</flux:button>
+        <flux:button type="button" wire:click="addLink" class="cursor-pointer">{{ __('Add link') }}</flux:button>
 
         {{-- Description --}}
         <flux:textarea wire:model="description" rows="3" label="{{ __('Description') }}"
@@ -119,7 +119,7 @@
                 {{ __('Cancel') }}
             </flux:button>
 
-            <flux:button wire:click="save" variant="primary">
+            <flux:button wire:click="save" variant="primary" class="cursor-pointer">
                 {{ __('Create recipe') }}
             </flux:button>
         </div>

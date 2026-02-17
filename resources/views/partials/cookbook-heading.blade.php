@@ -19,7 +19,7 @@
                     {{ __('Create recipe') }}
                 </flux:button>
 
-                <flux:button icon="arrows-right-left" wire:click="toggleSorting">
+                <flux:button icon="arrows-right-left" wire:click="toggleSorting" class="cursor-pointer">
                     {{ $sorting ? __('Done') : __('Reorder') }}
                 </flux:button>
             </div>

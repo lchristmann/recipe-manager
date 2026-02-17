@@ -4,6 +4,7 @@
         :initials="auth()->user()->initials()"
         icon:trailing="chevrons-up-down"
         data-test="sidebar-menu-button"
+        class="cursor-pointer"
     />
 
     <flux:menu>
