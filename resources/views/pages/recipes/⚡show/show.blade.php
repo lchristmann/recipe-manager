@@ -90,4 +90,7 @@
         </div>
     @endif
 
+    {{-- Recipe Chat --}}
+    <livewire:recipe.chat :recipe-id="$recipe->id" />
+
 </section>
