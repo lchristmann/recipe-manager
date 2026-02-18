@@ -13,6 +13,8 @@ new class extends Component
     #[Validate('required|string|max:5000')]
     public string $body = '';
 
+    public bool $showComposer = false;
+
     public function mount(int $recipeId): void
     {
         $this->recipeId = $recipeId;
@@ -40,5 +42,6 @@ new class extends Component
         ]);
 
         $this->reset('body');
+        $this->showComposer = false;
     }
 };
