@@ -12,7 +12,18 @@
 
     {{-- Body --}}
     <div class="pl-8 mt-2">
-        <flux:text class="whitespace-pre-wrap">{{ $comment->body }}</flux:text>
+        @if($editing)
+            <form wire:submit="saveEdit" class="space-y-2">
+                <flux:composer wire:model="editBody" placeholder="{{ __('Edit comment...') }}" label="{{ __('Edit') }}" label:sr-only>
+                    <x-slot name="actionsTrailing">
+                        <flux:button type="submit" size="sm" variant="primary" icon="check" class="cursor-pointer"/>
+                    </x-slot>
+                </flux:composer>
+                <flux:button variant="ghost" size="sm" wire:click="cancelEdit" class="cursor-pointer">{{ __('Cancel') }}</flux:button>
+            </form>
+        @else
+            <flux:text class="whitespace-pre-wrap">{{ $comment->body }}</flux:text>
+        @endif
 
         {{-- Actions: thumbs-up, reply, dropdown --}}
         <div class="flex items-center mt-1">
@@ -31,10 +42,10 @@
 
                     <flux:menu class="min-w-0">
                         @can('update', $comment)
-                            <flux:menu.item icon="pencil-square" class="cursor-pointer">Edit</flux:menu.item>
+                            <flux:menu.item icon="pencil-square" wire:click="startEdit" class="cursor-pointer">{{ __('Edit') }}</flux:menu.item>
                         @endcan
                         @can('delete', $comment)
-                            <flux:menu.item variant="danger" icon="trash" class="cursor-pointer">Delete</flux:menu.item>
+                            <flux:menu.item variant="danger" icon="trash" wire:click="openDeleteModal" class="cursor-pointer">{{ __('Delete') }}</flux:menu.item>
                         @endcan
                     </flux:menu>
                 </flux:dropdown>
@@ -57,6 +68,22 @@
 
     {{-- Replies (1 level only) --}}
     @foreach($comment->replies as $reply)
-        <livewire:recipe.comment-item :comment="$reply" :key="'comment-'.$reply->id"/>
+        <livewire:recipe.comment-item :comment="$reply" :key="'comment-'.$reply->id" @comment-deleted="$refresh"/>
     @endforeach
+
+    {{-- DELETE MODAL --}}
+    <flux:modal wire:model.self="showDeleteModal" title="{{ __('Confirm Deletion') }}">
+        <div class="space-y-6">
+            <p>{{ __('Are you sure you want to delete this comment?') }}</p>
+
+            <div class="flex justify-end gap-2">
+                <flux:modal.close>
+                    <flux:button variant="ghost" class="cursor-pointer">{{ __('Cancel') }}</flux:button>
+                </flux:modal.close>
+                <flux:button variant="danger" wire:click="delete" class="cursor-pointer">
+                    {{ __('Delete') }}
+                </flux:button>
+            </div>
+        </div>
+    </flux:modal>
 </div>

@@ -14,7 +14,7 @@
     {{-- Comment List --}}
     <div>
         @forelse ($this->comments as $comment)
-            <livewire:recipe.comment-item :comment="$comment" :key="'comment-'.$comment->id"/>
+            <livewire:recipe.comment-item :comment="$comment" :key="'comment-'.$comment->id" @comment-deleted="$refresh"/>
         @empty
             <flux:text>{{ __('No comments yet.') }}</flux:text>
         @endforelse
