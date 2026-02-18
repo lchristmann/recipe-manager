@@ -62,4 +62,11 @@ class Recipe extends Model
             ->withPivot(['date', 'type', 'position'])
             ->orderByPivot('position');
     }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class)
+            ->whereNull('parent_id')
+            ->latest();
+    }
 }

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Constants\StorageConstants;
 use App\Enums\RecipeImageType;
+use App\Models\Comment;
 use App\Models\Cookbook;
 use App\Models\Recipe;
 use App\Models\RecipeImage;
@@ -88,15 +89,17 @@ class DatabaseSeeder extends Seeder
             ]),
         ]);
 
+        $users = User::all();
+
         $adminBooks
             ->merge($userBooks)
-            ->each(function (Cookbook $cookbook) use ($tags) {
+            ->each(function (Cookbook $cookbook) use ($tags, $users) {
                 Recipe::factory()
-                    ->count(60)
+                    ->count(40)
                     ->create([
                         'cookbook_id' => $cookbook->id,
                     ])
-                    ->each(function (Recipe $recipe) use ($tags) {
+                    ->each(function (Recipe $recipe) use ($tags, $users) {
                         // Attach tags
                         $recipe->tags()->attach(
                             $tags->random(rand(1, 4))->pluck('id')
@@ -126,6 +129,23 @@ class DatabaseSeeder extends Seeder
                                 ->photo()
                                 ->create(['recipe_id' => $recipe->id]);
                         }
+
+                        // Comments and replies
+                        $topLevelComments = Comment::factory()
+                            ->count(rand(0, 3))
+                            ->create([
+                                'recipe_id' => $recipe->id,
+                                'user_id' => $users->random()->id,
+                            ]);
+                        $topLevelComments->each(function (Comment $comment) use ($users, $recipe) {
+                            Comment::factory()
+                                ->count(rand(0, 3))
+                                ->create([
+                                    'recipe_id' => $recipe->id,
+                                    'parent_id' => $comment->id,
+                                    'user_id' => $users->random()->id,
+                                ]);
+                        });
                     });
             });
 
