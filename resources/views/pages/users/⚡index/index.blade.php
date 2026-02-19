@@ -23,7 +23,7 @@
                 <flux:table.row wire:key="user-{{ $user->id }}">
                     <!-- Name, Email and Role -->
                     <flux:table.cell class="flex items-center gap-3">
-                        <flux:avatar size="xs" :name="$user->name" />
+                        <flux:avatar size="xs" :src="$user->profileImageUrl()" :name="$user->name" />
                         {{ $user->name }}
                     </flux:table.cell>
                     <flux:table.cell>{{ $user->email }}</flux:table.cell>

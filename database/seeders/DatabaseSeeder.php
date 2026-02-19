@@ -12,6 +12,7 @@ use App\Models\RecipeLink;
 use App\Models\Tag;
 use App\Models\TagColor;
 use App\Models\User;
+use App\Support\Image\UserImageProcessor;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -26,7 +27,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Delete and recreate the image upload folders, so previously seeded/uploaded files are wiped (but keep .gitignore files)
-        foreach ([StorageConstants::PHOTO_IMAGES, StorageConstants::RECIPE_IMAGES] as $folder) {
+        foreach ([StorageConstants::PHOTO_IMAGES, StorageConstants::RECIPE_IMAGES, StorageConstants::USER_IMAGES] as $folder) {
             $gitignorePath = "{$folder}/.gitignore";
             $gitignoreContents = Storage::exists($gitignorePath) ? Storage::get($gitignorePath) : "*\n!.gitignore\n";
 
@@ -38,18 +39,22 @@ class DatabaseSeeder extends Seeder
             chmod(storage_path("app/private/{$folder}"), 0775);
         }
 
+        $adminImagePath = database_path('seeders/files/sample-user-image-1.jpg'); // https://www.pexels.com/photo/man-wearing-blue-crew-neck-t-shirt-2379005/
         $admin = User::factory()
             ->admin()
             ->create([
                 'name' => 'Admin',
                 'email' => 'admin@admin.com',
                 'password' => Hash::make('admin'),
+                'image_path' => UserImageProcessor::processSeedImage($adminImagePath),
             ]);
 
+        $userImagePath  = database_path('seeders/files/sample-user-image-2.jpg'); // https://www.pexels.com/photo/closeup-photo-of-woman-with-brown-coat-and-gray-top-733872/
         $user = User::factory()
             ->create([
                 'name' => 'User',
                 'email' => 'user@user.com',
+                'image_path' => UserImageProcessor::processSeedImage($userImagePath),
             ]);
 
         User::factory()

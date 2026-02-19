@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeRedirectController;
 use App\Http\Controllers\RecipeImageController;
+use App\Http\Controllers\UserImageController;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/recipe-images/{recipeImage}', RecipeImageController::class)
         ->name('recipe-images.show');
+
+    Route::get('/user-images/{user}', UserImageController::class)
+        ->name('user-images.show');
 
     Route::livewire('/planner', 'pages::planner.index')
         ->name('planner.index');

@@ -2,7 +2,7 @@
 
     {{-- Header: Avatar + Name + Timestamp --}}
     <div class="flex flex-row sm:items-center gap-2">
-        <flux:avatar :initials="$comment->user->initials()" size="xs" class="shrink-0" />
+        <flux:avatar :src="$comment->user->profileImageUrl()" :initials="$comment->user->initials()" size="xs" class="shrink-0" />
 
         <div class="flex flex-col gap-0.5 sm:gap-2 sm:flex-row sm:items-center">
             <flux:heading size="sm">{{ $comment->user->name }}</flux:heading>

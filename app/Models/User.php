@@ -26,6 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'is_admin',
+        'image_path',
         'locale',
     ];
 
@@ -93,5 +94,17 @@ class User extends Authenticatable
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    public function hasImage(): bool
+    {
+        return !empty($this->image_path);
+    }
+
+    public function profileImageUrl(string $size = '128'): ?string
+    {
+        if (!$this->hasImage()) return null;
+
+        return route('user-images.show', $this) . '?size=' . $size;
     }
 }
