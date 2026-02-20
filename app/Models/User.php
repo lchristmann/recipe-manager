@@ -105,6 +105,8 @@ class User extends Authenticatable
     {
         if (!$this->hasImage()) return null;
 
-        return route('user-images.show', $this) . '?size=' . $size;
+        return route('user-images.show', $this)
+            . '?size=' . $size
+            . '&v=' . $this->image_path;
     }
 }
