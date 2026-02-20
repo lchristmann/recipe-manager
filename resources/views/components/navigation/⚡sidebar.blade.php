@@ -79,7 +79,6 @@ new class extends Component {
                 <flux:sidebar.group :heading="__('Community')" class="grid">
                     @foreach ($this->communityBooks as $book)
                         <flux:sidebar.item
-                            icon="book-open"
                             :href="route('cookbooks.show', ['cookbook' => $book->id])"
                             :current="$this->currentCookbookId === $book->id"
                             wire:key="cb-c-{{ $book->id }}"
@@ -96,7 +95,6 @@ new class extends Component {
                 <flux:sidebar.group :heading="$user->name" class="grid">
                     @foreach ($user->sidebarBooks as $book)
                         <flux:sidebar.item
-                            icon="book-open"
                             :href="route('cookbooks.show', ['cookbook' => $book->id])"
                             :current="$this->currentCookbookId === $book->id"
                             wire:key="cb-p-{{ $book->id }}"
