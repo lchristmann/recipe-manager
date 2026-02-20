@@ -84,6 +84,18 @@ class User extends Authenticatable
             ->orderByPivot('position');
     }
 
+    public function commentNotifications(): HasMany
+    {
+        return $this->hasMany(CommentNotification::class)->latest();
+    }
+
+    public function unreadCommentNotifications(): HasMany
+    {
+        return $this->hasMany(CommentNotification::class)
+            ->where('read', false)
+            ->latest();
+    }
+
     /**
      * Get the user's initials
      */

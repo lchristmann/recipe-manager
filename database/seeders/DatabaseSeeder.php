@@ -103,6 +103,7 @@ class DatabaseSeeder extends Seeder
                     ->count(40)
                     ->create([
                         'cookbook_id' => $cookbook->id,
+                        'user_id' => $cookbook->user_id,
                     ])
                     ->each(function (Recipe $recipe) use ($tags, $users) {
                         // Attach tags

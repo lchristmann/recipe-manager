@@ -187,6 +187,7 @@ new class extends Component
 
             $recipe = Recipe::create([
                 'cookbook_id' => $cookbook->id,
+                'user_id' => auth()->id(),
                 'title' => $validated['title'],
                 'description' => $validated['description'] ?: null,
                 'ingredients' => $validated['ingredients'] ?: null,

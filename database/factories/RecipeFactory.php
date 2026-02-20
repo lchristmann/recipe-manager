@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Cookbook;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -78,6 +79,7 @@ class RecipeFactory extends Factory
 
         return [
             'cookbook_id' => Cookbook::factory(),
+            'user_id' => User::factory(),
             'title' => $title,
             'description' => fake()->sentences(2, true),
             'ingredients' => fake()->paragraph(),

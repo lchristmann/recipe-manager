@@ -16,6 +16,7 @@ class Recipe extends Model
 
     protected $fillable = [
         'cookbook_id',
+        'user_id',
         'title',
         'description',
         'ingredients',
@@ -26,6 +27,11 @@ class Recipe extends Model
     public function cookbook(): BelongsTo
     {
         return $this->belongsTo(Cookbook::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function links(): HasMany

@@ -1,6 +1,8 @@
 <?php
 
+use App\Enums\NotificationType;
 use App\Models\Comment;
+use App\Models\CommentNotification;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -35,16 +37,26 @@ new class extends Component
     {
         $this->validateOnly('replyBody');
 
-        Comment::create([
+        $reply = Comment::create([
             'recipe_id' => $this->comment->recipe_id,
             'user_id'   => auth()->id(),
             'parent_id' => $this->comment->id,
             'body'      => $this->replyBody,
         ]);
 
+        // Notify the parent comment author if they are not replying to themselves
+        if ($this->comment->user_id !== auth()->id()) {
+            CommentNotification::create([
+                'user_id'      => $this->comment->user_id,
+                'triggered_by' => auth()->id(),
+                'comment_id'   => $reply->id,
+                'type'         => NotificationType::REPLY,
+            ]);
+        }
+
         $this->reset(['replying', 'replyBody']);
 
-        // Refresh replies
+        // Refresh replies to include the new one
         $this->comment->load('replies.user');
     }
 
