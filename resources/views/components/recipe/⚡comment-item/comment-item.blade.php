@@ -1,4 +1,15 @@
-<div id="comment-{{ $comment->id }}" class="p-3 rounded-lg {{ $comment->parent_id ? 'ml-4 pb-0' : '' }}">
+<div
+    id="comment-{{ $comment->id }}"
+    x-data="{ highlight: false }"
+    x-init="
+        if (window.location.hash === '#comment-{{ $comment->id }}') {
+            highlight = true;
+            setTimeout(() => highlight = false, 500);
+        }
+    "
+    :class="highlight ? 'bg-yellow-100 dark:bg-yellow-900' : 'transition-colors duration-3000'"
+    class="p-3 rounded-lg {{ $comment->parent_id ? 'ml-4 pb-0' : '' }}"
+>
 
     {{-- Header: Avatar + Name + Timestamp --}}
     <div class="flex flex-row sm:items-center gap-2">
