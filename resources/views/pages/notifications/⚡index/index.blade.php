@@ -53,6 +53,9 @@
 
     </div>
 
+    {{-- Pagination Links --}}
+    {{ $this->notifications->links() }}
+
     {{-- Delete Modal --}}
     <flux:modal wire:model.self="showClearModal" title="{{ __('Clear inbox') }}" class="md:w-96">
         <div class="space-y-6">

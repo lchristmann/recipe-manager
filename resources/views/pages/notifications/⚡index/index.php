@@ -1,22 +1,25 @@
 <?php
 
 use App\Models\CommentNotification;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 new class extends Component
 {
+    use WithPagination;
+
     public bool $showClearModal = false;
 
     #[Computed]
-    public function notifications(): Collection
+    public function notifications(): LengthAwarePaginator
     {
         return auth()->user()
             ->commentNotifications()
             ->with(['actor', 'comment'])
             ->latest()
-            ->get();
+            ->paginate(10);
     }
 
     public function toggleRead(CommentNotification $notification): void
@@ -52,6 +55,8 @@ new class extends Component
             ->update(['read' => true]);
 
         $this->dispatch('notifications-updated');
+
+        $this->resetPage();
     }
 
     public function confirmClear(): void
@@ -68,5 +73,7 @@ new class extends Component
         $this->showClearModal = false;
 
         $this->dispatch('notifications-updated');
+
+        $this->resetPage();
     }
 };
