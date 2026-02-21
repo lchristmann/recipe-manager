@@ -98,7 +98,9 @@
                 <flux:modal.close>
                     <flux:button type="button" variant="ghost" class="cursor-pointer">{{ __('Cancel') }}</flux:button>
                 </flux:modal.close>
-                <flux:button type="button" variant="danger" wire:click="delete" class="cursor-pointer">{{ __('Delete') }}</flux:button>
+                <flux:button type="button" variant="danger" wire:click="delete" class="cursor-pointer">
+                    {{ __('Delete') }}
+                </flux:button>
             </div>
         </div>
     </flux:modal>

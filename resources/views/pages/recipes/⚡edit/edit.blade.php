@@ -152,7 +152,7 @@
     </div>
 
     {{-- DELETE MODAL --}}
-    <flux:modal wire:model.self="showDeleteModal" title="{{ __('Confirm Deletion') }}">
+    <flux:modal wire:model.self="showDeleteModal" title="{{ __('Confirm Deletion') }}" class="md:w-96">
         <div class="space-y-6">
             <p>
                 {{ __('Are you sure you want to delete :title?', ['title' => $recipe->title]) }}
