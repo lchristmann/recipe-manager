@@ -91,6 +91,6 @@
     @endif
 
     {{-- Recipe Chat --}}
-    <livewire:recipe.chat :recipe-id="$recipe->id" />
+    <livewire:recipe.chat defer :recipe-id="$recipe->id" />
 
 </section>
