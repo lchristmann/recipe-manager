@@ -1,4 +1,4 @@
-<div class="p-3 rounded-lg {{ $comment->parent_id ? 'ml-4 pb-0' : '' }}">
+<div id="comment-{{ $comment->id }}" class="p-3 rounded-lg {{ $comment->parent_id ? 'ml-4 pb-0' : '' }}">
 
     {{-- Header: Avatar + Name + Timestamp --}}
     <div class="flex flex-row sm:items-center gap-2">
@@ -72,7 +72,7 @@
     @endforeach
 
     {{-- DELETE MODAL --}}
-    <flux:modal wire:model.self="showDeleteModal" title="{{ __('Confirm Deletion') }}">
+    <flux:modal wire:model.self="showDeleteModal" title="{{ __('Confirm Deletion') }}" class="md:w-96">
         <div class="space-y-6">
             <p>{{ __('Are you sure you want to delete this comment?') }}</p>
 

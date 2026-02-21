@@ -5,7 +5,7 @@
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
         <!-- Sidebar with Navigation -->
-        <livewire:navigation.sidebar />
+        <livewire:navigation.sidebar :current-route="Route::currentRouteName()" />
 
         <!-- Mobile User Menu -->
         <flux:header class="lg:hidden">

@@ -2,20 +2,24 @@
 
 use App\Models\Cookbook;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 new class extends Component {
+    public string $currentRoute;
+
     #[On('cookbooks-changed')]
     #[On('users-changed')]
+    #[On('notifications-updated')]
     public function refreshSidebar(): void
     {
         // the event triggers a re-render of the component for a fresh sidebar
     }
 
     #[Computed]
-    public function communityBooks()
+    public function communityBooks(): Collection
     {
         return Cookbook::query()
             ->where('community', true)
@@ -24,7 +28,7 @@ new class extends Component {
     }
 
     #[Computed]
-    public function users()
+    public function users(): Collection
     {
         return User::query()
             ->orderBy('name')
@@ -49,18 +53,23 @@ new class extends Component {
     #[Computed]
     public function currentCookbookId(): ?int
     {
-        $route = request()->route();
-        if (!$route) return null;
+        $route = $this->currentRoute;
 
-        return match ($route->getName()) {
-            'cookbooks.show' => $route->parameter('cookbook')?->id,
+        return match ($route) {
+            'cookbooks.show' => request()->route()->parameter('cookbook')?->id,
 
-            'recipes.show', 'recipes.edit' => $route->parameter('recipe')?->cookbook_id,
+            'recipes.show', 'recipes.edit' => request()->route()->parameter('recipe')?->cookbook_id,
 
             'recipes.create' => request()->integer('cookbook'),
 
             default => null,
         };
+    }
+
+    #[Computed]
+    public function unreadCommentNotificationsCount(): int
+    {
+        return auth()->user()->unreadCommentNotifications()->count();
     }
 };
 ?>
@@ -110,8 +119,19 @@ new class extends Component {
         <flux:spacer/>
 
         <flux:sidebar.nav>
-            <flux:sidebar.item icon="calendar" :href="route('planner.index')" :current="request()->routeIs('planner.index')" wire:navigate>
+            <flux:sidebar.item icon="calendar" :href="route('planner.index')" :current="$currentRoute === 'planner.index'" wire:navigate>
                 {{ __('Planner') }}
+            </flux:sidebar.item>
+            <flux:sidebar.item icon="inbox" :href="route('notifications.index')" :current="$currentRoute === 'notifications.index'" wire:navigate>
+                <div class="flex items-center gap-2">
+                    <span>{{ __('Notifications') }}</span>
+
+                    @if ($this->unreadCommentNotificationsCount > 0)
+                        <flux:badge color="green" rounded size="sm" class="ml-2">
+                            {{ $this->unreadCommentNotificationsCount }}
+                        </flux:badge>
+                    @endif
+                </div>
             </flux:sidebar.item>
         </flux:sidebar.nav>
 

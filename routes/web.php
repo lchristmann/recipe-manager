@@ -44,6 +44,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::livewire('/planner', 'pages::planner.index')
         ->name('planner.index');
+
+    Route::livewire('/notifications', 'pages::notifications.index')
+        ->name('notifications.index');
 });
 
 require __DIR__.'/settings.php';
