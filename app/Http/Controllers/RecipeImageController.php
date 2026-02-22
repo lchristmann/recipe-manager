@@ -27,7 +27,7 @@ class RecipeImageController extends Controller
             $locationPrefix = StorageConstants::PHOTO_IMAGES;
         } else { // recipe image
             $file = match ($size) {
-                '300' => '300.webp',
+                '300', '1200' => $size . '.webp',
                 default => 'original.webp',
             };
             $locationPrefix = StorageConstants::RECIPE_IMAGES;

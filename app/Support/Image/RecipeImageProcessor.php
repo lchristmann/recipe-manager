@@ -12,16 +12,16 @@ use RuntimeException;
 class RecipeImageProcessor
 {
     // process a real uploaded Livewire TemporaryUploadedFile (used in production)
-    public static function process(TemporaryUploadedFile $file, RecipeImageType $type): string {
+    public static function process(TemporaryUploadedFile $file, RecipeImageType $type): array {
         return self::processPath($file->getRealPath(), $type);
     }
 
     // Process an existing file path (for seeding)
-    public static function processSeedImage(string $path, RecipeImageType $type): string {
+    public static function processSeedImage(string $path, RecipeImageType $type): array {
         return self::processPath($path, $type);
     }
 
-    private static function processPath(string $tmpPath, RecipeImageType $type): string {
+    private static function processPath(string $tmpPath, RecipeImageType $type): array {
         $base = $type === RecipeImageType::PHOTO ? StorageConstants::PHOTO_IMAGES : StorageConstants::RECIPE_IMAGES;
 
         do {
@@ -44,20 +44,26 @@ class RecipeImageProcessor
             $image = $scaled;
         }
 
-        // Always create original.webp
-        self::saveWebp($image, "{$absoluteDir}/original.webp");
+        // Capture final dimensions
+        $width = imagesx($image);
+        $height = imagesy($image);
 
-        // Always create 300px
+        // Always create original (max. 2000x), 1200px and 300px versions
+        self::saveWebp($image, "{$absoluteDir}/original.webp");
+        self::resizeAndSave($image, 1200, "{$absoluteDir}/1200.webp");
         self::resizeAndSave($image, 300, "{$absoluteDir}/300.webp");
 
         if ($type === RecipeImageType::PHOTO) {
             self::resizeAndSave($image, 600, "{$absoluteDir}/600.webp");
-            self::resizeAndSave($image, 1200, "{$absoluteDir}/1200.webp");
         }
 
         imagedestroy($image);
 
-        return $folder;
+        return [
+            'folder' => $folder,
+            'width' => $width,
+            'height' => $height,
+        ];
     }
 
     private static function loadImage(string $path)

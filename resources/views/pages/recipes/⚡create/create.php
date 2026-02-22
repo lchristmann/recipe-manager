@@ -211,9 +211,11 @@ new class extends Component
             // Store photo images
             foreach ($this->photoImages as $position => $file) {
                 if ($file) {
-                    $folder = RecipeImageProcessor::process($file, RecipeImageType::PHOTO);
+                    $result = RecipeImageProcessor::process($file, RecipeImageType::PHOTO);
                     $recipe->images()->create([
-                        'path' => $folder,
+                        'path' => $result['folder'],
+                        'width' => $result['width'],
+                        'height' => $result['height'],
                         'type' => RecipeImageType::PHOTO,
                         'position' => $position,
                     ]);
@@ -223,9 +225,11 @@ new class extends Component
             // Store recipe images
             foreach ($this->recipeImages as $position => $file) {
                 if ($file) {
-                    $folder = RecipeImageProcessor::process($file, RecipeImageType::RECIPE);
+                    $result = RecipeImageProcessor::process($file, RecipeImageType::RECIPE);
                     $recipe->images()->create([
-                        'path' => $folder,
+                        'path' => $result['folder'],
+                        'width' => $result['width'],
+                        'height' => $result['height'],
                         'type' => RecipeImageType::RECIPE,
                         'position' => $position,
                     ]);

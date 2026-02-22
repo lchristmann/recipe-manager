@@ -38,6 +38,7 @@ The app uses:
   - using the [Laravel Livewire Starter Kit](https://laravel.com/docs/12.x/starter-kits#livewire)
 - [Flux UI](https://fluxui.dev/) 2 incl. [Pro Components](https://fluxui.dev/pricing)
 - [Tailwind CSS](https://tailwindcss.com/) 4
+- [PhotoSwipe](https://photoswipe.com/) 5 (image lightbox library)
 
 ## Data Model
 

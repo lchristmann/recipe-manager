@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('recipe_id')->constrained()->cascadeOnDelete();
 
             $table->string('path');
+            $table->integer('width')->nullable();
+            $table->integer('height')->nullable();
             $table->string('type')->default(RecipeImageType::PHOTO->value);
             $table->integer('position')->default(0);
 

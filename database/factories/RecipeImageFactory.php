@@ -44,10 +44,12 @@ class RecipeImageFactory extends Factory
             $sourcePath = database_path('seeders/files/' . $selectedFile);
 
             // Process the image and generate the webp sizes
-            $folder = RecipeImageProcessor::processSeedImage($sourcePath, $image->type);
+            $result = RecipeImageProcessor::processSeedImage($sourcePath, $image->type);
 
             $image->updateQuietly([
-                'path' => $folder,
+                'path' => $result['folder'],
+                'width' => $result['width'],
+                'height' => $result['height'],
             ]);
         });
     }

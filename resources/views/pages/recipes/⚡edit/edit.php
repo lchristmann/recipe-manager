@@ -330,9 +330,11 @@ new class extends Component
                 if ($image['id']) {
                     $this->recipe->images()->whereKey($image['id'])->update(['position' => $position]);
                 } elseif ($image['file']) {
-                    $folder = RecipeImageProcessor::process($image['file'], RecipeImageType::PHOTO);
+                    $result = RecipeImageProcessor::process($image['file'], RecipeImageType::PHOTO);
                     $this->recipe->images()->create([
-                        'path' => $folder,
+                        'path' => $result['folder'],
+                        'width' => $result['width'],
+                        'height' => $result['height'],
                         'type' => RecipeImageType::PHOTO,
                         'position' => $position,
                     ]);
@@ -343,9 +345,11 @@ new class extends Component
                 if ($image['id']) {
                     $this->recipe->images()->whereKey($image['id'])->update(['position' => $position]);
                 } elseif ($image['file']) {
-                    $folder = RecipeImageProcessor::process($image['file'], RecipeImageType::RECIPE);
+                    $result = RecipeImageProcessor::process($image['file'], RecipeImageType::RECIPE);
                     $this->recipe->images()->create([
-                        'path' => $folder,
+                        'path' => $result['folder'],
+                        'width' => $result['width'],
+                        'height' => $result['height'],
                         'type' => RecipeImageType::RECIPE,
                         'position' => $position,
                     ]);

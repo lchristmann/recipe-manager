@@ -14,6 +14,8 @@ class RecipeImage extends Model
 
     protected $fillable = [
         'path',
+        'width',
+        'height',
         'type',
         'position',
     ];
