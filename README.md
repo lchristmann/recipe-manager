@@ -16,7 +16,7 @@ Recipes can take shape as...
 
 ... and have food pictures uploaded for it.
 
-There can also be multiple tags associated with a recipe (like "vegetarian" or "gluten-free").
+There can also be multiple tags associated with a recipe (like "vegetarian" or "gluten-free"). Individual colors can be picked on the tags page.
 
 A searchbar and a tag filter in the header enable quick and easy browsing of recipes by specific criteria.
 
@@ -26,6 +26,16 @@ Sorting is implemented for almost all entities, to give the user the freedom of 
 
 By default, the app is "multi-tenant" (each user only sees their own data) and the only special privilege of admins is to manage users.<br>
 However, users can make their cookbooks editable by others ("community") or just viewable ("public").
+
+Users can upload a profile picture to personalize their account.
+
+Recipes have a comment section where users can discuss them. A notifications feed keeps users informed about new comments and activity.
+
+The application supports multiple languages (currently German and English). Each user can choose their preferred language in their settings.
+
+Uploaded images are automatically optimized. They are resized into multiple versions, scaled down, converted to WebP, compressed, efficiently served and cached.
+
+Images on the recipe detail page open in a zoomable and swipeable lightbox for a better viewing experience.
 
 ## Technical Architecture
 
