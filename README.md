@@ -4,6 +4,9 @@ A beautiful self-hosted recipe manager for your family / friend group.
 
 The setup is quick and easy: just follow the **[Installation Guide](docs/INSTALLATION-GUIDE.md)**.
 
+![Recipe Page Screenshot](docs/screenshots/cookbook-page.png)
+_Check out all the pictures in the [docs/screenshots](docs/screenshots) folder!_
+
 ## Feature Description
 
 Each user can manage any number of cookbooks for himself, which may contain many recipes.
