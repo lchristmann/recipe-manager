@@ -30,3 +30,25 @@
         @endforelse
     </div>
 </div>
+
+{{-- If a #comment-123 in the URL indicates a redirect to a comment, scroll and trigger highlight --}}
+@script
+<script>
+(() => {
+    const hash = window.location.hash;
+    if (!hash) return;
+
+    requestAnimationFrame(() => {
+        const target = document.querySelector(hash);
+        if (!target) return;
+
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        target.dispatchEvent(new Event('highlight-comment'));
+
+        // Remove the hash from the URL
+        history.replaceState(null, "", window.location.pathname + window.location.search);
+    });
+})();
+</script>
+@endscript

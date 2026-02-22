@@ -4,8 +4,12 @@
     x-init="
         if (window.location.hash === '#comment-{{ $comment->id }}') {
             highlight = true;
-            setTimeout(() => highlight = false, 500);
+            setTimeout(() => highlight = false, 1500);
         }
+        $el.addEventListener('highlight-comment', () => {
+            highlight = true;
+            setTimeout(() => highlight = false, 1500);
+        });
     "
     :class="highlight ? 'bg-yellow-100 dark:bg-yellow-900' : 'transition-colors duration-3000'"
     class="p-3 rounded-lg {{ $comment->parent_id ? 'ml-4 pb-0' : '' }}"
