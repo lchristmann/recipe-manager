@@ -20,7 +20,9 @@ class UserImageProcessor
     }
 
     private static function processPath(string $tmpPath): string {
-        [$folder, $absoluteDir] = self::createImageDirectory();
+        $base = StorageConstants::USER_IMAGES;
+
+        [$folder, $absoluteDir] = self::createImageDirectory($base);
 
         try {
             $image = self::loadImage($tmpPath);
@@ -34,15 +36,13 @@ class UserImageProcessor
 
             return $folder;
         } catch (\Throwable $e) {
-            Storage::deleteDirectory(StorageConstants::USER_IMAGES . '/' . $folder);
+            Storage::deleteDirectory($base . '/' . $folder);
             throw $e;
         }
     }
 
-    private static function createImageDirectory(): array
+    private static function createImageDirectory(string $base): array
     {
-        $base = StorageConstants::USER_IMAGES;
-
         do {
             $folder = (string) Str::ulid();
         } while (Storage::exists("{$base}/{$folder}"));
