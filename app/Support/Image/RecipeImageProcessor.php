@@ -23,7 +23,9 @@ class RecipeImageProcessor
     }
 
     private static function processPath(string $tmpPath, RecipeImageType $type): array {
-        [$folder, $absoluteDir] = self::createImageDirectory($type);
+        $base = $type === RecipeImageType::PHOTO ? StorageConstants::PHOTO_IMAGES : StorageConstants::RECIPE_IMAGES;
+
+        [$folder, $absoluteDir] = self::createImageDirectory($base);
 
         try {
             $image = self::loadImage($tmpPath);
@@ -50,15 +52,13 @@ class RecipeImageProcessor
                 'height' => $height,
             ];
         } catch (\Throwable $e) {
-            Storage::deleteDirectory(($type === RecipeImageType::PHOTO ? StorageConstants::PHOTO_IMAGES : StorageConstants::RECIPE_IMAGES) . '/' . $folder);
+            Storage::deleteDirectory($base . '/' . $folder);
             throw $e;
         }
     }
 
-    private static function createImageDirectory(RecipeImageType $type): array
+    private static function createImageDirectory(string $base): array
     {
-        $base = $type === RecipeImageType::PHOTO ? StorageConstants::PHOTO_IMAGES : StorageConstants::RECIPE_IMAGES;
-
         do {
             $folder = (string) Str::ulid();
         } while (Storage::exists("{$base}/{$folder}"));
