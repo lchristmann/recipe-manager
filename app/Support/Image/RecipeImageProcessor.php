@@ -7,11 +7,12 @@ use App\Enums\RecipeImageType;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use GdImage;
 use RuntimeException;
 
 class RecipeImageProcessor
 {
-    // process a real uploaded Livewire TemporaryUploadedFile (used in production)
+    // Process a real uploaded Livewire TemporaryUploadedFile (used in production)
     public static function process(TemporaryUploadedFile $file, RecipeImageType $type): array {
         return self::processPath($file->getRealPath(), $type);
     }
@@ -22,6 +23,40 @@ class RecipeImageProcessor
     }
 
     private static function processPath(string $tmpPath, RecipeImageType $type): array {
+        [$folder, $absoluteDir] = self::createImageDirectory($type);
+
+        try {
+            $image = self::loadImage($tmpPath);
+            $image = self::limitMaxWidth($image, 2000);
+
+            // Capture final dimensions
+            $width = imagesx($image);
+            $height = imagesy($image);
+
+            // Always create original (max. 2000x), 1200px and 300px versions
+            self::saveWebp($image, "{$absoluteDir}/original.webp");
+            self::resizeAndSaveWebp($image, 1200, "{$absoluteDir}/1200.webp");
+            self::resizeAndSaveWebp($image, 300, "{$absoluteDir}/300.webp");
+
+            if ($type === RecipeImageType::PHOTO) {
+                self::resizeAndSaveWebp($image, 600, "{$absoluteDir}/600.webp");
+            }
+
+            imagedestroy($image);
+
+            return [
+                'folder' => $folder,
+                'width' => $width,
+                'height' => $height,
+            ];
+        } catch (\Throwable $e) {
+            Storage::deleteDirectory(($type === RecipeImageType::PHOTO ? StorageConstants::PHOTO_IMAGES : StorageConstants::RECIPE_IMAGES) . '/' . $folder);
+            throw $e;
+        }
+    }
+
+    private static function createImageDirectory(RecipeImageType $type): array
+    {
         $base = $type === RecipeImageType::PHOTO ? StorageConstants::PHOTO_IMAGES : StorageConstants::RECIPE_IMAGES;
 
         do {
@@ -30,43 +65,14 @@ class RecipeImageProcessor
 
         $directory = "{$base}/{$folder}";
         Storage::makeDirectory($directory);
+
         $absoluteDir = storage_path("app/private/{$directory}");
         chmod($absoluteDir, 0775);
 
-        $image = self::loadImage($tmpPath);
-
-        if (!$image) throw new RuntimeException('Unsupported image format');
-
-        // Limit max width to 2000px immediately (also for server memory reasons)
-        if (imagesx($image) > 2000) {
-            $scaled = imagescale($image, 2000);
-            imagedestroy($image);
-            $image = $scaled;
-        }
-
-        // Capture final dimensions
-        $width = imagesx($image);
-        $height = imagesy($image);
-
-        // Always create original (max. 2000x), 1200px and 300px versions
-        self::saveWebp($image, "{$absoluteDir}/original.webp");
-        self::resizeAndSave($image, 1200, "{$absoluteDir}/1200.webp");
-        self::resizeAndSave($image, 300, "{$absoluteDir}/300.webp");
-
-        if ($type === RecipeImageType::PHOTO) {
-            self::resizeAndSave($image, 600, "{$absoluteDir}/600.webp");
-        }
-
-        imagedestroy($image);
-
-        return [
-            'folder' => $folder,
-            'width' => $width,
-            'height' => $height,
-        ];
+        return [$folder, $absoluteDir];
     }
 
-    private static function loadImage(string $path)
+    private static function loadImage(string $path): GdImage
     {
         $type = exif_imagetype($path);
 
@@ -78,7 +84,7 @@ class RecipeImageProcessor
             default => null,
         };
 
-        if (!$image) return null;
+        if (!$image) throw new RuntimeException('Unsupported image format');
 
         // Auto-rotate JPEG based on EXIF orientation
         if ($type === IMAGETYPE_JPEG && function_exists('exif_read_data')) {
@@ -94,6 +100,7 @@ class RecipeImageProcessor
 
                 if ($angle !== 0) {
                     $rotated = imagerotate($image, $angle, 0);
+                    if (!$rotated) return $image; // If rotation failed (unlikely, but possible), keep original image
                     imagedestroy($image); // free original immediately
                     $image = $rotated;
                 }
@@ -103,7 +110,18 @@ class RecipeImageProcessor
         return $image;
     }
 
-    private static function prepareAlpha($image)
+    private static function limitMaxWidth(GdImage $image, int $maxWidth): GdImage
+    {
+        if (imagesx($image) <= $maxWidth) return $image;
+
+        $scaled = imagescale($image, $maxWidth);
+        if (!$scaled) throw new RuntimeException('Failed to scale image');
+
+        imagedestroy($image);
+        return $scaled;
+    }
+
+    private static function prepareAlpha(GdImage $image): GdImage
     {
         imagepalettetotruecolor($image);
         imagealphablending($image, true);
@@ -111,21 +129,30 @@ class RecipeImageProcessor
         return $image;
     }
 
-    private static function resizeAndSave($image, int $width, string $target): void
+    private static function resizeAndSaveWebp(GdImage $image, int $width, string $target): void
     {
-        // Prevent upscaling
         if (imagesx($image) <= $width) {
-            imagewebp($image, $target, 90);
+            if (!imagewebp($image, $target, 90)) {
+                throw new RuntimeException("Failed to write image to {$target}");
+            }
             return;
         }
 
         $scaled = imagescale($image, $width);
-        imagewebp($scaled, $target, 90);
+        if (!$scaled) throw new RuntimeException('Failed to scale image');
+
+        if (!imagewebp($scaled, $target, 90)) {
+            imagedestroy($scaled);
+            throw new RuntimeException("Failed to write image to {$target}");
+        }
+
         imagedestroy($scaled);
     }
 
-    private static function saveWebp($image, string $target): void
+    private static function saveWebp(GdImage $image, string $target): void
     {
-        imagewebp($image, $target, 95);
+        if (!imagewebp($image, $target, 95)) {
+            throw new RuntimeException("Failed to write image to {$target}");
+        }
     }
 }
