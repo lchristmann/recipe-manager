@@ -20,6 +20,27 @@ class UserImageProcessor
     }
 
     private static function processPath(string $tmpPath): string {
+        [$folder, $absoluteDir] = self::createImageDirectory();
+
+        try {
+            $image = self::loadImage($tmpPath);
+            $image = self::limitMaxWidth($image, 1200);
+            $image = self::cropSquare($image);
+
+            self::saveWebp($image, "{$absoluteDir}/original.webp");
+            self::resizeAndSaveWebp($image, 128, "{$absoluteDir}/128.webp");
+
+            imagedestroy($image);
+
+            return $folder;
+        } catch (\Throwable $e) {
+            Storage::deleteDirectory(StorageConstants::USER_IMAGES . '/' . $folder);
+            throw $e;
+        }
+    }
+
+    private static function createImageDirectory(): array
+    {
         $base = StorageConstants::USER_IMAGES;
 
         do {
@@ -28,34 +49,14 @@ class UserImageProcessor
 
         $directory = "{$base}/{$folder}";
         Storage::makeDirectory($directory);
+
         $absoluteDir = storage_path("app/private/{$directory}");
         chmod($absoluteDir, 0775);
 
-        $image = self::loadImage($tmpPath);
-
-        if (!$image) throw new RuntimeException('Unsupported image format');
-
-        // Limit max width to 1200px immediately (also for server memory reasons)
-        if (imagesx($image) > 1200) {
-            $scaled = imagescale($image, 1200);
-            imagedestroy($image);
-            $image = $scaled;
-        }
-
-        $image = self::cropSquare($image);
-
-        // Create original.webp (max 1200x1200)
-        self::saveWebp($image, "{$absoluteDir}/original.webp");
-
-        // Create 128.webp
-        self::resizeAndSave($image, 128, "{$absoluteDir}/128.webp");
-
-        imagedestroy($image);
-
-        return $folder;
+        return [$folder, $absoluteDir];
     }
 
-    private static function loadImage(string $path)
+    private static function loadImage(string $path): GdImage
     {
         $type = exif_imagetype($path);
 
@@ -67,7 +68,7 @@ class UserImageProcessor
             default => null,
         };
 
-        if (!$image) return null;
+        if (!$image) throw new RuntimeException('Unsupported image format');
 
         // Auto-rotate JPEG based on EXIF orientation
         if ($type === IMAGETYPE_JPEG && function_exists('exif_read_data')) {
@@ -83,6 +84,7 @@ class UserImageProcessor
 
                 if ($angle !== 0) {
                     $rotated = imagerotate($image, $angle, 0);
+                    if (!$rotated) return $image; // If rotation failed (unlikely, but possible), keep original image
                     imagedestroy($image); // free original immediately
                     $image = $rotated;
                 }
@@ -92,13 +94,29 @@ class UserImageProcessor
         return $image;
     }
 
-    private static function cropSquare($image): GdImage
+    private static function limitMaxWidth(GdImage $image, int $maxWidth): GdImage
+    {
+        if (imagesx($image) <= $maxWidth) return $image;
+
+        $scaled = imagescale($image, $maxWidth);
+        if (!$scaled) throw new RuntimeException('Failed to scale image');
+
+        imagedestroy($image);
+        return $scaled;
+    }
+
+    private static function cropSquare(GdImage $image): GdImage
     {
         $width = imagesx($image);
         $height = imagesy($image);
 
+        // If already square, return as-is
+        if ($width === $height) return $image;
+
+        // Size of the square to be cropped to
         $size = min($width, $height);
 
+        // Calculate x and y offset, so the cropped square is taken from the middle of the image | either $x or $y will be 0
         $x = (int) floor(($width - $size) / 2);
         $y = (int) floor(($height - $size) / 2);
 
@@ -116,7 +134,7 @@ class UserImageProcessor
         return $cropped;
     }
 
-    private static function prepareAlpha($image)
+    private static function prepareAlpha(GdImage $image): GdImage
     {
         imagepalettetotruecolor($image);
         imagealphablending($image, true);
@@ -124,21 +142,30 @@ class UserImageProcessor
         return $image;
     }
 
-    private static function resizeAndSave($image, int $width, string $target): void
+    private static function resizeAndSaveWebp(GdImage $image, int $width, string $target): void
     {
         // Prevent upscaling
         if (imagesx($image) <= $width) {
-            imagewebp($image, $target, 90);
+            if (!imagewebp($image, $target, 90)) {
+                throw new RuntimeException("Failed to write image to {$target}");
+            }
             return;
         }
 
         $scaled = imagescale($image, $width);
-        imagewebp($scaled, $target, 90);
+        if (!$scaled) throw new RuntimeException('Failed to scale image');
+
+        if (!imagewebp($scaled, $target, 90)) {
+            imagedestroy($scaled);
+            throw new RuntimeException("Failed to write image to {$target}");
+        }
         imagedestroy($scaled);
     }
 
-    private static function saveWebp($image, string $target): void
+    private static function saveWebp(GdImage $image, string $target): void
     {
-        imagewebp($image, $target, 95);
+        if (!imagewebp($image, $target, 95)) {
+            throw new RuntimeException("Failed to write image to {$target}");
+        }
     }
 }
